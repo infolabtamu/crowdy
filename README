@@ -1,0 +1,4 @@
+A system for finding and displaying crowds in real-time.
+
+usage:
+    ./jsoncrawl.py infolabers.json|./tee.py tmp|./digits.py 1
