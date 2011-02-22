@@ -1,0 +1,35 @@
+A draft of Json crowd object is shown below. We might do minor changes to it as we continue our implementation. We can discuss this object in the week's DARPA meeting and decide if we want to have any other field.
+
+Crowd {
+	id: Unique identifier for a crowd
+	start: Time-stamp when the crowd was created
+	end: Time-stamp when the crowd was deleted
+	users: A list of user object with information specific to the crowd.
+		id: User id
+		history: A list of tuples that contains information of the join and leave events for this user.
+	merge: A list of tuples that contains information of the crowds that merged into this crowd and the time-stamp of merge
+	split: A list of tuples that contains information of the crowds that split from this crowd and the time-stamp of split
+}
+
+
+Example:
+{
+	"id" : 10,
+    "start" : "Tue Feb 15 06:30:32 +0000 2011",
+    "end" : "Tue Feb 15 13:30:32 +0000 2011",
+    "type" : "ats",
+    "users" : [{
+        "id" : "ev",
+        "history" : [["Tue Feb 15 06:30:32 +0000 2011",null]]
+    },
+    {
+        "id" : "jobs",
+        "history" : [["Tue Feb 15 08:30:32 +0000 2011","Tue Feb 15 11:30:32 +0000 2011"]]
+    },
+    {
+        "id" : "gates",
+        "history" : [["Tue Feb 15 10:30:32 +0000 2011",null]]
+    }],
+    "merge" : [[2,"Tue Feb 15 07:30:32 +0000 2011"],[3,"Tue Feb 15 11:30:32 +0000 2011"]],
+    "split" : [[12,"Tue Feb 15 13:30:32 +0000 2011"],[14,"Tue Feb 15 13:30:32 +0000 2011"]]
+}
