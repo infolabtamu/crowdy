@@ -1,0 +1,69 @@
+body {
+        font: 10pt georgia;
+        background-color: #FFFFCC;
+        margin: 0px;
+}
+
+.banner {
+
+}
+.content{
+        border: 2px dotted #999999;
+        /*position: absolute;
+        border: 2px dotted #999999;
+        top: 100px;
+        left:50px;
+        right:50px;
+        width: 1500px;*/
+}
+.timelineC {
+        position: absolute;
+        border: 2px dotted #999999;
+        top: 200px;
+        left: 100px;
+        width: 1380px;
+        display: block;
+        opacity: 1;
+}
+
+.timelineC .body {
+        padding: 40px 13px 10px 40px;
+}
+
+.optionC {
+        position: absolute;
+        border: 2px dotted #999999;
+        top: 100px;
+        left: 100px;
+        width: 1380px;
+        display: block
+        opacity: 1;
+}
+.optionC .body {
+        /*background: #FFFF00;*/
+        padding: 40px 13px 10px 40px;
+}
+
+.workspaceC {
+        position: absolute;
+        border: 2px dotted #999999;
+        bottom: 100px;
+        left: 100px;
+        width: 1380px;
+        display: block;
+        opacity: 1;
+}
+
+.workspaceC .body {
+        /*background: #FFFF00;*/
+        padding: 40px 13px 10px 40px;
+}
+
+table, th, td
+{
+border-style: none;
+}
+table.center{
+	margin-left:auto; 
+	margin-right:auto;
+}

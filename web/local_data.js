@@ -4,7 +4,7 @@ var timeline_data = {  // save as a global variable
 'wikiSection': "Simile Cubism Timeline",
 
 'events' : [
-        {'start': '1924',
+        {'start': '1999',
         'title': 'Barfusserkirche',
         'description': 'by Lyonel Feininger, American/German Painter, 1871-1956',
         'image': 'http://images.allposters.com/images/AWI/NR096_b.jpg',
@@ -12,8 +12,8 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '2013',
-        'end': '2029',
+        {'start': '1909',
+        'end': '3029',
         'title': 'Three Figures',
         'description': 'by Kasimir Malevich, Ukrainian Painter, 1878-1935',
         'image': 'http://images.allposters.com/images/BRGPOD/75857_b.jpg',
@@ -21,7 +21,7 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '2081',
+        {'start': '1981',
         'end': '2153',
         'title': 'Landschaft bei Montreuil',
         'description': 'by Albert Gleizes, French Painter, 1881-1953',
@@ -33,15 +33,17 @@ var timeline_data = {  // save as a global variable
         'textColor' : 'green'},
 
 
-        {'start': '2020',
+        {'start': '1901',
+	'end': '1951',
         'title': 'Femme au Miroir',
         'description': 'by Fernand Leger, French Painter, 1881-1955',
         'image': 'http://images.allposters.com/images/AWI/GMR117_b.jpg',
-        'link': 'http://www.allposters.com/-sp/Femme-au-Miroir-1920-Posters_i141266_.htm'
+        'link': 'http://www.allposters.com/-sp/Femme-au-Miroir-1920-Posters_i141266_.htm',
+	'color': 'black'
         },
 
 
-        {'start': '2003',
+        {'start': '2100',
         'title': 'The Old Guitarist',
         'description': 'by Pablo Picasso, Spanish Painter/Sculptor, 1881-1973',
         'image': 'http://images.allposters.com/images/ESC/AP599_b.jpg',
@@ -49,7 +51,7 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '2082',
+        {'start': '1922',
         'end': '2164',
         'title': 'Jour',
         'description': 'by Georges Braque, French Painter, 1882-1963',
@@ -59,7 +61,7 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '1916',
+        {'start': '1943',
         'title': 'Still Life with a White Dish',
         'description': 'by Gino Severini, Italian Painter, 1883-1966',
         'image': 'http://images.allposters.com/images/MCG/FS1254_b.jpg',
@@ -67,17 +69,18 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '2085',
-        'end': '2141',
+        {'start': '1915',
+        'end': '1941',
         'title': 'Rhythm, Joie de Vivre',
         'description': 'by Robert Delaunay, French Painter, 1885-1941',
         'image': 'http://imagecache2.allposters.com/images/pic/adc/10053983a_b~Rhythm-Joie-de-Vivre-Posters.jpg',
-        'link': 'http://www.allposters.com/-sp/Rhythm-Joie-de-Vivre-Posters_i1250641_.htm'
+        'link': 'http://www.allposters.com/-sp/Rhythm-Joie-de-Vivre-Posters_i1250641_.htm',
+	'color': 'green'
         },
 
 
-        {'start': '2085',
-        'end': '2125',
+        {'start': '1905',
+        'end': '1925',
         'title': 'Castor Et Pollux',
         'description': 'by Roger de la Fresnaye, French Painter, 1885-1925',
         'image': 'http://images.allposters.com/images/CORPOD/IX001463_b.jpg',
@@ -85,12 +88,14 @@ var timeline_data = {  // save as a global variable
         'tapeImage': 'blue_stripes.png',
         'tapeRepeat': 'repeat-x',
         'caption': "This is the event's caption attribute.",
-        'classname': 'hot_event' 
+        'classname': 'hot_event',
+	'color': 'red' 
         },
 
 
         {'start': '1912',
-        'title': 'Portrait of Pablo Picasso',
+	'end': '1990',
+        'title': 'Prtrait of Pablo Picasso',
         'description': 'by Juan Gris, Spanish Painter/Sculptor, 1887-1927',
         'image': 'http://images.allposters.com/images/BRGPOD/156514_b.jpg',
         'link': 'http://www.allposters.com/-sp/Portrait-of-Pablo-Picasso-1881-1973-1912-Posters_i1344154_.htm'
