@@ -4,7 +4,56 @@ var timeline_data = {  // save as a global variable
 'wikiSection': "Simile Cubism Timeline",
 
 'events' : [
-        {'start': '1999',
+	{'start': '1909',
+	'end': '1959',
+        'title': 'Barfusserkirche',
+        'description': 'by Lyonel Feininger, American/German Painter, 1871-1956',
+        'image': 'http://images.allposters.com/images/AWI/NR096_b.jpg',
+        'link': 'http://www.allposters.com/-sp/Barfusserkirche-1924-Posters_i1116895_.htm'
+        },
+
+
+        {'start': '1906',
+        'end': '1999',
+        'title': 'Three Figures',
+        'description': 'by Kasimir Malevich, Ukrainian Painter, 1878-1935',
+        'image': 'http://images.allposters.com/images/BRGPOD/75857_b.jpg',
+        'link': 'http://www.allposters.com/-sp/Three-Figures-1913-28-Posters_i1349989_.htm'
+        },
+
+
+        {'start': '1922',
+        'end': '2100',
+        'title': 'Landschaft bei Montreuil',
+        'description': 'by Albert Gleizes, French Painter, 1881-1953',
+        'image': 'http://images.allposters.com/images/mer/1336_b.jpg',
+        'link': 'http://www.allposters.com/-sp/Landschaft-bei-Montreuil-Posters_i339007_.htm',
+        'isDuration' : true,
+        'icon' : "dark-red-circle.png",
+        'color' : 'red',
+        'textColor' : 'green'},
+
+
+        {'start': '1920',
+        'end': '1923',
+        'title': 'Femme au Miroir',
+        'description': 'by Fernand Leger, French Painter, 1881-1955',
+        'image': 'http://images.allposters.com/images/AWI/GMR117_b.jpg',
+        'link': 'http://www.allposters.com/-sp/Femme-au-Miroir-1920-Posters_i141266_.htm',
+        'color': 'black'
+        },
+
+
+        {'start': '1890',
+	'end': '1990',
+        'title': 'The Old Guitarist',
+        'description': 'by Pablo Picasso, Spanish Painter/Sculptor, 1881-1973',
+        'image': 'http://images.allposters.com/images/ESC/AP599_b.jpg',
+        'link': 'http://www.allposters.com/-sp/The-Old-Guitarist-c-1903-Posters_i328746_.htm'
+        },
+
+        {'start': '1939',
+	'end': '1949',
         'title': 'Barfusserkirche',
         'description': 'by Lyonel Feininger, American/German Painter, 1871-1956',
         'image': 'http://images.allposters.com/images/AWI/NR096_b.jpg',
@@ -21,7 +70,7 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '1981',
+        {'start': '1911',
         'end': '2153',
         'title': 'Landschaft bei Montreuil',
         'description': 'by Albert Gleizes, French Painter, 1881-1953',
@@ -43,7 +92,8 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '2100',
+        {'start': '1900',
+	'end': '1972',
         'title': 'The Old Guitarist',
         'description': 'by Pablo Picasso, Spanish Painter/Sculptor, 1881-1973',
         'image': 'http://images.allposters.com/images/ESC/AP599_b.jpg',
@@ -102,7 +152,7 @@ var timeline_data = {  // save as a global variable
         },
 
 
-        {'start': '2091',
+        {'start': '1913',
         'end': '2115',
         'title': 'Portrait of Horace Brodsky',
         'description': 'by Henri Gaudier-Brzeska, French Sculptor, 1891-1915',
