@@ -1,0 +1,438 @@
+/*
+ * YUI Resect CSS version: 2.2.2 
+ * Copyright (c) 2007, Yahoo! Inc. All rights reserved.
+ * Licensed under the BSD License: http://developer.yahoo.net/yui/license.txt
+ */
+/*
+ * CSS borrowed and inspired by http://alifelski.com.  Thanks!
+ */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,optgroup,button,p,blockquote,th,td{
+        margin:0;
+        padding:0;
+        line-height:1.5;
+}
+* {
+        margin: 0;
+}
+html, body {
+        height: 100%;
+}
+
+pre { border: 0px; }
+
+
+body {
+        background:#fff url(/static/images/pageBG.png) repeat-x scroll center top;
+        color:#333333;
+        font-family:"Segoe UI",Helvetica,Arial,Verdana,sans-serif;
+        font-size:13px;
+        line-height:125%;
+}
+
+h1,h2,h3,h4,h5,h6{
+        font-size:100%;
+        font-weight:bold;
+}
+table{
+        border-collapse:collapse;
+        border-spacing:0;
+}
+#user_messages {
+        float:left;
+        background:#bb5026;
+        width:100%;
+        color:#fff;
+        padding:6px;
+}
+caption,th{
+        text-align:left;
+}
+/* ol,ul{
+        list-style:none;
+} */
+.hidden{
+        display: none;
+}
+
+
+fieldset,img{
+        border:0;
+}
+input,textarea,select,optgroup,option,button{
+        font-family:inherit;
+        font-size:90%;
+        margin: 3px 2px 0px 10px;
+}
+
+.comments{
+        float:left;   
+        padding: 10px;
+        width:100%;
+        font-size: 17px;
+        line-height:1.4em;
+}
+div#headerContainer {
+    background:transparent url(/static/images/largeCrowd.png) no-repeat scroll right top;
+max-width: 1024px;
+min-width: 800px;
+height: 100px;
+}
+div#headerMain {
+    background:transparent url(/static/images/smallCrowd.png) no-repeat scroll left top;
+}
+div#headerMain h1 a {
+display:block;
+padding:20px 80px;
+font-size:40px;
+color: #eee;
+text-decoration: none;
+width:300px;
+}
+div#headerright {
+        background:transparent url(/static/images/largeCrowd.png) no-repeat scroll right bottom;
+        border:medium none;
+        display:block;
+        float:right;
+        height:100px;
+        margin:0;
+        text-indent:-9999em;
+        width:270px;
+        z-index:200;
+}
+div#header a, div#nav a { outline: none; }
+
+a:link { color: #4c8ab4; text-decoration: underline; }
+a:visited { color: #666; text-decoration: underline;}
+a:hover { text-decoration: none;}
+a:active { color:#4c8ab4; text-decoration: none;}
+
+strong{
+        font-weight: bold;
+}
+
+body{
+        color: #333;
+        font-size: 13px;
+        line-height: 125%;
+        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
+}
+p{
+        margin-top: 10px;
+        margin-bottom: 10px;
+}
+
+div#container{
+        margin:auto;
+        max-width:1024px;
+        min-width:800px;
+        height: auto !important;
+        min-height: 85%;
+        margin: 0 auto -60px; /* the bottom margin is the negative value of the footer's height */
+}
+
+div#content{
+        background: #fff;
+        height: auto;
+        padding:10px 30px;
+}
+
+
+div#left{
+ float: left;
+ width: 50%;  
+ padding-left: 10px;
+}
+
+div#right{
+ float: right;
+ width: 328px;
+ margin-right: -20px;
+}
+
+div#righttop{
+  background: url(/static/images/boxTop.png) no-repeat;  
+  height: 16px;
+}
+
+div#rightcontent{
+ background: #eeeeee url(/static/images/boxGrad.png) repeat-x;
+ border-left: solid 1px #b3b3b3;
+ border-right: solid 1px #b3b3b3;
+ padding: 10px;
+ padding-right: 20px;
+ margin-top: 0px;
+ min-height: 113px;
+}
+
+div#rightbottom{
+  background: url(/static/images/boxBottom.png) no-repeat;
+  height: 14px;
+}
+
+
+h1.featureHeader {
+        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
+        font-size: 218%;
+        margin-bottom: 20px;
+        line-height: 100%;
+}
+
+h2.subHeader {
+        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
+        font-size: 152%;
+        margin-top: 16px;
+        margin-bottom: 12px;
+        line-height: 100%;
+}
+
+
+
+div.footerbox{
+    font-size: 11px;
+    width: 30%;
+    float: left; 
+    color: #333;
+    padding: 8px;
+}
+
+input{
+        padding: 2px;
+        width: 148px;
+        margin: 2px 0px 0px 10px;
+}
+
+.small {
+        color:#222;
+        font-size:80%;
+        line-height:1;
+        font-weight:normal;
+}
+
+textarea{
+        border: 1px solid #c8c7c7;
+        padding: 2px;
+        width: 307px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+}
+
+div.fieldWrapper {
+        padding:10px;
+        margin-bottom: 15px;
+}
+
+submit input {
+        margin:10px;
+        float:right;
+        padding:3px;
+        font-size:medium;
+        font-weight:normal;
+        color:#FFF;
+        background:#BB5026;
+        margin-right:20px;
+}
+
+div#footer{
+        color: #fff;
+        float: left;
+        width: 100%;
+        background: #500000;
+        bottom: 0;
+        margin-top:80px;
+        padding:10px 0 10px 0;
+        height: 60px;
+}
+
+#footer, .push {
+        height: 60px; /* .push must be the same height as .footer */
+}
+
+div#footerInner{
+        padding-left: 10px;
+}
+
+ul#footerLinks a{
+  color: #fff;
+  text-decoration: none;
+}
+
+.clear{
+  clear: both;
+}
+
+/* ================================================================
+This copyright notice must be kept untouched in the stylesheet at 
+all times.
+
+The original version of this stylesheet and the associated (x)html
+is available at http://www.cssplay.co.uk/menus/pro_drop6.html
+Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.
+This stylesheet and the associated (x)html may be modified in any 
+way to fit your requirements.
+=================================================================== */
+
+.preload1 {background: url(/static/images/tabOnLeft.png);}
+.preload2 {background: url(/static/images/tabOnRight.png);}
+
+#nav {
+        padding:0; 
+        margin:0; 
+        list-style:none; 
+        height:39px; 
+        background:# 
+        position:relative; 
+        z-index:200; 
+        font-family:arial, verdana, sans-serif; 
+        margin-left: 20px;
+        margin-right: auto;
+        width: 100%;
+        padding-top:14px;
+}
+#nav li{
+        float:left;
+        background: url(/static/images/tabOffLeft.png) left top no-repeat;
+        margin:0;
+    padding:0 6px 0 9px;
+        
+        }
+#nav li a.top_link {
+        display:block; 
+        float:left; 
+        height:34px; 
+        line-height:33px; 
+        color:#332c2c; 
+        text-decoration:none; 
+        font-size:12px; 
+    padding:0px 15px 4px 6px;
+    cursor:pointer;
+        background: url(/static/images/tabOffRight.png) right top no-repeat;
+}
+#nav li a.top_link span {
+        float:left; 
+        display:block; 
+        padding:0 24px 0 24px;
+        line-height:2.3em;
+        height:35px; background: 
+}
+
+#nav li:hover{
+        float:left;
+        background: url(/static/images/tabOnLeft.png) left top no-repeat;
+        margin:0;
+        padding:0 6px 0 9px;
+}
+#nav li:hover a.top_link, #nav a.top_link:hover{
+        display:block; 
+        float:left; 
+        height:34px; 
+        line-height:33px; 
+        color:#332c2c; 
+        text-decoration:none; 
+        font-size:12px; 
+        padding:0px 15px 4px 6px;
+        cursor:pointer;
+        background: url(/static/images/tabOnRight.png) right top no-repeat;
+}
+#nav li:hover a.top_link span, 
+#nav a.top_link:hover span
+{background:url(/static/images/six_1.png) no-repeat right top;}
+#nav li:hover a.top_link span.down,
+#nav a.top_link:hover span.down
+#nav li:hover {position:relative; z-index:200;}
+#nav a:hover {position:relative; white-space:normal; z-index:200;}
+#nav :hover ul.sub {left:1px; top:35px; background: #CEF1F9; padding:6px; border:1px solid #06738E; white-space:nowrap; width:100%; height:auto; z-index:300;}
+
+
+#nav li#on{
+        float:left;
+        background: url(/static/images/tabOnLeft.png) left top no-repeat;
+        margin:0;
+        padding:0 6px 0 9px;
+}
+#nav li#on a.top_link {
+        display:block; 
+        float:left; 
+        height:34px; 
+        line-height:33px; 
+        color:#332c2c; 
+        text-decoration:none; 
+        font-size:12px; 
+        padding:0px 15px 4px 6px;
+        cursor:pointer;
+        background: url(/static/images/tabOnRight.png) right top no-repeat;
+}
+#nav li#on a.top_link span, 
+#nav a.top_link span {background:url(/static/images/six_1.png) no-repeat right top;}
+#nav li#on a.top_link span.down
+#nav li#on {position:relative; z-index:200;}
+
+/* **** */
+
+.people-list { font-size:110%; margin-bottom: 30px; }
+.people-list h2 { font-size:130%; margin-bottom: 10px; }
+.people-list a { font-size:130%; };
+.people-list ul { list-style-type:none; }
+.people-list ul li { margin-bottom: 4px; list-style-type:none; }
+
+.paper h2 { font-size:120%; }
+.paper .abstract {margin:6px 0 6px 30px; font-family:georgia,"times new roman",times,serif; color:#333; }
+.paper .details { font-size:90%; }
+
+.interests { font-size:115%; }
+.interests ul { margin: 0 0 0 33px; list-type: disc; }
+.howdy ul { margin: 0 0 0 33px; list-type: disc; }
+.descr { font-size:115%; }
+
+.people-info { font-size: 90%; display: block; width: 48%; }
+.info-label { color: #444; font-weight: bold; font-size:110%;}
+
+.paper img { width: 30px; float: left; }
+
+div.post-item  { margin-bottom: 30px; }
+.post-item h3.title { font-size: 130%; margin-top: 3px; background-color:#ddd }
+.post-item .meta { font-size:90%; }
+.post-item .tease { padding-left:20px; }
+.post-item .more-meta { font-size:80%; color:#777;}
+
+#twitter_update_list{
+  padding-left: 20px;  
+ }
+
+#twitter_update_list li {
+    list-style: none; margin-bottom: 10px; margin-top:10px; }
+
+.flat-content h1 {
+        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
+        font-size: 182%;
+        margin-top: 16px;
+        margin-bottom: 12px;
+        line-height: 100%;
+}
+
+.flat-content h2 {
+        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
+        font-size: 152%;
+        margin-top: 16px;
+        margin-bottom: 12px;
+        line-height: 100%;
+}
+
+.flat-content h3 {
+        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
+        font-size: 126%;
+        margin-top: 16px;
+        margin-bottom: 12px;
+        line-height: 100%;
+}
+
+.flat-content h4 {
+        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
+        font-size: 100 %;
+        margin-top: 16px;
+        margin-bottom: 12px;
+        line-height: 100%;
+}
+
+.flat-content ul li { margin: 0 0 0 33px; list-type: disc; }
+
+.flat-content blockquote { margin: 8px 8px 8px 8px; padding: 6px; }

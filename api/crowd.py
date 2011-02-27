@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import cherrypy
 from cherrypy import tools
+#from crowdy.models import Crowd
 
 @cherrypy.expose
 @tools.json_out()
