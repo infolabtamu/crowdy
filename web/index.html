@@ -78,52 +78,67 @@ Crowdy
         }
    </script>
 
+   <script type="text/javascript"> 
+	//Modifying HTML contents at runtime.
+   		function remove_element(){
+   			$(this).remove();
+   		}
+   		$('#mod-html-add').click(function (){
+   			$('<li>favorite crowd</li>').appendTo('#favorite').click(remove_element);
+   		});
+   		$('#favorite > li').click(remove_element);	
+   </script>
 </head>
 
 <body onload="onLoad();" onresize="onResize();">
 
-<div class="tabber">
-                <div class="tabbertab" title="Timeline">
-                        <p>tab1</p>
-                </div>
-                <div class="tabbertab" title="Timeline">
-                        <p>tab2</p>
-                </div>
-</div>
 <br>
-<div id="container">
+<div class="container">
 	<div class = "banner">
                 This is banner
                 <a href="login.html" class="lbOn">log in</a>
 		<a href="register.html" class="lbOn">register</a>
         </div>
-                <div id="container">
-                        <div class="optionC">
-                                option box
-                        </div>
-                </div>
+        <div class="optionC">
+		<p><h2>layout style</h2>
+			<input type="radio" name="layout" value="Timeline" checked> Timeline
+			<input type="radio" name="layout" value="List"> List
+			<input type="radio" name="layout" value="Map"> Map
+		</p>
+        </div>
 
 	<div class="tabber">
 		<div class="tabbertab" title="Timeline">
 
-                	<div id="container">
-                        	<div class="timelineC">
-                                	timeline box
-	                                <div id='tl'></div>
-        	                </div>
-                	</div>
+                     	<div class="timelineC">
+                              	timeline box
+				<br><br><br><br><br><br>
+	                        <div id='tl'></div>
+				<br><br><br><br><br><br>
+        	         </div>
 		</div>
 
-  		<div class="tabbertab" title="List">
-		</div>
+		<!--Work Space put in second tab. Selected item in main window(timeline,etc) should have a mark as reminder-->
+  		<!--div class="tabbertab" title="WorkSpace">
+			<div id="container">
+	                        <div class="workspaceC">
+                        	        workspace box
+                	                <br><br><br><br><br><br><br><br><br><br><br><br>
+        	                </div>
+	                </div>
+
+		</div-->
 	</div>
 
-                <div id="container">
-                        <div class="workspaceC">
-                                workspace box
-                                <br><br><br><br><br><br><br><br><br><br><br><br>
-                        </div>
-                </div>
+	<div class="workspaceC">
+                temp workspace box <br>
+			<!--not working!!!!!!-->
+		<span id="mod-html-add"> Click me to add items to the list </span>
+		<ul id="favorite">
+			<li>item 1</li>	
+		</ul>
+        </div>
+
 
 		
 </div><!--container-->
