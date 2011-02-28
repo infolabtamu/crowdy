@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import cherrypy
 from cherrypy import tools
-#from crowdy.models import Crowd
+from models import Crowd
 
 @cherrypy.expose
 @tools.json_out()
@@ -11,7 +11,11 @@ def full(cid):
 
 @cherrypy.expose
 @tools.json_out()
-def simple():
+def simple(cid):
     """returns a crowd, after removing information about when users leave
     and join plus when crowds split and merge"""
-    raise NotImplementedError
+    crowd = Crowd.get_id(cid).to_d()
+    del crowd['merge']
+    del crowd['split']
+    crowd['users'] = [u[0] for u in crowd['users']]
+    return crowd
