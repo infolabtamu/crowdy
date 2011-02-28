@@ -28,9 +28,14 @@
 *.sql
 *.sqlite
 
-# OS generated files #
+# generated files #
 ######################
 .DS_Store?
 ehthumbs.db
 Icon?
 Thumbs.db
+*.swp
+
+# development settings
+settings_dev.py
+etc/dev.conf
