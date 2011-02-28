@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import cherrypy
 from cherrypy import tools
-from models import Crowd
+from api.models import Crowd
 
 @cherrypy.expose
 @tools.json_out()

@@ -62,11 +62,11 @@ class Edges(Model):
     followers = ListProperty('fols',int)
 
 
-class Group(Model):
-    _id = SlugProperty('_id')
+class Crowd(Model):
+    _id = TextProperty('_id')
     start = DateTimeProperty('start')
     end = DateTimeProperty('end')
-    type = EnumProperty(['ats','geo','txt'])
+    type = EnumProperty('type', ['ats','geo','txt'])
     users = ListProperty('users')
     merge = ListProperty('merge')
     split = ListProperty('split')
