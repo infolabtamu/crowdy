@@ -133,67 +133,9 @@ div#container{
 div#content{
         background: #fff;
         height: auto;
-        padding:10px 30px;
+        padding: 0;
 }
 
-
-div#left{
- float: left;
- width: 50%;  
- padding-left: 10px;
-}
-
-div#right{
- float: right;
- width: 328px;
- margin-right: -20px;
-}
-
-div#righttop{
-  background: url(/static/images/boxTop.png) no-repeat;  
-  height: 16px;
-}
-
-div#rightcontent{
- background: #eeeeee url(/static/images/boxGrad.png) repeat-x;
- border-left: solid 1px #b3b3b3;
- border-right: solid 1px #b3b3b3;
- padding: 10px;
- padding-right: 20px;
- margin-top: 0px;
- min-height: 113px;
-}
-
-div#rightbottom{
-  background: url(/static/images/boxBottom.png) no-repeat;
-  height: 14px;
-}
-
-
-h1.featureHeader {
-        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
-        font-size: 218%;
-        margin-bottom: 20px;
-        line-height: 100%;
-}
-
-h2.subHeader {
-        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
-        font-size: 152%;
-        margin-top: 16px;
-        margin-bottom: 12px;
-        line-height: 100%;
-}
-
-
-
-div.footerbox{
-    font-size: 11px;
-    width: 30%;
-    float: left; 
-    color: #333;
-    padding: 8px;
-}
 
 input{
         padding: 2px;
@@ -343,13 +285,13 @@ way to fit your requirements.
 #nav :hover ul.sub {left:1px; top:35px; background: #CEF1F9; padding:6px; border:1px solid #06738E; white-space:nowrap; width:100%; height:auto; z-index:300;}
 
 
-#nav li#on{
+#nav li.on{
         float:left;
         background: url(/static/images/tabOnLeft.png) left top no-repeat;
         margin:0;
         padding:0 6px 0 9px;
 }
-#nav li#on a.top_link {
+#nav li.on a.top_link {
         display:block; 
         float:left; 
         height:34px; 
@@ -361,78 +303,8 @@ way to fit your requirements.
         cursor:pointer;
         background: url(/static/images/tabOnRight.png) right top no-repeat;
 }
-#nav li#on a.top_link span, 
+#nav li.on a.top_link span, 
 #nav a.top_link span {background:url(/static/images/six_1.png) no-repeat right top;}
-#nav li#on a.top_link span.down
-#nav li#on {position:relative; z-index:200;}
+#nav li.on a.top_link span.down
+#nav li.on {position:relative; z-index:200;}
 
-/* **** */
-
-.people-list { font-size:110%; margin-bottom: 30px; }
-.people-list h2 { font-size:130%; margin-bottom: 10px; }
-.people-list a { font-size:130%; };
-.people-list ul { list-style-type:none; }
-.people-list ul li { margin-bottom: 4px; list-style-type:none; }
-
-.paper h2 { font-size:120%; }
-.paper .abstract {margin:6px 0 6px 30px; font-family:georgia,"times new roman",times,serif; color:#333; }
-.paper .details { font-size:90%; }
-
-.interests { font-size:115%; }
-.interests ul { margin: 0 0 0 33px; list-type: disc; }
-.howdy ul { margin: 0 0 0 33px; list-type: disc; }
-.descr { font-size:115%; }
-
-.people-info { font-size: 90%; display: block; width: 48%; }
-.info-label { color: #444; font-weight: bold; font-size:110%;}
-
-.paper img { width: 30px; float: left; }
-
-div.post-item  { margin-bottom: 30px; }
-.post-item h3.title { font-size: 130%; margin-top: 3px; background-color:#ddd }
-.post-item .meta { font-size:90%; }
-.post-item .tease { padding-left:20px; }
-.post-item .more-meta { font-size:80%; color:#777;}
-
-#twitter_update_list{
-  padding-left: 20px;  
- }
-
-#twitter_update_list li {
-    list-style: none; margin-bottom: 10px; margin-top:10px; }
-
-.flat-content h1 {
-        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
-        font-size: 182%;
-        margin-top: 16px;
-        margin-bottom: 12px;
-        line-height: 100%;
-}
-
-.flat-content h2 {
-        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
-        font-size: 152%;
-        margin-top: 16px;
-        margin-bottom: 12px;
-        line-height: 100%;
-}
-
-.flat-content h3 {
-        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
-        font-size: 126%;
-        margin-top: 16px;
-        margin-bottom: 12px;
-        line-height: 100%;
-}
-
-.flat-content h4 {
-        font-family: "Segoe UI", Helvetica, Arial, Verdana, sans-serif;
-        font-size: 100 %;
-        margin-top: 16px;
-        margin-bottom: 12px;
-        line-height: 100%;
-}
-
-.flat-content ul li { margin: 0 0 0 33px; list-type: disc; }
-
-.flat-content blockquote { margin: 8px 8px 8px 8px; padding: 6px; }
