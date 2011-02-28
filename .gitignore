@@ -35,6 +35,9 @@ ehthumbs.db
 Icon?
 Thumbs.db
 *.swp
+*.dvi
+*.aux
+docs/crowdy_gui.pdf
 
 # development settings
 settings_dev.py
