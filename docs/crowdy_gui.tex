@@ -25,16 +25,16 @@
 \begin{abstract}
 Microblogging systems have provided society with a more transparent channel
 for information distribution. Each individual is empowered to spread news
-and build their social networks. With the freedom of information generation,
-the issue now is identifiying, organizing, visualizing useful information.
+and build their social network. With the freedom of information generation,
+the issue now is identifying, organizing, and visualizing useful information.
 For this project, we want to design an user interface that takes
 both usefulness and usability into consideration. Our system will
 adapt to different types of users and display the crowds that form in a specific
 period of time as well as the topics discussed by the crowd from Twitter. The
 interface should both optimize the user experience and system speed. For
-evaluation, we will design some user study or inspection procedures in order to
-test the efficiency, effectivness, and satisfaction of this system to our
-poential users.
+evaluation, we will design a user study to
+test the efficiency, effectiveness, and satisfaction of this system to our
+potential users.
 \end{abstract}
 
 \category{H.5.1}{Information Interfaces and Presentation}{Multimedia
@@ -162,7 +162,7 @@ to provide mechanisms for tip reminding of behavior history.
 In addition, with the nature of the temporal massive data, we do not expect our
 users to remember where to find the crowd/topic of interest that the user just
 encountered. We want to provide a Workspace panel so to release the stress on
-the memory requirment from the user.
+the memory requirement from the user.
 
 \section{Related Work}
 There has been some work into understanding how communities of users interact
@@ -217,7 +217,7 @@ group affiliation, which they refer to as ``transient crowds''. A transient
 crowd according to them is a potentially short-lived ad-hoc collection of users
 bound together by some common thread – which can be communication-based,
 location-based or interest based. We are inspired by this idea of formation and
-detection of crowds. We try to implement detection of crowd in “crowdy” in a
+detection of crowds. We try to implement detection of crowd in “Crowdy” in a
 similar fashion.
 
 \section{Interface Design}
@@ -292,6 +292,18 @@ option panel. Some detailed components in these three panels are listed below.
 \end{itemize}
 
 \section{Implementation}
+The system is designed to run in a user's web browser.
+As a result, we choose to use some fairly standard web tools to implement the system.
+The system that we are building the user interface on top of exposes a RESTful API.
+To retrieve data, our system makes an HTTP GET request to the server.
+The server returns data in the JSON format, which is easy to decode in Javascript.
+
+CherryPy
+Jinja
+
+jQuery
+Simile Timeline
+Google Maps API
 
 \section{Evaluation}
 
