@@ -72,13 +72,13 @@ input,textarea,select,optgroup,option,button{
         line-height:1.4em;
 }
 div#headerContainer {
-    background:transparent url(/static/images/largeCrowd.png) no-repeat scroll right top;
+    background:transparent url(/static/images/UItitle.png) no-repeat scroll right top; /*largeCrowd.png*/
 max-width: 900px;
 min-width: 800px;
 height: 100px;
 }
 div#headerMain {
-    background:transparent url(/static/images/smallCrowd.png) no-repeat scroll left top;
+    background:transparent url(/static/images/UItitle.png) no-repeat scroll left top; /*smallCrowd.png*/
 }
 div#headerMain h1 a {
 display:block;
