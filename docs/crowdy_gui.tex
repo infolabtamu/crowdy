@@ -164,70 +164,74 @@ users to remember where to find the crowd/topic of interest that the user just
 encountered. We want to provide a Workspace panel so to release the stress on
 the memory requirement from the user.
 
-\section{Related Work}
-There has been some work into understanding how communities of users interact
-on social networks. Along with working on understanding microblogging usage and
-communities\cite{java2007we}, the main author - Akshay Java was one of the
-first few who dealt with the measurement of the usage and nature of communities
-in microblogging. In his latter study\cite{java2008mining}, he presented his
-observations of the microblogging phenomena and user intentions by studying the
-content, topological and geographical properties of such communities. He found
-that microblogging provides users with a more immediate form of communication
-to talk about their daily activities and to seek or share information.
-
-When it comes to visualization of social crowds, a tool which has
-similar objectives to ours is
-Vizster\cite{heer2005vizster}. It is a visualization system for playful
-end-user exploration and navigation of large-scale online social networks. The
-design builds upon familiar node-link network layouts to contribute techniques
-for exploring connectivity in large graph structures, supporting visual search
-and analysis, and automatically identifying and visualizing community
-structures. The system facilitates discovery of people, connections,
-and communities to promote increased awareness of community structure and
-information exposure, while maintaining a fun and socially engaged online
-space. The creators of the tool were interested in crafting techniques for the
-situated exploration and visual analysis of large graph structures by a
-specific end-user population.
-
-Another related study was on how web-based retrieval from Twitter can be used
-as knowledge base\cite{cheong2009integrating} which shows that the
-visualization system we try to attempt can be helpful. Marc Cheong et al. in
-this study tried to analyze demographics of the authors of Twitter messages and
-attempt to map a Twitter trend into what's going on in the real world. Their
-findings reveal a pattern behind trends on Twitter, and trying to evolve
-through visualization methods.  Their findings also enable us to understand the
-underlying characteristics behind the ``trend setters'', providing us a new
-perspective on the contributors of a trend.
-
-Identifying highly dynamic ad-hoc collections of users what we refer to as
-crowds in massive social messaging systems like Twitter and Facebook is
-important\cite{kamath2010identifying}. K. Y. Kamath et al. in the study have a
-salient feature of the proposed approach as an efficient locality-based
-clustering approach for identifying crowds of users in near real-time compared
-to more heavyweight static clustering algorithm. The study consisted of 711,612
-users and 61.3 million messages, which show how the proposed approach can
-efficiently and effectively identify Twitter-based crowds.
-
-In the other study based on the previous one, K. Y. Kamath et
-al\cite{kamath2011transient}, they add another salient feature - a novel crowd
-tracking and evolution approach for linking crowds across time periods. Unlike
-the more static and long-lived group-based membership offered on many social
-networks their goal is to support the discovery of organic and highly-temporal
-group affiliation, which they refer to as ``transient crowds''. A transient
-crowd according to them is a potentially short-lived ad-hoc collection of users
-bound together by some common thread – which can be communication-based,
-location-based or interest based. We are inspired by this idea of formation and
-detection of crowds. We try to implement detection of crowd in ``Crowdy'' in a
-similar fashion.
-
-\section{Interface Design}
-
 \begin{figure*}[t]
 \centering
 \includegraphics[width=400pt]{img/UIdesign.eps}
 \caption{Crowdy User Interface Design}
 \label{fig:UIdesign}
 \end{figure*}
+
+\section{Related Work}
+Twitter\footnote{http://www.twitter.com} is a microblogging platform which is
+fast gaining popularity\cite{Oreilly:2009} among broad sections of society and
+has a global outreach spreading from developed, urban nations like the United
+States where it has a high adoption rate \cite{Java:2007}, to developing
+countries in parts of Asia and South America.
+
+Along with working on understanding microblogging usage and communities
+\cite{Java:2007}, the main author - Akshay Java was one of the first few who
+dealt with the measurement of the usage and nature of communities in
+microblogging. In his latter study \cite{Java:2008}, he presented his
+observations of the microblogging phenomena and user intentions by studying the
+content, topological and geographical properties of such communities. He found
+that microblogging provides users with a more immediate form of communication
+to talk about their daily activities and to seek or share information.
+
+When it comes to visualization of the social crowd, a tool which in some ways
+shows similar objectives as us and stands out among the rest is Vizster
+\cite{Heer:2005}. It is a visualization system for which can be used for
+exploration and navigation of the social networks of any scale. The system
+provides facilities to improve the functionalities like discovering people or
+connections which can help in promoting awareness of community structure and
+exposure to information. It maintains a fun element to it while providing these
+given features. It was aimed to provide specific end-users, functionalities
+like situated exploration and visual analysis of big-scale communities. It is
+based on a design of network layouts which have features like supporting visual
+search and analysis, exploring connectivity in large graphs and automatic
+identification and visualization of structures of communities.
+
+Another related study was on how web-based retrieval from twitter can be used
+as knowledge base \cite{Cheong:2009} which shows that the visualization system
+we try to attempt can be helpful. Marc Cheong et al. in this study tried to
+analyze demographics of the Twitter users and attempted to provide and analyze
+the trend in Twitter into what's going on in the real world. They enabled us to
+understand the underlying characteristics behind the trend setting in Twitter
+and thereby providing a new perspective on the contributors of a trend. They
+used visualization techniques along with artificial intelligence-based data
+mining methods to classify the Twitter messages dealing with the trend topic.
+
+Identifying highly dynamic ad-hoc collections of users what we refer to as
+crowds in massive social messaging systems like Twitter and Facebook is
+important \cite{krishna:2010}. K. Y. Kamath et al. in the study suggest an
+efficient locality-based clustering approach for identifying crowds of users in
+near real-time compared to more heavyweight static clustering algorithm. The
+study consisted of 711,612 users and 61.3 million messages, and tells what
+approaches to follow to efficiently and effectively identify Twitter-based
+crowds.
+
+In the other study based on the previous one, K. Y. Kamath et al
+\cite{krishna:2011}, they add another salient feature - a novel crowd tracking
+and evolution approach for linking crowds across time periods. Unlike the more
+static and long-lived group-based membership offered on many social networks
+their goal was to support the discovery of organic and highly-temporal group
+affiliation, which they refer to as ``transient crowds''. A transient crowd
+according to them is a potentially short-lived ad-hoc collection of users bound
+together by some common thread – which can be communication-based,
+location-based or interest based. We are inspired by this idea of formation and
+detection of crowds. We try to implement detection of crowd in Crowdy in a
+similar fashion.
+
+\section{Interface Design}
 
 Figure \ref{fig:UIdesign} shows an outline of the prototype. We want to provide
 the user with a simple and flexible interface to maximize their options for
@@ -294,15 +298,24 @@ option panel. Some detailed components in these three panels are listed below.
 \section{Implementation}
 The system is designed to run in a user's web browser.  As a result, we decided
 to use some fairly standard web tools to implement the system.  The system that
-we are building the user interface on top of exposes a RESTful API.  To
-retrieve data, our system makes an HTTP GET request to the server.  The server
-returns data in the JSON format, which is easy to decode in Javascript.
+we are building the user interface on top of exposes a RESTful API.  Although
+it is not a part of this project, it is important to understand how the backend
+works, and how it fits into this project.  First, a crawler retrieves tweets
+from Twitter using Twitter's REST API, search API, and streaming API.  Next,
+this data goes through several filters that add additional information to the
+users and tweets.  After that, a program finds groups of users based on their
+communication patterns.  This data is stored as JSON in a MongoDB database.
+The backend also provides the RESTful API that we connect to.  To retrieve
+data, our system makes an HTTP GET request to the server.  The server returns
+data in the JSON format, which is easy to decode in Javascript.  Our GUI never
+directly reads from or writes to the database.
 
-We are writing the portion of the web application that runs on the server in
-python, since that is what our team has the most experience with.  We chose the
+We are writing the portion of our web application that runs on the server in
+Python, since that is what our team has the most experience with.  We chose the
 CherryPy framework to build the application because it is simple and lets us
-write testable code.  We are using the Jinja templating engine to generate the
-HTML pages.
+write modular, testable code.  We are using the Jinja templating engine to
+generate the HTML pages. This makes it easy to have a consistent look across
+all of our pages without duplicating code.
 
 The code that will run on the user's web browser has to be written in
 Javascript.  We use the jQuery library to handle events, retrieve JSON, and
