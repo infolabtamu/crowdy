@@ -9,12 +9,14 @@
 \title{Crowdy: Social Crowd Visualization}
 
 \numberofauthors{1} 
-\author{\alignauthor Jeffrey McGee, Zhiyuan Cheng, Chiao-Fang Hsu, Pratheek
-Kumar Akireddy \\
-\affaddr{Department of Computer Science and Engineering, Texas A\&M University}
-\\ \affaddr{ College Station, TX 77845 USA} \\
-\email{jeffamcgee@gmail.com, chengzhy@gmail.com, drakihsu@cse.tamu.edu,
-pka293@cse.tamu.edu}
+\author{
+    \alignauthor Jeffrey McGee, Zhiyuan Cheng, Chiao-Fang Hsu, Pratheek
+    Kumar Akireddy \\
+    \affaddr{Department of Computer Science and Engineering, Texas A\&M
+    University} \\
+    \affaddr{ College Station, TX 77845 USA} \\
+    \email{jeffamcgee@gmail.com, chengzhy@gmail.com, drakihsu@cse.tamu.edu,
+    pka293@cse.tamu.edu}
 } 
 
 \maketitle
@@ -160,6 +162,65 @@ encountered. We want to provide a Workspace panel so to release the stress on
 the memory requirment from the user.
 
 \section{Related Work}
+Twitter is a microblogging platform which is fast gaining popularity
+among broad sections of society and has a global outreach spreading from
+developed, urban nations the likes of the United States where it has a high
+adoption rate\cite{akshayjava2009we}, to developing countries in parts of Asia
+and South America.
+
+Along with working on understanding microblogging usage and
+communities\cite{java2007we}, the main author - Akshay Java was one of the
+first few who dealt with the measurement of the usage and nature of communities
+in microblogging. In his latter study\cite{java2008mining}, he presented his
+observations of the microblogging phenomena and user intentions by studying the
+content, topological and geographical properties of such communities. He found
+that microblogging provides users with a more immediate form of communication
+to talk about their daily activities and to seek or share information.
+
+When it comes to visualization of the social crowd, a tool which in some ways
+shows similar objectives as us and stands out among the rest is
+Vizster\cite{heer2005vizster}. It is a visualization system for playful
+end-user exploration and navigation of large-scale online social networks. The
+design builds upon familiar node- link network layouts to contribute techniques
+for exploring connectivity in large graph structures, supporting visual search
+and analysis, and automatically identifying and visualizing community
+structures. The system facilitates a better discovery of people, connections,
+and communities to promote increased awareness of community structure and
+information exposure, while maintaining a fun and socially engaged online
+space. The creators of the tool were interested in crafting techniques for the
+situated exploration and visual analysis of large graph structures by a
+specific end-user population.
+
+Another related study was on how web-based retrieval from twitter can be used
+as knowledge base\cite{cheong2009integrating} which shows that the
+visualization system we try to attempt can be helpful. Marc Cheong et al. in
+this study tried to analyze demographics of the authors of Twitter messages and
+attempt to map a Twitter trend into what's going on in the real world. Their
+findings reveal a pattern behind trends on Twitter, and trying to evolve
+through visualization methods.  Their findings also enable us to understand the
+underlying characteristics behind the ``trend setters'', providing us a new
+perspective on the contributors of a trend.
+
+Identifying highly dynamic ad-hoc collections of users what we refer to as
+crowds in massive social messaging systems like Twitter and Facebook is
+important\cite{kamath2010identifying}. K. Y. Kamath et al. in the study have a
+salient feature of the proposed approach as an efficient locality-based
+clustering approach for identifying crowds of users in near real-time compared
+to more heavyweight static clustering algorithm. The study consisted of 711,612
+users and 61.3 million messages, which show how the proposed approach can
+efficiently and effectively identify Twitter-based crowds.
+
+In the other study based on the previous one, K. Y. Kamath et
+al\cite{kamath2011transient}, they add another salient feature - a novel crowd
+tracking and evolution approach for linking crowds across time periods. Unlike
+the more static and long-lived group-based membership offered on many social
+networks their goal is to support the discovery of organic and highly-temporal
+group affiliation, which they refer to as ``transient crowds''. A transient
+crowd according to them is a potentially short-lived ad-hoc collection of users
+bound together by some common thread – which can be communication-based,
+location-based or interest based. We are inspired by this idea of formation and
+detection of crowds. We try to implement detection of crowd in “crowdy” in a
+similar fashion.
 
 \section{Interface Design}
 
