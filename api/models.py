@@ -1,5 +1,8 @@
 import datetime
-import json
+try:
+    import simplejson as json
+except:
+    import json
 import logging
 
 import maroon
