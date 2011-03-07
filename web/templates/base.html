@@ -4,9 +4,11 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <title>{% block title %}Crowdy{% endblock %}</title>
 <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" href="/static/css/default.css" media="screen,projection" type="text/css" />
+<link rel="stylesheet" href="/static/css/lightbox.css" media="screen,projection" type="text/css" />
 <link rel="stylesheet" type="text/css" href="/static/css/infolab.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js" type="text/javascript"></script>
-
+<script type="text/javascript" src="scripts/lightbox.js"></script>
 {% block head_extra %}{% endblock %}
 </head>
 <body>
@@ -14,6 +16,8 @@
 	<div id="headerContainer">
     		<!--<div id="headerMain"><h1><a href="/">Crowdy</h1></div>-->
 		<!--<div id="headerRight"></div>-->
+		<p align='right'><a href="login.html" class="lbOn">Log In</a> 
+		<a href="register.html" class="lbOn">Register</a></p>
 	</div>
  
 <!-- start nav -->
@@ -31,7 +35,9 @@
 {% block content_title %}{% endblock %}
 {% block content %}{% endblock %}
 		</div>
-		<div class="push">{% block side_content %}{% endblock %}</div>
+		<div class="push">
+			{% block side_content %}{% endblock %}
+		</div>
 	</div>
 </div>
 	<div id="footer">
