@@ -13,3 +13,7 @@ def _render(path, **kwargs):
 def index():
     return _render('index.html')
 
+@cherrypy.expose
+def list():
+    return _render('list.html')
+
