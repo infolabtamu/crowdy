@@ -56,8 +56,7 @@ caption,th{
 
 
 fieldset,img{
-        border:1px;
-	color = #c51878;
+        border:0px;
 }
 input,textarea,select,optgroup,option,button{
         font-family:inherit;

@@ -6,7 +6,6 @@
 <script>
 
 var tl;
-var wtl;
 function loadTimeline(data) {
     var events = jQuery.map(data, function(crowd,i) {
         return {
@@ -18,7 +17,6 @@ function loadTimeline(data) {
     });
 
     var tl_el = document.getElementById("tl");
-    var wtl_el = document.getElementById("wtl");
     var eventSource1 = new Timeline.DefaultEventSource();
 
     var theme1 = Timeline.ClassicTheme.create();
@@ -42,7 +40,6 @@ function loadTimeline(data) {
 
     // create the Timeline
     tl = Timeline.create(tl_el, bandInfos, Timeline.HORIZONTAL);
-    wtl = Timeline.create(wtl_el, bandInfos, Timeline.HORIZONTAL);
 
     var url = '.'; // The base url for image, icon and background image
                    // references in the data
@@ -50,7 +47,6 @@ function loadTimeline(data) {
                    // The data was stored into the
                                                // timeline_data variable.
     tl.layout(); // display the Timeline
-    wtl.layout();
 }
 
 var resizeTimerID = null;
@@ -84,15 +80,9 @@ $(document).ready(function() {
     <fieldset>
     <legend> global view</legend>
 	    <div class="timelineC">
-        	<div id='wtl'></div>
-	    </div>
-    </fieldset>
-    </br></br></br></br>
-    <fieldset>
-    <legend>workspace timeline</legend>
-	    <div class="workspaceC">
 		<div id = 'tl'></div>
 	    </div>
     </fieldset>
+    </br></br></br></br>
 {% endblock %}
 
