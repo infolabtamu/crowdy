@@ -1,0 +1,3 @@
+[submodule "maroon"]
+	path = maroon
+	url = git@lenny.csdl.tamu.edu:maroon.git
