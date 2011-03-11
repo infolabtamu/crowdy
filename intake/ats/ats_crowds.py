@@ -12,10 +12,12 @@ from datetime import datetime
 data_path = '/mnt/chevron/kykamath/data/twitter/ats/crawler/'
 crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
 crowd_type = 'ats'
+edge_threshold_weight = 1.3
+
 
 
 # DB initialization
-mongodb_connection = Connection('localhost', 27017)
+mongodb_connection = Connection('sid', 27017)
 crowds_db = mongodb_connection.crowds
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
@@ -167,7 +169,7 @@ class GraphReader(object):
                     e['upr'] = -1
                 e['w'] = decayedWeight
                 Edges.add(e)
-            if self.writeGraph and decayedWeight > 4: 
+            if self.writeGraph and decayedWeight > edge_threshold_weight: 
                 graphFile.write('%s %s\n'%(edge, decayedWeight))
 #                if edge in tweets.keys(): tweetsFile.write('%s %s\n'%(edge, ' '.join(['%s' % id for id in tweets[edge]])))
         map(updateEdge, Edges.getAllEdges())
@@ -177,7 +179,7 @@ class GraphReader(object):
         def validateLine(line):
             l = line.strip().split()
             t = int(l[0])
-            if len(l) == 4 and t>=low and t<high: return (t, int(l[1]), l[2], l[3])
+            if len(l) == 4 and t>=low and t<high: return (t, l[1], l[2], l[3])
         for e in filter(lambda e: e != None, 
                       map(validateLine, open(self.epoch.getTweetFile()))):
             edge = ' '.join(sorted([e[2], e[3]]))
