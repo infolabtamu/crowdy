@@ -20,7 +20,7 @@ crowds_db = mongodb_connection.crowds
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
 
-crowds_collection = crowds_db.ats_crowds
+crowds_collection = crowds_db.Crowd
 crowds_collection.ensure_index('_id')
 
 class CrowdsDB:
