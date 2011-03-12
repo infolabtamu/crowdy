@@ -14,8 +14,6 @@ crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
 crowd_type = 'ats'
 edge_threshold_weight = 1.3
 
-
-
 # DB initialization
 mongodb_connection = Connection('sid', 27017)
 crowds_db = mongodb_connection.crowds
@@ -37,6 +35,7 @@ class CrowdsDB:
         crowd_object_in_db =  {'_id': data['_id'], 'start': self.currentTime, 'end': None, 'users': [], 
                                'type': crowd_type, 'merge' : [], 'split' : [] }
         for user in data['users']: crowd_object_in_db['users'].append({'id': user,'history': [[self.currentTime, None]]})
+        crowd_object_in_db['size'] = len(crowd_object_in_db['users'])
         self.collection.save(crowd_object_in_db)
     def __update(self, crowd, newdata):
         ############# Starting users changes. ####################################
@@ -63,6 +62,10 @@ class CrowdsDB:
         # Update user changes in the crowd object.
         crowd['users'] = users.values()
         ############# Ending users changes. ####################################
+        
+        # Update crowd size (Max. number of users the crowd has ever had).
+        current_number_of_users = len(crowd['users'])
+        if current_number_of_users>crowd['size']: crowd['size']=current_number_of_users
         
         # Saving updated object in db.
         self.collection.save(crowd)
