@@ -5,7 +5,7 @@ Created on Feb 21, 2011
 '''
 import sys
 from pymongo.connection import Connection, database
-sys.path.append('../../src')
+sys.path.append('../../intake')
 import unittest
 from operator import itemgetter
 from ats.ats_crowds import Epoch, GraphReader, MCL, Evolution, CrowdsDB
