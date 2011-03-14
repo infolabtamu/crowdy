@@ -73,3 +73,4 @@ class Crowd(Model):
     users = ListProperty('users')
     merge = ListProperty('merge')
     split = ListProperty('split')
+    size = IntProperty('size')

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import cherrypy
 from cherrypy import tools
 from api.models import Crowd

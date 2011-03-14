@@ -12,15 +12,15 @@ from datetime import datetime
 data_path = '/mnt/chevron/kykamath/data/twitter/ats/crawler/'
 crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
 crowd_type = 'ats'
-
+edge_threshold_weight = 1.3
 
 # DB initialization
-mongodb_connection = Connection('localhost', 27017)
+mongodb_connection = Connection('sid', 27017)
 crowds_db = mongodb_connection.crowds
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
 
-crowds_collection = crowds_db.ats_crowds
+crowds_collection = crowds_db.Crowd
 crowds_collection.ensure_index('_id')
 
 class CrowdsDB:
@@ -35,6 +35,7 @@ class CrowdsDB:
         crowd_object_in_db =  {'_id': data['_id'], 'start': self.currentTime, 'end': None, 'users': [], 
                                'type': crowd_type, 'merge' : [], 'split' : [] }
         for user in data['users']: crowd_object_in_db['users'].append({'id': user,'history': [[self.currentTime, None]]})
+        crowd_object_in_db['size'] = len(crowd_object_in_db['users'])
         self.collection.save(crowd_object_in_db)
     def __update(self, crowd, newdata):
         ############# Starting users changes. ####################################
@@ -61,6 +62,10 @@ class CrowdsDB:
         # Update user changes in the crowd object.
         crowd['users'] = users.values()
         ############# Ending users changes. ####################################
+        
+        # Update crowd size (Max. number of users the crowd has ever had).
+        current_number_of_users = len(crowd['users'])
+        if current_number_of_users>crowd['size']: crowd['size']=current_number_of_users
         
         # Saving updated object in db.
         self.collection.save(crowd)
@@ -167,7 +172,7 @@ class GraphReader(object):
                     e['upr'] = -1
                 e['w'] = decayedWeight
                 Edges.add(e)
-            if self.writeGraph and decayedWeight > 4: 
+            if self.writeGraph and decayedWeight > edge_threshold_weight: 
                 graphFile.write('%s %s\n'%(edge, decayedWeight))
 #                if edge in tweets.keys(): tweetsFile.write('%s %s\n'%(edge, ' '.join(['%s' % id for id in tweets[edge]])))
         map(updateEdge, Edges.getAllEdges())
@@ -177,7 +182,7 @@ class GraphReader(object):
         def validateLine(line):
             l = line.strip().split()
             t = int(l[0])
-            if len(l) == 4 and t>=low and t<high: return (t, int(l[1]), l[2], l[3])
+            if len(l) == 4 and t>=low and t<high: return (t, l[1], l[2], l[3])
         for e in filter(lambda e: e != None, 
                       map(validateLine, open(self.epoch.getTweetFile()))):
             edge = ' '.join(sorted([e[2], e[3]]))

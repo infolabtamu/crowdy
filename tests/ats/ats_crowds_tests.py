@@ -5,13 +5,13 @@ Created on Feb 21, 2011
 '''
 import sys
 from pymongo.connection import Connection, database
-sys.path.append('../../src')
+sys.path.append('../../intake')
 import unittest
 from operator import itemgetter
 from ats.ats_crowds import Epoch, GraphReader, MCL, Evolution, CrowdsDB
 
-TEST_STARTING_EPOCH = 1283317200
-TEST_ENDING_EPOCH = 1283400000
+TEST_STARTING_EPOCH = 1280639087
+TEST_ENDING_EPOCH = 1288846743
 TEST_CURRENT_EPOCH = 1283317200
 TEST_TYPE = 'ats'
 
@@ -48,9 +48,13 @@ class DemoCrowdGeneration:
         while currentEpoch.ep < last_epoch:
             print 'Generating crowd evolution for: ', str(currentEpoch)
             Evolution.buildCrowdEvolutionGraph(currentEpoch)
-#            i+=1
-#            if i==2: exit()
             currentEpoch = currentEpoch.next()
+    @staticmethod
+    def demo():
+        DemoCrowdGeneration.test_graphReader()
+        DemoCrowdGeneration.test_mcl()
+        DemoCrowdGeneration.test_evolution()        
+    
 
 class CrowdsDBTests(unittest.TestCase):
     def setUp(self):
@@ -228,6 +232,4 @@ class CrowdsDBTests(unittest.TestCase):
         
 if __name__ == '__main__':
 #    unittest.main()
-    DemoCrowdGeneration.test_graphReader()
-    DemoCrowdGeneration.test_mcl()
-    DemoCrowdGeneration.test_evolution()
+    DemoCrowdGeneration.demo()
