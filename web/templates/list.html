@@ -2,9 +2,69 @@
 
 {% block head_extra %}
 
+
+<script>
+function loadData(data) {
+	var events = jQuery.map(data, function(crowd,i) {
+        return {
+            'start': new Date(1000*crowd.start),
+            'end': new Date(1000*crowd.end),
+	    'users': crowd.users,
+            'title': crowd.cid,
+            'description': 'a crowd of '+crowd.size+' people'
+        };
+        });
+	
+	alert(events[0]['users']);
+
+	var root=document.getElementById('dyTable');
+	var tab=document.createElement('table');
+	tab.className="mytable";
+	var tbo=document.createElement('tbody');
+	var row, cell;
+	row=document.createElement('tr');
+	cell=document.createElement('th');
+	cell.appendChild(document.createTextNode('Period'));
+	row.appendChild(cell);
+	cell=document.createElement('th');
+	cell.appendChild(document.createTextNode('Tweets'));
+	row.appendChild(cell);
+	cell=document.createElement('th');
+        cell.appendChild(document.createTextNode('Users'));
+	row.appendChild(cell);
+	tbo.appendChild(row);
+	for(var i=0;i<events.length;i++){
+		row=document.createElement('tr');
+		for(var j=0;j<10;j++){
+			cell=document.createElement('td');
+			switch(j)
+			{
+				case 0: 
+					var date1 = events[i]['start'];
+					var date2 = events[i]['end'];
+					cell.appendChild(document.createTextNode(date1.getFullYear()+'/'+date1.getMonth()+'/'+date1.getDate()+' '+date1.getHours()+':'+date1.getMinutes()+' To '+date2.getFullYear()+'/'+date2.getMonth()+'/'+date2.getDate()+' '+date2.getHours()+':'+date2.getMinutes())); 
+					break;
+				case 1: cell.appendChild(document.createTextNode(events[i]['title'])); break;
+				case 2: cell.appendChild(document.createTextNode(events[i]['description'])); break;
+			}
+			row.appendChild(cell);
+		}
+		tbo.appendChild(row);
+	}
+	tab.appendChild(tbo);
+	root.appendChild(tab);
+	
+}
+
+$(document).ready(function() {
+    jQuery.getJSON('/api/1/search/crowd', loadData);
+    $(window).resize(onResize());
+});
+</script>
+
 {% endblock %}
 
 {% block content %}
-This should be a list.
+<div id="dyTable"></div>
    {% endblock %}
 
