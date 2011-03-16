@@ -14,5 +14,11 @@ def edges(uid):
 
 @cherrypy.expose
 @tools.json_out()
-def tweets(uid):
-    raise NotImplementedError
+def tweets(uid,start=None,end=None):
+    #FIXME: write parse_time
+    start = parse_time(start)
+    end = parse_time(end)
+    tweets = Tweet.find(
+        (Tweet.user_id==int(uid)) &
+        (Tweet.created_at.range(start,end)))
+    return [t.to_d() for t in tweets]
