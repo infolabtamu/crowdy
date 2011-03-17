@@ -8,7 +8,7 @@ def _to_epoch(dt):
 
 @cherrypy.expose
 @tools.json_out()
-def crowd():
+def crowd(**kwargs):
     """returns a list of crowds and their duration"""
     return [
         dict(
