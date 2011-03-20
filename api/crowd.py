@@ -13,8 +13,4 @@ def full(cid):
 def simple(cid):
     """returns a crowd, after removing information about when users leave
     and join plus when crowds split and merge"""
-    crowd = Crowd.get_id(cid).to_d()
-    del crowd['merge']
-    del crowd['split']
-    crowd['users'] = [u[0] for u in crowd['users']]
-    return crowd
+    return Crowd.get_id(cid).simple()

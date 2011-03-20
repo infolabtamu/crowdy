@@ -74,3 +74,10 @@ class Crowd(Model):
     merge = ListProperty('merge')
     split = ListProperty('split')
     size = IntProperty('size')
+
+    def simple(self):
+        crowd = self.to_d(dateformat="epoch")
+        del crowd['merge']
+        del crowd['split']
+        crowd['users'] = [u[0] for u in crowd['users']]
+        return crowd

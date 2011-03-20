@@ -1,24 +1,14 @@
 import cherrypy
 from cherrypy import tools
-from time import mktime
 from api.models import Crowd
-
-def _to_epoch(dt):
-    if dt!=None: return mktime(dt.timetuple())
+from utils import to_epoch,
 
 @cherrypy.expose
 @tools.json_out()
-def crowd():
+def crowd(min_size=None,max_size=None):
     """returns a list of crowds and their duration"""
-    return [
-        dict(
-            cid=c._id,
-            start=_to_epoch(c.start),
-            end=_to_epoch(c.end),
-            size=len(c.users),
-        )
-        for c in Crowd.get_all(limit=100)
-    ]
+    crowds = Crowd.get_all(limit=100)
+    return [ c.simple() for c in crowds]
 
 @cherrypy.expose
 @tools.json_out()
