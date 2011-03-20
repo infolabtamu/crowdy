@@ -61,9 +61,7 @@ class Q(dict):
         d = defaultdict(dict)
         for key,val in self.iteritems():
             #crawl the tree
-            if isinstance(val, Q):
-                mongo_value = val.to_mongo_dict()
-            elif hasattr(val, '__iter__') and not isinstance(val, basestring):
+            if isinstance(val, list):
                 mongo_value = [
                         item.to_mongo_dict() if isinstance(item,Q) else item
                         for item in val
@@ -298,17 +296,16 @@ class SlugListProperty(ListProperty):
         return val
 
 
+class ModelMetaclass(type):
+    def __init__(cls, name, bases, d):
+        type.__init__(cls,name, bases, d)
+        cls.update_long_names()
+
+
 class ModelPart(object):
+    __metaclass__=ModelMetaclass
     ignored = ()
-    def __new__(kind, *args, **kwargs):
-        #FIXME: properties cannot be added to a Model at runtime!
-        if 'long_names' not in kind.__dict__:
-            kind.long_names = {}
-            for name in dir(kind):
-                prop = getattr(kind,name)
-                if isinstance(prop, Property):
-                    kind.long_names[prop.name] = name
-        return object.__new__(kind)
+    long_names = {}
 
     def __init__(self, from_dict=None, **kwargs):
         if from_dict:
@@ -330,6 +327,14 @@ class ModelPart(object):
 
     def __repr__(self):
         return pprint.pformat(self.to_d())
+
+    @classmethod
+    def update_long_names(cls):
+        cls.long_names = {}
+        for name in dir(cls):
+            prop = getattr(cls,name)
+            if isinstance(prop, Property):
+                cls.long_names[prop.name] = name
 
     def to_d(self, **kwargs):
         'Build a dictionary from all the properties attached to self.'
@@ -402,10 +407,6 @@ class Model(ModelPart):
         if q is False or q is True:
             #make sure we didn't call one of python's comparison operators
             raise BogusQuery("The first term in a comparison must be a Property.")
-        try:
-            q = q.to_mongo_dict()
-        except AttributeError:
-            pass
         return cls.database.find(cls, q, **kwargs)
 
     @classmethod
