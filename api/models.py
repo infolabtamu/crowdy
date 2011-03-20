@@ -9,6 +9,13 @@ import maroon
 from maroon import *
 
 
+class TwitterModel(Model):
+    def __init__(self, from_dict=None, **kwargs):
+        Model.__init__(self, from_dict, **kwargs)
+        if self._id is None and from_dict and 'id' in from_dict:
+            self._id = from_dict['id']
+
+
 class TwitterIdProperty(IntProperty):
     pass
 
@@ -19,9 +26,18 @@ class TwitterDateTimeProperty(DateTimeProperty):
         DateTimeProperty.__init__(self, name, format, **kwargs)
 
 
-class User(Model):
+class User(TwitterModel):
     _id = TwitterIdProperty('_id')
-   
+    ignored = [
+        'contributors_enabled', 'follow_request_sent', 'following',
+        'profile_background_color', 'profile_background_image_url',
+        'profile_background_tile', 'profile_link_color',
+        'profile_sidebar_border_color', 'profile_sidebar_fill_color',
+        'profile_text_color', 'profile_use_background_image',
+        'show_all_inline_media', 'time_zone', 'status', 'notifications',
+        'id', 'id_str', 'is_translator'
+    ]
+    
     #properties from twitter
     verified = BoolProperty("ver")
     created_at = TwitterDateTimeProperty('ca')
@@ -42,21 +58,32 @@ class User(Model):
     utc_offset = IntProperty('utco')
 
 
-class Tweet(Model):
+class Tweet(TwitterModel):
     _id = TwitterIdProperty('_id')
-    mentions = SlugListProperty('ats') #based on entities
+    mentions = ListProperty('ats',int) #based on entities
+
+    ignored = [
+        'contributors', 'entities', 'in_reply_to_screen_name', 'source',
+        'truncated', 'user', 'id', 'id_str', 'retweeted', 'retweeted_status',
+        'retweeted_count', 'favorited', 'geo', 'user_id_str'
+        ]
 
     #properties from twitter
     coordinates = Property('coord')
     created_at = TwitterDateTimeProperty('ca')
-    favorited = BoolProperty('fav')
-    geo = Property('geo')
     in_reply_to_status_id = TwitterIdProperty('rtt')
     in_reply_to_user_id = TwitterIdProperty('rtu')
     place = Property('plc')
     text = TextProperty('tx')
     user_id = TwitterIdProperty('uid')
 
+    def __init__(self, from_dict=None, **kwargs):
+        TwitterModel.__init__(self, from_dict, **kwargs)
+        if self.user_id is None and 'user' in from_dict:
+            self.user_id = from_dict['user']['id']
+        if self.mentions is None and 'entities' in from_dict:
+            ats = from_dict['entities']['user_mentions']
+            self.mentions = [at['id'] for at in ats ]
 
 class Edges(Model):
     # I only store the first 5000 friends and followers
