@@ -9,14 +9,17 @@ from datetime import timedelta
 from datetime import datetime
 
 # General settings.
-data_path = '/mnt/chevron/kykamath/data/twitter/ats/crawler/'
-crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
+#crawled_data_path = '/mnt/chevron/kykamath/data/twitter/ats/crawler/'
+#crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
+data_dir = '/mnt/sid/hou_crowds'
+crawled_data_path = '%s/crawler/'%data_dir
+crowd_path = data_dir
 crowd_type = 'ats'
 edge_threshold_weight = 1.3
 
 # DB initialization
 mongodb_connection = Connection('sid', 27017)
-crowds_db = mongodb_connection.crowds
+crowds_db = mongodb_connection.hou
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
 
@@ -121,7 +124,7 @@ class Epoch(object):
         return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
     def getTweetFile(self):
         tm = time.localtime(self.ep)
-        return os.sep.join([data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
+        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
     def getGraphFile(self, create = False, paramInfo = ''):
         tm = time.localtime(self.ep)
         filePath = os.sep.join([crowd_path, paramInfo, 'graphs', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)]) 
