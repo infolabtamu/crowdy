@@ -108,7 +108,7 @@ if __name__ == '__main__':
     db = sys.argv[1]
     models = ('SimpleModel', 'FunModel', 'PersonModel')
     if db=='mongo':
-        Model.database = MongoDB(None,'test_maroon')
+        Model.database = MongoDB(None,'test_maroon', port=2727)
         for m in models:
             Model.database[m].remove()
     elif db=='couch':
