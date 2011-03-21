@@ -6,12 +6,12 @@ from utils import parse_date, get_or_404
 @cherrypy.expose
 @tools.json_out()
 def id(uid):
-    return get_or_404(User,uid).to_d()
+    return get_or_404(User,int(uid)).to_d()
 
 @cherrypy.expose
 @tools.json_out()
 def edges(uid):
-    return get_or_404(Edges,uid).to_d()
+    return get_or_404(Edges,int(uid)).to_d()
 
 @cherrypy.expose
 @tools.json_out()

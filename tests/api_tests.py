@@ -34,6 +34,11 @@ class TestAPI(unittest.TestCase):
         lim = api.user.tweets('106582358',limit=5)
         self.failUnlessEqual(len(lim),5)
 
+    def test_crowd_simple(self):
+        crowd = api.crowd.simple('test1')
+        self.failUnlessEqual(crowd['size'],2)
+        self.failUnlessEqual(crowd['users'][0],106582358)
+
 
 if __name__ == '__main__':
     unittest.main()

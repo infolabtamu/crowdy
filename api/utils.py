@@ -10,8 +10,8 @@ def parse_date(dstr):
     return datetime.utcfromtimestamp(float(dstr))
 
 def get_or_404(cls,id):
-    obj = cls.get_id(int(id))
+    obj = cls.get_id(id)
     if obj is None:
         raise cherrypy.HTTPError(404,
-            'There is no %s with id "%d"!'%(cls.__name__,int(id)))
+            'There is no %s with id "%s"!'%(cls.__name__,str(id)))
     return obj
