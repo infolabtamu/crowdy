@@ -18,7 +18,7 @@ crowd_type = 'ats'
 edge_threshold_weight = 1.3
 
 # DB initialization
-mongodb_connection = Connection('sid', 27017)
+mongodb_connection = Connection('localhost', 27017)
 crowds_db = mongodb_connection.hou
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
@@ -265,16 +265,18 @@ class Crowds(object):
         for line in map(lambda l: l.strip().split(),
                      open(self.epoch.getCrowdsFile(paramInfo = '%s'%self.decayCoefficient))):
             crowd = Crowds.getCrowdFromLine(line, graphId)
-            self.crowds[crowd.crowdId] = crowd
+            if crowd!=None: self.crowds[crowd.crowdId] = crowd
         return self.crowds
     @staticmethod
     def difference(crowd1, crowd2): return list(set(crowd1.users).intersection(set(crowd2.users)))
     @staticmethod
     def getCrowdFromLine(line, graphId):
         splitIndex, splitIndex2, splitIndex3 = line.index(':ilab:'), line.index(':ilab2:'), line.index(':ilab3:')
-        return Crowd('%s:%s'%(graphId, line[0]), line[splitIndex3+1] ,line[1:splitIndex], 
-                     map(lambda id: int(id), line[splitIndex+1:splitIndex2]), 
-                     map(lambda id: int(id), line[splitIndex2+1:splitIndex3]))
+        if len(line[1:splitIndex])>=3:
+            return Crowd('%s:%s'%(graphId, line[0]), line[splitIndex3+1] ,line[1:splitIndex], 
+                         map(lambda id: int(id), line[splitIndex+1:splitIndex2]), 
+                         map(lambda id: int(id), line[splitIndex2+1:splitIndex3]))
+        else: return None
     def writeCrowds(self):
         crowdsFile = open(self.epoch.getCrowdsFile(create = True, paramInfo = '%s'%self.decayCoefficient), 'w')
         for crowdId in self.crowds: 
