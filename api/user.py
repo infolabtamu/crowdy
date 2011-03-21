@@ -1,17 +1,17 @@
 import cherrypy
 from cherrypy import tools
 from api.models import User,Tweet,Edges
-from utils import parse_date
+from utils import parse_date, get_or_404
 
 @cherrypy.expose
 @tools.json_out()
 def id(uid):
-    return User.get_id(uid).to_d()
+    return get_or_404(User,uid).to_d()
 
 @cherrypy.expose
 @tools.json_out()
 def edges(uid):
-    return Edges.get_id(uid).to_d()
+    return get_or_404(Edges,uid).to_d()
 
 @cherrypy.expose
 @tools.json_out()

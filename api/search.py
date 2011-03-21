@@ -1,7 +1,7 @@
 import cherrypy
 from cherrypy import tools
 from api.models import Crowd
-from utils import to_epoch,
+from utils import to_epoch
 
 @cherrypy.expose
 @tools.json_out()
