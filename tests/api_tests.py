@@ -39,6 +39,16 @@ class TestAPI(unittest.TestCase):
         self.failUnlessEqual(crowd['size'],2)
         self.failUnlessEqual(crowd['users'][0],106582358)
 
+    def _assert_search_res(self, expected,**kwargs):
+        res = api.search.crowd(**kwargs)
+        res = ''.join(sorted(d['_id'].strip('test') for d in res))
+        self.failUnlessEqual(res,expected)
+        
+    def test_search_crowd(self):
+        self._assert_search_res("123")
+        self._assert_search_res("12",min_start='1294185600')
+        self._assert_search_res("13",max_size='3')
+
 
 if __name__ == '__main__':
     unittest.main()
