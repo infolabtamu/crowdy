@@ -5,7 +5,7 @@ from utils import get_or_404
 
 @cherrypy.expose
 @tools.json_out()
-def full(cid):
+def id(cid):
     """returns all the information about a crowd in a dict"""
     return get_or_404(Crowd,cid).to_d()
 

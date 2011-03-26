@@ -10,4 +10,6 @@ from cherrypy import tools
 @cherrypy.expose
 @tools.json_out()
 def status():
+    """used to verify that the server is running - always returns
+    {"status" : "ok"}"""
     return dict(status='ok')
