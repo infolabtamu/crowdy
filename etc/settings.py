@@ -7,7 +7,7 @@ class SettingsBunch(dict):
         self[name] = value
 
 settings = SettingsBunch(
-    mongo_host = 'sid.csdl.tamu.edu',
+    mongo_host = 'sarge.csdl.tamu.edu',
     mongo_database = 'crowds',
     beanstalk_host = 'localhost',
     beanstalk_port = 11300,
