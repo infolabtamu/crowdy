@@ -13,7 +13,7 @@ Contents:
 
 Some high level comments:
 
-    * This documentation is a work-in-progres.
+    * This documentation is a work-in-progress.
     * All methods return JSON.  There are five different types of objects that
       the methods return: a Crowd, a simplified Crowd, a User, their Edges 
       (friends and followers), and a Tweet.
@@ -21,7 +21,7 @@ Some high level comments:
     * The name of the method determines the url. For example, to run
       api.crowd.id(cid), you can GET /api/1/crowd/id/106582358 or 
       GET /api/1/crowd/id?cid=106582358 . Either way, it returns the profile for      @jeffamcgee.
-    * Datetimes are always specified in seconds since the unix epoch in UTC.
+    * Datetimes are always specified in seconds since the UNIX epoch in UTC.
     * If there is a min_field and a max_field, then it searches for objects
       where min_field<=object.field<field .
 
