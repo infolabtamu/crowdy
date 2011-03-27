@@ -19,8 +19,8 @@ Some high level comments:
       (friends and followers), and a Tweet.
       *FIXME: this would be a great place to put sample objects.*
     * The name of the method determines the url. For example, to run
-      api.crowd.id(cid), you can GET /api/1/crowd/id/106582358 or 
-      GET /api/1/crowd/id?cid=106582358 . Either way, it returns the profile for      @jeffamcgee.
+      api.user.id(uid), you can GET /api/1/user/id/106582358 or 
+      GET /api/1/user/id?uid=106582358 . Either way, it returns the profile for      @jeffamcgee.
     * Datetimes are always specified in seconds since the UNIX epoch in UTC.
     * If there is a min_field and a max_field, then it searches for objects
       where min_field<=object.field<field .
