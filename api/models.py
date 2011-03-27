@@ -15,6 +15,9 @@ class TwitterModel(Model):
         if self._id is None and from_dict and 'id' in from_dict:
             self._id = from_dict['id']
 
+    def to_d(self, dateformat="epoch", **kwargs):
+        #change the default dateformat to epoch
+        return Model.to_d(self, dateformat=dateformat, **kwargs)
 
 class TwitterIdProperty(IntProperty):
     pass
@@ -35,7 +38,10 @@ class User(TwitterModel):
         'profile_sidebar_border_color', 'profile_sidebar_fill_color',
         'profile_text_color', 'profile_use_background_image',
         'show_all_inline_media', 'time_zone', 'status', 'notifications',
-        'id', 'id_str', 'is_translator'
+        'id', 'id_str', 'is_translator',
+        # ncd and lcd were added to work around differences between datetimes in
+        # localcrawl and crowdy. - Jeff
+        'ncd','lcd',
     ]
     
     #properties from twitter
@@ -85,14 +91,14 @@ class Tweet(TwitterModel):
             ats = from_dict['entities']['user_mentions']
             self.mentions = [at['id'] for at in ats ]
 
-class Edges(Model):
+class Edges(TwitterModel):
     # I only store the first 5000 friends and followers
     _id = TwitterIdProperty('_id')
     friends = ListProperty('frs',int)
     followers = ListProperty('fols',int)
 
 
-class Crowd(Model):
+class Crowd(TwitterModel):
     _id = TextProperty('_id')
     start = DateTimeProperty('start')
     end = DateTimeProperty('end')
@@ -103,7 +109,7 @@ class Crowd(Model):
     size = IntProperty('size')
 
     def simple(self):
-        crowd = self.to_d(dateformat="epoch")
+        crowd = self.to_d()
         del crowd['merge']
         del crowd['split']
         crowd['users'] = [u['id'] for u in crowd['users']]
