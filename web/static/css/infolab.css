@@ -340,3 +340,31 @@ way to fit your requirements.
 #nav li.on a.top_link span.down
 #nav li.on {position:relative; z-index:200;}
 
+
+/*
+ Added by Zhiyuan Cheng begins
+ */
+#search #searchEntry { 
+    width: 428px;
+    margin: 0 auto 5px auto;
+    background-color:#c3cdeb;
+}
+  
+#search #searchBox,#search #locationBox {
+    width: 400px;
+}
+
+#search #searchOptionsCtrl {
+    text-align: right;
+    margin-top: 3px;
+    margin-right: 5px;
+}
+
+#search #searchButton {
+    text-align: right;
+    margin-right: 370px;
+}
+
+/*
+ Added by Zhiyuan Cheng ends
+ */
