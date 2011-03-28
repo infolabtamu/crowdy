@@ -114,3 +114,15 @@ class Crowd(TwitterModel):
         del crowd['split']
         crowd['users'] = [u['id'] for u in crowd['users']]
         return crowd
+
+    def tweets(self,limit=1000):
+        "returns all of the tweets involved in the crowd"
+        if self.type!='ats':
+            raise NotImplementedError
+        uids = [u['id'] for u in self.users]
+        return Tweet.find(
+            Tweet.user_id.is_in(uids)&
+            Tweet.mentions.is_in(uids)&
+            Tweet.created_at.range(self.start, self.end),
+            limit=limit,
+            sort=Tweet._id)

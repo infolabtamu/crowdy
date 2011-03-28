@@ -20,16 +20,17 @@ class TestAPI(unittest.TestCase):
         jeff = api.user.id('106582358')
         self.failUnlessEqual(jeff['sn'],'JeffAMcGee')
         self.failUnlessRaises(cherrypy.HTTPError, api.user.id, '12')
+        #FIXME: check date format
     
     def test_user_tweets(self):
         #tweets(uid,start_date=None,end_date=None,limit=100):
         jan5 = '1294185600'
         jan16 = '1295136000'
-        before = api.user.tweets('106582358',end_date=jan5)
+        before = api.user.tweets('106582358',max_date=jan5)
         self.failUnlessEqual(len(before),3)
-        after = api.user.tweets('106582358',start_date=jan16)
+        after = api.user.tweets('106582358',min_date=jan16)
         self.failUnlessEqual(len(after),4)
-        mid = api.user.tweets('106582358',start_date=jan5,end_date=jan16)
+        mid = api.user.tweets('106582358',min_date=jan5,max_date=jan16)
         self.failUnlessEqual(len(mid),12)
         lim = api.user.tweets('106582358',limit=5)
         self.failUnlessEqual(len(lim),5)
@@ -38,6 +39,16 @@ class TestAPI(unittest.TestCase):
         crowd = api.crowd.simple('test1')
         self.failUnlessEqual(crowd['size'],2)
         self.failUnlessEqual(crowd['users'][0],106582358)
+
+    def test_crowd_users(self):
+        users = api.crowd.users('test1')
+        names = sorted(u['sn'].lower() for u in users)
+        self.failUnlessEqual(['jeffamcgee','nod'],names)
+
+    def test_crowd_tweets(self):
+        settings.pdb()
+        tweets = api.crowd.tweets('test1')
+        self.failUnlessEqual(len(tweets),6)
 
     def _assert_search_res(self, expected,**kwargs):
         res = api.search.crowd(**kwargs)

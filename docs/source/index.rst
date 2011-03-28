@@ -29,6 +29,8 @@ Some high level comments:
 .. autofunction:: api.search.crowd
 .. autofunction:: api.crowd.id
 .. autofunction:: api.crowd.simple
+.. autofunction:: api.crowd.users
+.. autofunction:: api.crowd.tweets
 .. autofunction:: api.user.id
 .. autofunction:: api.user.edges
 .. autofunction:: api.user.tweets
