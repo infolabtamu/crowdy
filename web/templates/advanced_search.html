@@ -133,6 +133,18 @@ $(function()
 
 </script>
 
+<script type="text/javascript">
+function showNumTweets(newValue)
+{
+        document.getElementById("range_num_tweets").innerHTML=newValue;
+}
+
+function showNumUsers(newValue)
+{
+        document.getElementById("range_num_users").innerHTML=newValue;
+}
+</script>
+
 
 {% endblock %}
 
@@ -154,8 +166,12 @@ $(function()
     <tr><th>Dates</th><td class="l t">Since this date</td><td class="r t"><input name="date1" id="date1" class="date-pick" /></td><tr>
     <tr><th></th><td class="l b">Until this date</td><td class="r b"><input name="date2" id="date2" class="date-pick" /></td><tr>
     <tr><td colspan="3" class="sep"></td></tr>
+    <!--
     <tr><th>Size</th><td class="l t">Min # of tweets in the crowd</td><td class="r t"><input class="int" name="num_tweets" id="num_tweets"/></td><tr>
     <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input class="int" name="num_users" id="num_users"/></td><tr>
+    -->
+    <tr><th>Size</th><td class="l t">Min # of tweets in the crowd</td><td class="r t"><input type="range" min="1" max="100" value="5" name="num_tweets" id="num_tweets" onchange="showNumTweets(this.value)"/><span id="range_num_tweets"> 5</span></td><tr>
+    <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span id = "range_num_users"> 5</span></td><tr>
     <tr><td colspan="3" class="sep"></td></tr>
     <tr><th>Presentation</th><td class="l b">Type of Visualization</td><td class="r t"><select id="viz_type" name="viz_type"><option value="List" >List</option><option value="Timeline" >Timeline</option></select><span class="note"></span></td></tr>
     <tr><td colspan="3" class="sep"></td></tr>
