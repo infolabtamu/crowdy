@@ -166,7 +166,7 @@ the memory requirement from the user.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=400pt]{img/UIdesign.eps}
+\includegraphics[width=\linewidth]{img/UIdesign.jpg}
 \caption{Crowdy User Interface Design}
 \label{fig:UIdesign}
 \end{figure*}
@@ -212,14 +212,14 @@ mining methods to classify the Twitter messages dealing with the trend topic.
 
 Identifying highly dynamic ad-hoc collections of users what we refer to as
 crowds in massive social messaging systems like Twitter and Facebook is
-important \cite{krishna:2010}. K. Y. Kamath et al. in the study suggest an
+important \cite{krishna:2010}. Kamath et al. in the study suggest an
 efficient locality-based clustering approach for identifying crowds of users in
 near real-time compared to more heavyweight static clustering algorithm. The
 study consisted of 711,612 users and 61.3 million messages, and tells what
 approaches to follow to efficiently and effectively identify Twitter-based
 crowds.
 
-In the other study based on the previous one, K. Y. Kamath et al
+In the other study based on the previous one, Kamath et al
 \cite{krishna:2011}, they add another salient feature - a novel crowd tracking
 and evolution approach for linking crowds across time periods. Unlike the more
 static and long-lived group-based membership offered on many social networks
@@ -296,32 +296,83 @@ option panel. Some detailed components in these three panels are listed below.
 \end{itemize}
 
 \section{Implementation}
-The system is designed to run in a user's web browser.  As a result, we decided
-to use some fairly standard web tools to implement the system.  The system that
-we are building the user interface on top of exposes a RESTful API.  Although
+
+\subsection{Workflows}
+
+The system is designed to run in a user's web browser. As a result, we decided
+to use some fairly standard web tools to implement the system. The system that
+we are building the user interface on top of exposes a RESTful API. Although
 it is not a part of this project, it is important to understand how the backend
-works, and how it fits into this project.  First, a crawler retrieves tweets
-from Twitter using Twitter's REST API, search API, and streaming API.  Next,
-this data goes through several filters that add additional information to the
-users and tweets.  After that, a program finds groups of users based on their
-communication patterns.  This data is stored as JSON in a MongoDB database.
-The backend also provides the RESTful API that we connect to.  To retrieve
-data, our system makes an HTTP GET request to the server.  The server returns
-data in the JSON format, which is easy to decode in Javascript.  Our GUI never
-directly reads from or writes to the database.
+works, and how it fits into this project. The workflows of the system can be
+decomposed into following parts: (i) a crawler retrieves tweets from Twitter using
+Twitter's REST API, search API, and streaming API; (ii) the corresponding data
+go through several filters that add additional information to the users and
+tweets; (iii) a program finds groups of users (i.e., crowds) based on their 
+communication patterns; (iv) the data of crowds are stored as JSON in a MongoDB
+database; (v) the backend also provides the RESTful API that we connect to; (vi)
+to retrieve data, our system makes an HTTP GET request to the server, and the 
+server returns data in the JSON format, which is easy to decode in Javascript.
+To make the architecture clean, we never allow our GUI directly read from or 
+write to the database.
+
+\subsection{Techniques}
 
 We are writing the portion of our web application that runs on the server in
-Python, since that is what our team has the most experience with.  We chose the
+Python, since that is what our team has the most experience with. We chose the
 CherryPy framework to build the application because it is simple and lets us
-write modular, testable code.  We are using the Jinja templating engine to
+write modular, testable code. We are using the Jinja templating engine to
 generate the HTML pages. This makes it easy to have a consistent look across
 all of our pages without duplicating code.
 
 The code that will run on the user's web browser has to be written in
-Javascript.  We use the jQuery library to handle events, retrieve JSON, and
-abstract away the idiosyncrasies of the various web browsers.  We are using the
-Simile Timeline library to produce the crowd timelines.  In the future, we may
-use the Google Maps API to display crowds on a map.
+Javascript. We use the jQuery library to handle events, retrieve JSON, and
+abstract away the idiosyncrasies of the various web browsers. We are using the
+Simile Timeline library \cite{simile} to produce the crowd timelines. In the 
+future, we may use the Google Maps API to display crowds on a map.
+
+\subsection{Features}
+
+In the system, we provide three perspectives to visualize the crowds: (i) timeline;
+(ii) list; (iii) map. We also support search function so users are able to search 
+crowds given query of text, time period of crowd, and size of crowd, and visualize
+the crowds with the three options of perspectives.
+
+\subsubsection{Timeline}
+
+We apply the Simile Timeline library which is developed by MIT's Computer Science
+and Artificial Intelligence Laboratory. BLAHBLAH WAITING JEFF'S STUFF.
+
+The timeline view 
+
+
+\subsubsection{List}
+
+The list view requires a dynamic table in which it display as many rows as the
+amount of crowds returned by the API. Concretely, we issue a jQuery for all the
+available crowds in the database. The javascript helps to create the dynamic
+table which includes the following columns: Period, Tweets, Users. Ideally,
+this table should support sorting by column. Other than that, we plan to 
+implement detail information box for the tweets and user column after a row 
+is selected. In order to provide users a more clean page view, we may 
+restrict 10 crowds per page and thus, a multiple page navigation is possible.
+
+\subsubsection{Map}
+
+\subsubsection{Search}
+
+In the search function of the system, we provide a main search box in which 
+users can type a textual query to search for crowds which contains the query.
+Besides, users can also click the link of advanced search, so that they can 
+choose options of words, time period of crowd, size of crowd, presentation ways,
+and results they would like to see per page. We maintain indices for each kind
+of queries in the MongoDB database, so that we can efficiently return the results
+to users. Whenever a query is issued, the systems send a HTTP GET request to the
+backend, and the server would return the corresponding search results.
+
+In our future direction, we will also provide query options like location, user's
+screen name. So that users can search crowds that are in a specific city or an 
+area, and also search crowds that a specific user is involved in.
+
 
 \section{Evaluation}
 
