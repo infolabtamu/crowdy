@@ -34,17 +34,14 @@ function loadData(data) {
 		}
                 tbo.appendChild(row);
                 jq_tbo.children().last().click(
-                    {cid:events[i]['title']},
                     function(e) {
                         var detail = $(this).next();
                         detail.slideToggle();
-                        var td = detail.children().first();
-                        if(!td.contents.length==0) {
-                            td.load('/crowd/'+e.data.cid);
-                        }
                     }
                 );
-                jq_tbo.append('<tr style="display:none"><td colspan="3"></td></tr>');
+                jq_tbo.append(
+                    '<tr style="display:none"><td colspan="3"><a href="/crowd/'+
+                    events[i]['title']+'">crowd</a></td></tr>');
 	}
 }
 
