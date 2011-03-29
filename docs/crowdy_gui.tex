@@ -339,11 +339,13 @@ the crowds with the three options of perspectives.
 
 \subsubsection{Timeline}
 
-We apply the Simile Timeline library which is developed by MIT's Computer Science
-and Artificial Intelligence Laboratory. BLAHBLAH WAITING JEFF'S STUFF.
-
-The timeline view 
-
+We apply the Simile Timeline library which is developed by MIT's Computer
+Science and Artificial Intelligence Laboratory. The timeline shows all of the
+crowds at a given time span.  The timeline allows the analyist to zoom in on a
+specific time, and move forward and backward thorough time.  The visualization
+shows how long the crowd lasts, and the size of the crowd. We may make the
+crowd taller or shorter based on the size of the crowd.  We will also display a
+few keywords from each crowd.
 
 \subsubsection{List}
 
@@ -373,6 +375,15 @@ In our future direction, we will also provide query options like location, user'
 screen name. So that users can search crowds that are in a specific city or an 
 area, and also search crowds that a specific user is involved in.
 
+\subsubsection{Crowd View}
+When an analyst clicks a crowd in the list, timeline, or map view, we show an
+expanded view of the crowd. This is a form of progressive disclosure, where we
+give the analyst more information as they need it.  At the moment, we just show
+a network graph where nodes represent users, and edges represent the tweets
+between users. We plan to add the ability to drill down even more.  When the
+analyst clicks on a node, we can give the analyst more information about the
+user that was clicked on. When the analyst clicks on an edge, we can show the
+conversation between two users.
 
 \section{Evaluation}
 
