@@ -25,3 +25,7 @@ def search():
 def advanced_search():
     return _render('advanced_search.html')
 
+@cherrypy.expose
+def crowd(cid):
+    return _render('crowd.html',cid=cid)
+

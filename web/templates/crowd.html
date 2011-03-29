@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block head_extra %}
+
+<script type="text/javascript" src="/static/scripts/protovis-r3.2.js"></script>
+
+{% endblock %}
+
+{% block content %}
+
+<script>
+var vis = new pv.Panel().width(400).height(300);
+
+jQuery.getJSON('/api/1/crowd/users/{{cid}}', function(users) {
+    jQuery.getJSON('/api/1/crowd/tweets/{{cid}}', function(tweets) {
+        var uid_idx = {};
+        var nodes = jQuery.map(users, function(user,i) {
+            uid_idx[user._id] = i;
+            return {nodeName:user.sn};
+        });
+        var links = [];
+        jQuery.each(tweets, function(i,tweet) {
+            for(i in tweet.ats){
+                if(tweet.ats[i] in uid_idx)
+                    links.push({
+                        source:uid_idx[tweet.uid],
+                        target:uid_idx[tweet.ats[i]]});
+            }
+        });
+
+        var force = vis.add(pv.Layout.Force)
+            .nodes(nodes)
+            .links(links)
+
+        force.link.add(pv.Line);
+
+        force.node.add(pv.Dot)
+            .lineWidth(1)
+            .title(function(d) {return d.nodeName})
+            .event("mousedown", pv.Behavior.drag())
+            .event("drag", force);
+        vis.render();
+
+    });
+});
+vis.render();
+</script>
+
+{% endblock %}
