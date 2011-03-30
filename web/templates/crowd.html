@@ -18,14 +18,22 @@ jQuery.getJSON('/api/1/crowd/users/{{cid}}', function(users) {
             uid_idx[user._id] = i;
             return {nodeName:user.sn};
         });
+	//var tmpDiv = document.getElementById('tempDiv');
         var links = [];
+	var tweetInfo = '';
         jQuery.each(tweets, function(i,tweet) {
+	    tweetInfo = tweet.uid + ' @ '
             for(i in tweet.ats){
+		//document.createTextNode()
                 if(tweet.ats[i] in uid_idx)
+		    tweetInfo = tweetInfo + tweet.ats[i]+','
                     links.push({
                         source:uid_idx[tweet.uid],
                         target:uid_idx[tweet.ats[i]]});
             }
+	    tweetInfo = tweetInfo + ' : ' + tweet.tx + '<br/>'
+	    //tmpDiv.appendChild(tweetInfo)
+	    alert(tweetInfo)
         });
 
         var force = vis.add(pv.Layout.Force)
