@@ -24,8 +24,8 @@ function loadTimeline(data) {
     theme1.autoWidth = true; // Set the Timeline's "width" automatically.
                              // Set autoWidth on the Timeline's first band's theme,
                              // will affect all bands.
-    theme1.timeline_start = new Date(Date.UTC(2010, 7, 1));
-    theme1.timeline_stop  = new Date(Date.UTC(2011, 9, 1));
+    theme1.timeline_start = new Date(Date.UTC(2010, 8, 1));
+    theme1.timeline_stop  = new Date(Date.UTC(2011, 10, 1));
 
     var bandInfos = [
         Timeline.createBandInfo({
@@ -61,7 +61,7 @@ function onResize() {
 }
 
 $(document).ready(function() {
-    jQuery.getJSON('/api/1/search/crowd', loadTimeline);
+    jQuery.getJSON('/api/1/search/crowd?limit=1000', loadTimeline);
     $(window).resize(onResize());
 });
 

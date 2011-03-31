@@ -46,7 +46,7 @@ function loadData(data) {
 }
 
 $(document).ready(function() {
-    jQuery.getJSON('/api/1/search/crowd', loadData);
+    jQuery.getJSON('/api/1/search/crowd?limit=1000', loadData);
     $(window).resize(onResize());
 });
 </script>
