@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
 {% block head_extra %}
+<script src="/static/scripts/arbor.js"></script>  
+<script src="/static/scripts/crowd_network.js"></script>  
 <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
+
+<link rel="stylesheet" type="text/css" href="/static/css/boxy.css"/>
+<script src="/static/scripts/jquery.boxy.js" type="text/javascript"></script> 
 
 <script>
 
@@ -60,6 +65,17 @@ function onResize() {
     }
 }
 
+Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
+    Boxy.load(evt._link, {
+        cache:true,
+        title:evt._description,
+        afterShow: function() {
+            loadCrowdPopup(evt._text,this.boxy);
+        }
+    });
+}
+
+
 $(document).ready(function() {
     jQuery.getJSON('/api/1/search/crowd?limit=1000', loadTimeline);
     $(window).resize(onResize());
@@ -88,5 +104,6 @@ $(document).ready(function() {
 	    </div>
     </fieldset>
     </br></br></br></br>
+    <p id="tlinfo">none</p>
 {% endblock %}
 

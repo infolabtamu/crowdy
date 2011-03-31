@@ -2,6 +2,8 @@
 
 {% block head_extra %}
 
+<script src="/static/scripts/arbor.js"></script>  
+<script src="/static/scripts/crowd_network.js"></script>  
 
 <script>
 function loadData(data) {
@@ -33,10 +35,17 @@ function loadData(data) {
 			row.appendChild(cell);
 		}
                 tbo.appendChild(row);
+                //toggle the detailed view when the user clicks a row
                 jq_tbo.children().last().click(
                     function(e) {
                         var detail = $(this).next();
                         detail.slideToggle();
+                        var td = detail.children().first();
+                        if(!td.contents.length==0) {
+                          td.load('/crowd/'+e.data.cid,function() {
+                              loadCrowdPopup(e.data.cid, detail);
+                          });
+                        }
                     }
                 );
                 jq_tbo.append(
@@ -44,6 +53,7 @@ function loadData(data) {
                     events[i]['title']+'">crowd</a></td></tr>');
 	}
 }
+
 
 $(document).ready(function() {
     jQuery.getJSON('/api/1/search/crowd?limit=1000', loadData);
