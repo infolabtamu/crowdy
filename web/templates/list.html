@@ -35,6 +35,7 @@ function loadData(data) {
 			row.appendChild(cell);
 		}
                 tbo.appendChild(row);
+                //toggle the detailed view when the user clicks a row
                 jq_tbo.children().last().click(
                     {cid:events[i]['title']},
                     function(e) {
@@ -43,47 +44,15 @@ function loadData(data) {
                         var td = detail.children().first();
                         if(!td.contents.length==0) {
                           td.load('/crowd/'+e.data.cid,function() {
-                            loadCrowd(e.data.cid,detail.find('canvas').first());
+                              loadCrowdNetworkGraph(
+                                e.data.cid,
+                                detail.find('canvas').first());
                           });
                         }
                     }
                 );
                 jq_tbo.append('<tr style="display:none"><td colspan="3"></td></tr>');
 	}
-}
-
-function loadCrowd(cid,canvas) {
-  jQuery.getJSON('/api/1/crowd/users/'+cid, function(users) {
-    jQuery.getJSON('/api/1/crowd/tweets/'+cid, function(tweets) {
-      var nodes = {}
-      $.each(users, function(i,user) {
-          nodes[user._id] = user;
-      });
-      var edges = {};
-      // make edges into a weighted undirected graph
-      $.each(tweets, function(i,tweet) {
-        if('ats' in tweet) {
-          $.each(tweet.ats, function(j,at) {
-            if(at in nodes && tweet.uid in nodes) {
-              from = Math.min(tweet.uid,at);
-              to = Math.max(tweet.uid,at);
-              if(!(from in edges))
-                edges[from] = {}
-              if(to in edges[from])
-                edges[from][to].weight+=1;
-              else
-                edges[from][to] = {weight:1};
-            }
-          });
-        }
-      });
-      //start the force directed layout
-      var sys = arbor.ParticleSystem(4000, 500, 0.5, 55)
-      sys.renderer = Renderer(canvas)
-      sys.merge({nodes:nodes, edges:edges})
-      sys.parameters({stiffness:600})
-    });
-  });
 }
 
 

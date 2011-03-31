@@ -99,3 +99,37 @@ Renderer = function(canvas){
   }
   return that
 }
+
+function loadCrowdNetworkGraph(cid,canvas) {
+  jQuery.getJSON('/api/1/crowd/users/'+cid, function(users) {
+    jQuery.getJSON('/api/1/crowd/tweets/'+cid, function(tweets) {
+      var nodes = {}
+      $.each(users, function(i,user) {
+          nodes[user._id] = user;
+      });
+      var edges = {};
+      // make edges into a weighted undirected graph
+      $.each(tweets, function(i,tweet) {
+        if('ats' in tweet) {
+          $.each(tweet.ats, function(j,at) {
+            if(at in nodes && tweet.uid in nodes) {
+              from = Math.min(tweet.uid,at);
+              to = Math.max(tweet.uid,at);
+              if(!(from in edges))
+                edges[from] = {}
+              if(to in edges[from])
+                edges[from][to].weight+=1;
+              else
+                edges[from][to] = {weight:1};
+            }
+          });
+        }
+      });
+      //start the force directed layout
+      var sys = arbor.ParticleSystem(4000, 500, 0.5, 55)
+      sys.renderer = Renderer(canvas)
+      sys.merge({nodes:nodes, edges:edges})
+      sys.parameters({stiffness:600})
+    });
+  });
+}
