@@ -44,9 +44,7 @@ function loadData(data) {
                         var td = detail.children().first();
                         if(!td.contents.length==0) {
                           td.load('/crowd/'+e.data.cid,function() {
-                              loadCrowdNetworkGraph(
-                                e.data.cid,
-                                detail.find('canvas').first());
+                              loadCrowdPopup(e.data.cid, detail);
                           });
                         }
                     }

@@ -70,7 +70,7 @@ Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
         cache:true,
         title:evt._description,
         afterShow: function() {
-            loadCrowdNetworkGraph(evt._text,this.boxy.find('canvas').first());
+            loadCrowdPopup(evt._text,this.boxy);
         }
     });
 }
