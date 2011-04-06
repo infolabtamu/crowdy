@@ -134,8 +134,24 @@ function loadCrowdPopup(cid,elem) {
   jQuery.getJSON('/api/1/crowd/users/'+cid, function(users) {
     jQuery.getJSON('/api/1/crowd/tweets/'+cid, function(tweets) {
         loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
-
-        elem.find('p').html("This is a <i>wonderful</i> place to show tweets.");
+	var tweetInfo = '';
+	var list=document.getElementById('mylist');
+        jQuery.each(tweets, function(i,tweet) {
+        	tweetInfo = tweet.uid + ' @ '
+        	for(i in tweet.ats){
+            		tweetInfo = tweetInfo + tweet.ats[i]+','
+	        }
+        	tweetInfo = tweetInfo + ' : ';
+		var li = document.createElement('li');
+		var p = document.createElement('p');
+		p.appendChild(document.createTextNode(tweetInfo));
+		p.appendChild(document.createElement('br'));
+		p.appendChild(document.createTextNode(tweet.tx));
+		li.appendChild(p)
+		list.appendChild(li);
+		//elem.find('p').html(tweetInfo)
+	});
+        //elem.find('p').html("This is a <i>wonderful</i> place to show tweets.xyz");
     });
   });
 }
