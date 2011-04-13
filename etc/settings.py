@@ -12,6 +12,7 @@ settings = SettingsBunch(
     beanstalk_host = 'localhost',
     beanstalk_port = 11300,
     log_dir = 'logs',
+    lucene_index_dir = '/tmp/twitter_search',
     pdb = pdb.set_trace,
 )
 
