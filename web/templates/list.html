@@ -63,10 +63,36 @@ $(document).ready(function() {
 {% endblock %}
 
 {% block content %}
-<table class="mytable">
-    <tbody id="dyTableBody">
-        <tr><th>Period</th><th>Tweets</th><th>Users</th></tr>
-    </tbody>
-</table>
+
+    <br>
+    <div id="header">
+    <div id="headerContent">
+    <!--
+    <div id="logo"><a href="Crowdy Search"><img alt="crowdy-logo-small" src="crowdy-logo-pic" /></a></div>
+    -->
+    <div id="search_header">
+    <form action="/search" id="searchForm" method="get">
+    <div id="searchEntry">
+    <input autosave="com.twitter.search" id="searchBox" name="q" placeholder="Enter your query" results="10" type="search" value="" />
+    </div>
+    <div id="searchButton">
+    <input type="submit" value="Search" />
+    </div>
+    <div id="searchOptionsCtrl">
+    <a href="/advanced" class="litnv">Advanced Search</a>
+    </div>
+    <p class="clearer"></p>
+    </form></div>   </div>
+    </div>
+
+    <br>
+    
+    <div id="mytable">
+        <table class="mytable">
+            <tbody id="dyTableBody">
+                <tr><th>Period</th><th>Tweets</th><th>Users</th></tr>
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 

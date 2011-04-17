@@ -17,9 +17,9 @@ def index():
 def list():
     return _render('list.html')
 
-@cherrypy.expose
-def search():
-    return _render('search.html')
+#@cherrypy.expose
+#def search():
+#    return _render('search.html')
 
 @cherrypy.expose
 def advanced_search():
