@@ -480,6 +480,14 @@ way to fit your requirements.
      margin-right:200px;
 }
 
+#timeline {
+     text-align: left;
+     vertical-align: middle;
+
+     margin-left: 200px;
+     margin-right:200px;
+}
+
 #adv_search {
      text-align: left;
      vertical-align: middle;

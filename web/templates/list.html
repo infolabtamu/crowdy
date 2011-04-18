@@ -58,6 +58,27 @@ $(document).ready(function() {
     jQuery.getJSON('/api/1/search/crowd?limit=1000', loadData);
     $(window).resize(onResize());
 });
+
+function search() {
+    //document.body.innerHTML = "";
+	var tbo=document.getElementById('dyTableBody');
+    tbo.innerHTML = "";
+    var searchBox = document.getElementById('searchBox');
+    var query = "";
+    query = searchBox.value;
+    row = document.createElement('tr');
+    cell=document.createElement('td');
+    if (query == "")
+        cell.appendChild(document.createTextNode('Please enter a valid query!'));
+    else cell.appendChild(document.createTextNode("The query is:" + query));
+
+    row.appendChild(cell);
+    tbo.appendChild(row);
+
+    //document.appendChild(document.createTextNode("rPlease enter a valid query!"));
+    //document.createTextNode("rPlease enter a valid query!");
+}
+
 </script>
 
 {% endblock %}
@@ -76,10 +97,13 @@ $(document).ready(function() {
     <input autosave="com.twitter.search" id="searchBox" name="q" placeholder="Enter your query" results="10" type="search" value="" />
     </div>
     <div id="searchButton">
+    <!--
     <input type="submit" value="Search" />
+    -->
+    <input type=BUTTON value="Search" OnClick="search()"/>
     </div>
     <div id="searchOptionsCtrl">
-    <a href="/advanced" class="litnv">Advanced Search</a>
+    <a href="/advanced_search" class="litnv">Advanced Search</a>
     </div>
     <p class="clearer"></p>
     </form></div>   </div>
