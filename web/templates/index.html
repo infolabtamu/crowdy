@@ -81,26 +81,88 @@ $(document).ready(function() {
     $(window).resize(onResize());
 });
 
-function search() {
-    //document.body.innerHTML = "";
-    var my_div=document.getElementById('timeline');
-    my_div.innerHTML = "";
+function loadSearchResults(data) {
+    var events = jQuery.map(data, function(crowd,i) {
+        return {
+            'start': new Date(1000*crowd.start),
+            'end': new Date(1000*crowd.end),
+            'title': crowd._id,
+            'link': '/crowd/'+crowd._id,
+            'description': 'a crowd of '+crowd.size+' people'
+        };
+    });
+
+    var query_title = document.getElementById("query_title");
+    var eventSource1 = new Timeline.DefaultEventSource();
+
+
+    query_title.innerHTML = "";
+
     var searchBox = document.getElementById('searchBox');
     var query = "";
     query = searchBox.value;
-    row = document.createElement('tr');
-    cell=document.createElement('td');
-    if (query == "")
-        cell.appendChild(document.createTextNode('Please enter a valid query!'));
-    else
-        cell.appendChild(document.createTextNode("The query is:" + query));
-    row.appendChild(cell);
-    my_div.appendChild(row);
+    query_title.appendChild(document.createTextNode('(Demonstration Example) Results for '));
+   
+    // Emphasize the query text.
+    query_text = document.createElement('strong');
+    query_text.appendChild(document.createTextNode(query));
+    query_title.appendChild(query_text);
+
+
+	var tl_el = document.getElementById("tl");
+
+
+    var theme1 = Timeline.ClassicTheme.create();
+    theme1.autoWidth = true; // Set the Timeline's "width" automatically.
+                             // Set autoWidth on the Timeline's first band's theme,
+                             // will affect all bands.
+    theme1.timeline_start = new Date(Date.UTC(2010, 7, 1));
+    theme1.timeline_stop  = new Date(Date.UTC(2011, 10, 1));
+
+    var bandInfos = [
+        Timeline.createBandInfo({
+            width:          45, // set to a minimum, autoWidth will then adjust
+            intervalUnit:   Timeline.DateTime.DAY,
+            intervalPixels: 200,
+            eventSource:    eventSource1,
+            date:           theme1.timeline_start,
+            theme:          theme1,
+            layout:         'original'  // original, overview, detailed
+        })
+    ];
+
+    // create the Timeline
+    tl = Timeline.create(tl_el, bandInfos, Timeline.HORIZONTAL);
+
+    var url = '.'; // The base url for image, icon and background image
+                   // references in the data
+    eventSource1.loadJSON({'events' : events} , url);
+                   // The data was stored into the
+                                               // timeline_data variable.
+    tl.layout(); // display the Timeline
+}
+
+
+function search() {
+    //document.body.innerHTML = "";
+    var query_title = document.getElementById("query_title");
+    query_title.innerHTML = "";
+    var searchBox = document.getElementById('searchBox');
+    var query = "";
+    query = searchBox.value;
+    if (query == "") {
+		query_title.appendChild(document.createTextNode('Please enter a valid query!'));
+	}
+    else {
+        query = "love";
+        var api = '/api/1/search/crowd?q=' + query + '&limit=5';
+        jQuery.getJSON(api, loadSearchResults);
+        $(window).resize(onResize());
+    }
     
     //document.appendChild(document.createTextNode("rPlease enter a valid query!"));
     //document.createTextNode("rPlease enter a valid query!");
 }
-
 
 </script>
 {% endblock %}
@@ -148,7 +210,7 @@ function search() {
     <form action="/search" id="searchForm" method="get">
     -->
     <div id="searchEntry">
-    <input id="searchBox" name="q" placeholder="Enter your query" results="10" type="search" value="" />
+    <input id="searchBox" name="q" placeholder="Enter your query" type="search" value=""/>
     </div>
     <div id="searchButton">
     <!--
@@ -170,6 +232,8 @@ function search() {
 
     <div id="timeline">
     <br><br>
+	<div id = 'query_title'>
+	</div>
     <fieldset>
     <legend> global view</legend>
 	    <div class="timelineC">

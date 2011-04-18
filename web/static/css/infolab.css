@@ -480,6 +480,13 @@ way to fit your requirements.
      margin-right:200px;
 }
 
+#query_title {
+    font-size: 20pt;
+    text-align: left;
+    vertical-align: middle;
+    margin-left:100px;
+}
+
 #timeline {
      text-align: left;
      vertical-align: middle;
