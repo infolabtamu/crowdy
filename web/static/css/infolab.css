@@ -496,7 +496,7 @@ way to fit your requirements.
 }
 
 #adv_search {
-     text-align: left;
+     text-align: middle;
      vertical-align: middle;
 
      margin-left: 200px;
@@ -505,6 +505,14 @@ way to fit your requirements.
 
 #adv_search #title {
      font-size: 16pt;
+}
+
+#search_results {
+     text-align: middle;
+     vertical-align: middle;
+     font-size: 16pt;
+     margin-left: 200px;
+     margin-right:200px;
 }
 /*
  Added by Zhiyuan Cheng ends

@@ -110,8 +110,7 @@ function loadSearchResults(data) {
 
 
 	var tbo=document.getElementById('dyTableBody');
-                <tr><th>Period</th><th>Tweets</th><th>Users</th></tr>
-
+ 
     row = document.createElement('tr');
     th = document.createElement('th');
     th.appendChild(document.createTextNode('Period'));
@@ -182,9 +181,6 @@ function search() {
         jQuery.getJSON(api, loadSearchResults);
         $(window).resize(onResize());
     }
-
-
-
     //document.appendChild(document.createTextNode("rPlease enter a valid query!"));
     //document.createTextNode("rPlease enter a valid query!");
 }
@@ -202,9 +198,8 @@ function search() {
     <div id="logo"><a href="Crowdy Search"><img alt="crowdy-logo-small" src="crowdy-logo-pic" /></a></div>
     -->
     <div id="search_header">
-    <form action="/search" id="searchForm" method="get">
     <div id="searchEntry">
-    <input autosave="com.twitter.search" id="searchBox" name="q" placeholder="Enter your query" results="10" type="search" value="" />
+    <input id="searchBox" name="q" placeholder="Enter your query" results="10" type="search" value="" />
     </div>
     <div id="searchButton">
     <!--
