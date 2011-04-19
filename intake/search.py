@@ -70,15 +70,14 @@ class CrowdsSearch:
 
     @staticmethod
     def getCrowds(query, field = CrowdFields.text): 
-        if not CrowdsSearch.initialized: CrowdsSearch.initialize()
+        if not CrowdsSearch.initialized:
+            CrowdsSearch.initialize()
         searcher = IndexSearcher(CrowdsSearch.index, True);
         q = QueryParser(Version.LUCENE_CURRENT, field, CrowdsSearch.analyzer).parse(query);
         collector = TopScoreDocCollector.create(hitsPerPage, True);
         searcher.search(q, collector);
         hits = collector.topDocs().scoreDocs
         
-        returnData = []
-        for scoreDoc in hits:
-            doc = searcher.doc(scoreDoc.doc)
-            returnData.append({CrowdFields.id: doc.get(CrowdFields.id), CrowdFields.text: doc.get(CrowdFields.text)})
-        return returnData
+        return [
+            searcher.doc(scoreDoc.doc).get(CrowdFields.id)
+            for scoreDoc in hits]

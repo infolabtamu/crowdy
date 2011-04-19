@@ -33,7 +33,9 @@ elif len(sys.argv)>2:
         logging.exception("command failed")
         pdb.post_mortem()
 else:
+    #get ready for an interactive session
+    from api.models import Crowd,Tweet,User,Edges
     logging.basicConfig(level=logging.INFO)
     maroon.Model.database = maroon.MongoDB(
-        name = settings.region,
+        name = settings.mongo_database,
         host=settings.mongo_host)

@@ -23,8 +23,8 @@ class TwitterSearchTest(unittest.TestCase):
             index.addCrowd('3',u'Managing Gigabytes')
             index.addCrowd('4',u'The Art of Computer Science')
             index.addCrowd('5',u'The Art of Computer Science and Engineering')
-        self.assertEqual([{'text': u'Lucene in Action', 'id': u'1'}, {'text': u'Lucene for Dummies', 'id': u'2'}], CrowdsSearch.getCrowds('lucene'))
-        self.assertEqual([{'text': u'The Art of Computer Science', 'id': u'4'}, {'text': u'The Art of Computer Science and Engineering', 'id': u'5'}], CrowdsSearch.getCrowds('science'))
+        self.assertEqual(['1','2'], CrowdsSearch.getCrowds('lucene'))
+        self.assertEqual(['4','5'], CrowdsSearch.getCrowds('science'))
     
     def test_updateCrowdSearch(self):
         docBeforeUpdate = {'id': '1', 'text': 'Lucene in Action'}
@@ -32,14 +32,12 @@ class TwitterSearchTest(unittest.TestCase):
         
         with CrowdIndexer() as index:
             index.addCrowd(**docBeforeUpdate)
-            self.assertEqual([docBeforeUpdate], CrowdsSearch.getCrowds('action'))
+        self.assertEqual(['1'], CrowdsSearch.getCrowds('action'))
             
+        with CrowdIndexer() as index:
             index.addCrowd(**docAfterUpdate)
-            self.assertNotEqual([docAfterUpdate], CrowdsSearch.getCrowds('action'))
-            self.assertEqual([docAfterUpdate], CrowdsSearch.getCrowds('dummies'))
-    
-    def tearDown(self):
-        os.system('rm -rf %s'%testIndexFolder)
+        self.assertEqual([], CrowdsSearch.getCrowds('action'))
+        self.assertEqual(['1'], CrowdsSearch.getCrowds('dummies'))
         
 if __name__ == '__main__': 
     unittest.main()
