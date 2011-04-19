@@ -23,11 +23,11 @@ class CrowdFields:
 
 
 class CrowdIndexer():
-    def __enter__(self,searcher):
-        self.searcher = searcher
+    def __enter__(self):
+        self.searcher = CrowdSearcher()
         mkdir = not os.path.exists(settings.lucene_index_dir)
-        self.writer = IndexWriter(searcher.index,
-            searcher.analyzer,
+        self.writer = IndexWriter(self.searcher.index,
+            self.searcher.analyzer,
             mkdir,
             IndexWriter.MaxFieldLength.UNLIMITED)
         return self
@@ -58,10 +58,13 @@ class CrowdIndexFilter(CrowdFilter):
 
 
 class CrowdSearcher:
+    __shared_state = {}
     def __init__(self):
-        self.jccvm = lucene.initVM()
-        self.index = SimpleFSDirectory(lucene.File(settings.lucene_index_dir))
-        self.analyzer = StandardAnalyzer(Version.LUCENE_CURRENT)
+        self.__dict__ = self.__shared_state
+        if not self.__shared_state:
+            self.jccvm = lucene.initVM()
+            self.index = SimpleFSDirectory(lucene.File(settings.lucene_index_dir))
+            self.analyzer = StandardAnalyzer(Version.LUCENE_CURRENT)
 
     def getCrowds(self, query, field = CrowdFields.text): 
         searcher = IndexSearcher(self.index, True)

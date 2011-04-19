@@ -21,8 +21,6 @@ if __name__ == '__main__':
             lambda x: searcher.jccvm.attachCurrentThread())
     except ImportError:
         print "WARNING: ignoring lucene"
-        searcher = None
-    api.search.searcher = searcher
 
     try:
         maroon.Model.database = maroon.MongoDB(

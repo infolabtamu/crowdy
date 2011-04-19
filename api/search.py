@@ -2,7 +2,12 @@ import cherrypy
 from cherrypy import tools
 from api.models import Crowd
 from utils import parse_bool, parse_date, range_from_params
-import intake.search
+
+try:
+    import intake.search
+except ImportError:
+    pass
+
 
 @cherrypy.expose
 @tools.json_out()
@@ -47,8 +52,7 @@ def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
         range_from_params(Crowd, 'end', parse_date, kwargs) &
         range_from_params(Crowd, 'size', int, kwargs))
     if q:
-        #FIXME: searcher is set in serve.py - spooky action at a distance
-        cids = searcher.getCrowds(q)
+        cids = intake.search.CrowdSearcher().getCrowds(q)
         query = query & Crowd._id.is_in(cids)
     limit=int(limit) if limit.lower()!="none" else None
     crowds = Crowd.find(query,limit=limit)
