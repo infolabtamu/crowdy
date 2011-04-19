@@ -36,11 +36,7 @@ class CrowdIndexer():
         doc = Document();
         doc.add(Field(CrowdFields.id, id, Field.Store.YES, Field.Index.NOT_ANALYZED))
         doc.add(Field(CrowdFields.text, text, Field.Store.YES, Field.Index.ANALYZED))
-        try:
-            self.searcher.getCrowds(id, CrowdFields.id)
-            self.writer.updateDocument(Term(CrowdFields.id, id), doc)
-        except JavaError:
-            self.writer.addDocument(doc)
+        self.writer.updateDocument(Term(CrowdFields.id, id), doc)
 
     def __exit__(self, type, value, traecback):
         self.writer.close()
