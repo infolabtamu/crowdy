@@ -47,7 +47,8 @@ def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
         range_from_params(Crowd, 'end', parse_date, kwargs) &
         range_from_params(Crowd, 'size', int, kwargs))
     if q:
-        cids = intake.search.CrowdsSearch.getCrowds(q)
+        #FIXME: searcher is set in serve.py - spooky action at a distance
+        cids = searcher.getCrowds(q)
         query = query & Crowd._id.is_in(cids)
     limit=int(limit) if limit.lower()!="none" else None
     crowds = Crowd.find(query,limit=limit)

@@ -23,12 +23,11 @@ class CrowdFields:
 
 
 class CrowdIndexer():
-    def __enter__(self):
-        if not CrowdsSearch.initialized:
-            CrowdsSearch.initialize()
+    def __enter__(self,searcher):
+        self.searcher = searcher
         mkdir = not os.path.exists(settings.lucene_index_dir)
-        self.writer = IndexWriter(CrowdsSearch.index,
-            CrowdsSearch.analyzer,
+        self.writer = IndexWriter(searcher.index,
+            searcher.analyzer,
             mkdir,
             IndexWriter.MaxFieldLength.UNLIMITED)
         return self
@@ -38,7 +37,7 @@ class CrowdIndexer():
         doc.add(Field(CrowdFields.id, id, Field.Store.YES, Field.Index.NOT_ANALYZED))
         doc.add(Field(CrowdFields.text, text, Field.Store.YES, Field.Index.ANALYZED))
         try:
-            CrowdsSearch.getCrowds(id, CrowdFields.id)
+            self.searcher.getCrowds(id, CrowdFields.id)
             self.writer.updateDocument(Term(CrowdFields.id, id), doc)
         except JavaError:
             self.writer.addDocument(doc)
@@ -58,24 +57,17 @@ class CrowdIndexFilter(CrowdFilter):
                 yield crowd
 
 
-class CrowdsSearch:
-    initialized = False
-    
-    @staticmethod
-    def initialize():
-        CrowdsSearch.initialized = True
-        lucene.initVM()
-        CrowdsSearch.index = SimpleFSDirectory(lucene.File(settings.lucene_index_dir))
-        CrowdsSearch.analyzer = StandardAnalyzer(Version.LUCENE_CURRENT);
+class CrowdSearcher:
+    def __init__(self):
+        self.jccvm = lucene.initVM()
+        self.index = SimpleFSDirectory(lucene.File(settings.lucene_index_dir))
+        self.analyzer = StandardAnalyzer(Version.LUCENE_CURRENT)
 
-    @staticmethod
-    def getCrowds(query, field = CrowdFields.text): 
-        if not CrowdsSearch.initialized:
-            CrowdsSearch.initialize()
-        searcher = IndexSearcher(CrowdsSearch.index, True);
-        q = QueryParser(Version.LUCENE_CURRENT, field, CrowdsSearch.analyzer).parse(query);
-        collector = TopScoreDocCollector.create(hitsPerPage, True);
-        searcher.search(q, collector);
+    def getCrowds(self, query, field = CrowdFields.text): 
+        searcher = IndexSearcher(self.index, True)
+        q = QueryParser(Version.LUCENE_CURRENT, field, self.analyzer).parse(query)
+        collector = TopScoreDocCollector.create(hitsPerPage, True)
+        searcher.search(q, collector)
         hits = collector.topDocs().scoreDocs
         
         return [
