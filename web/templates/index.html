@@ -154,7 +154,6 @@ function search() {
 		query_title.appendChild(document.createTextNode('Please enter a valid query!'));
 	}
     else {
-        query = "love";
         var api = '/api/1/search/crowd?q=' + query + '&limit=5';
         jQuery.getJSON(api, loadSearchResults);
         $(window).resize(onResize());
