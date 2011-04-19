@@ -141,11 +141,14 @@ function filterTweets(tweets,start,end){
 	return subTweet
 }
 
-function showTweets(list,tweets,users,start){
-	if(tweets.length-start>5)
+function showTweets(list,tweets,users,start,next){
+	if(tweets.length-start>5){
                 subTweets = filterTweets(tweets,start,start + 5);
-        else
-                subTweets = tweets
+	}
+        else{
+		subTweets = filterTweets(tweets,start,tweets.length);
+		next.empty();
+	}
 
 	var nodes = {}
         $.each(users, function(i,user) {
@@ -153,19 +156,11 @@ function showTweets(list,tweets,users,start){
         });
 
         var tweetInfo = '';
-	while ( list.childNodes.length >= 1 )
-        	list.removeChild( list.firstChild );      
+	list.empty();
 	 
         jQuery.each(subTweets, function(i,tweet) {
         	tweetInfo = nodes[tweet.uid]+ ' : '
-
-                var li = document.createElement('li');
-                var p = document.createElement('p');
-                p.appendChild(document.createTextNode(tweetInfo));
-                p.appendChild(document.createElement('br'));
-                p.appendChild(document.createTextNode(tweet.tx));
-                li.appendChild(p)
-                list.appendChild(li);
+		list.append("<li>"+tweetInfo+"<br>"+tweet.tx+"</li>");
         });
 }
 
@@ -179,19 +174,19 @@ function loadCrowdPopup(cid,elem) {
   jQuery.getJSON('/api/1/crowd/users/'+cid, function(users) {
     jQuery.getJSON('/api/1/crowd/tweets/'+cid, function(tweets) {
         loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
-	
+	var list = elem.find('.mylist');
+	var next = elem.find('.next');
+
 	var start = 0;
-	var list=document.getElementById('mylist');
 		
 	showTweets(list,tweets,users,start);
 	start += 5;
 	if(start < tweets.length){
-		var nextpage=document.getElementById('next');
-		nextpage.appendChild(document.createTextNode('Next 5 tweets'));
-		//nextpage.appendChild(document.createElement('a'));
-		//nextpage.setAttribute('onclick', 'showTweets(tweets,users,start)'); 
-		//nextpage.onclick=showTweets(tweets,users,start);
-		start += 5;
+		next.append("<br><a>Next 5 tweets</a>");
+		next.click(function () { 
+			showTweets(list,tweets,users,start,next);
+			start += 5; 
+		});
 	}
     });
   });
