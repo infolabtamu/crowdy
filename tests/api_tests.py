@@ -46,7 +46,6 @@ class TestAPI(unittest.TestCase):
         self.failUnlessEqual(['jeffamcgee','nod'],names)
 
     def test_crowd_tweets(self):
-        settings.pdb()
         tweets = api.crowd.tweets('test1')
         self.failUnlessEqual(len(tweets),6)
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import logging
 
-from settings import settings
-import module
+from etc.settings import settings
+from .. import module
 
 class Digits(module.Grouper):
     def __init__(self, digits=2):

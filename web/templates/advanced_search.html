@@ -143,6 +143,176 @@ function showNumUsers(newValue)
 {
         document.getElementById("range_num_users").innerHTML=newValue;
 }
+
+function loadSearchResults(data) {
+	var events = jQuery.map(data, function(crowd,i) {
+        return {
+            'start': new Date(1000*crowd.start),
+            'end': new Date(1000*crowd.end),
+	        'users': crowd.users,
+            'title': crowd._id,
+            'description': 'a crowd of '+crowd.size+' people'
+        };
+    });
+    var jq_tbo = $('#dyTableBody');
+
+
+
+    // Here is the code to generate text "Search results for BLAHBLAH"
+    
+    var query_title=document.getElementById('query_title');
+    query_title.innerHTML="";
+
+    var searchBox = document.getElementById('searchBox');
+    var query = "";
+    query = searchBox.value;
+    row = document.createElement('tr');
+    cell = document.createElement('td');
+    //cell.appendChild(document.createTextNode('Results for ' + query));
+    cell.appendChild(document.createTextNode('(Demonstration Example) Results for '));
+   
+    // Emphasize the query text.
+    query_text = document.createElement('strong');
+    query_text.appendChild(document.createTextNode(query));
+
+    cell.appendChild(query_text);
+    row.appendChild(cell);
+    query_title.appendChild(row);
+
+	var tbo=document.getElementById('dyTableBody');
+
+    row = document.createElement('tr');
+    th = document.createElement('th');
+    th.appendChild(document.createTextNode('Period'));
+    row.appendChild(th);
+    th = document.createElement('th');
+    th.appendChild(document.createTextNode('Tweets'));
+    row.appendChild(th);
+    th = document.createElement('th');
+    th.appendChild(document.createTextNode('Users'));
+    row.appendChild(th);
+    tbo.appendChild(row);
+    
+    // Clear the search interface
+    var adv_search_el = document.getElementById('adv_search');
+    adv_search_el.innerHTML = "";
+
+	for(var i=0;i<events.length;i++){
+		row=document.createElement('tr');
+		for(var j=0;j<3;j++){
+			cell=document.createElement('td');
+			switch(j)
+			{
+				case 0: 
+					var date1 = events[i]['start'];
+					var date2 = events[i]['end'];
+					cell.appendChild(document.createTextNode(date1.getFullYear()+'/'+date1.getMonth()+'/'+date1.getDate()+' '+date1.getHours()+':'+date1.getMinutes()+' To '+date2.getFullYear()+'/'+date2.getMonth()+'/'+date2.getDate()+' '+date2.getHours()+':'+date2.getMinutes())); 
+					break;
+				case 1: cell.appendChild(document.createTextNode(events[i]['title'])); break;
+				case 2: cell.appendChild(document.createTextNode(events[i]['description'])); break;
+			}
+			row.appendChild(cell);
+		}
+        tbo.appendChild(row);
+        //toggle the detailed view when the user clicks a row
+        
+        jq_tbo.children().last().click(
+            {cid:events[i]['title']},
+            function(e) {
+                var detail = $(this).next();
+                detail.slideToggle();
+                var td = detail.children().first();
+                if(!td.contents.length==0) {
+                    td.load('/crowd/'+e.data.cid,function() {
+                        loadCrowdPopup(e.data.cid, detail);
+                    });
+                }
+            }
+        );
+        
+        jq_tbo.append('<tr style="display:none"><td colspan="3"></td></tr>');
+	}
+}
+
+/*
+var resizeTimerID = null;
+function onResize() {
+    if (resizeTimerID == null) {
+        resizeTimerID = window.setTimeout(function() {
+            resizeTimerID = null;
+            tl.layout();
+            }, 500);
+    }
+}
+*/
+
+
+function search() {
+
+    // Get the query term
+    var query = "";
+    var searchBox = document.getElementById('searchBox')
+    query = searchBox.value;
+    var search_results = document.getElementById('search_results');
+    //search_results.innerHTML = "";
+
+    // Get the min_start_date
+    var date1 = document.getElementById('date1');
+    min_start_date = String(date1.value);
+    day = min_start_date.substring(0,2);
+    month = min_start_date.substring(3,5);
+    year = min_start_date.substring(6,10);
+    min_start_date = new Date(year, month, day);
+    //min_start_date= Date(min_start_date);
+    epoch_seconds_min_start = (min_start_date.getTime() - min_start_date.getMilliseconds()) / 1000 - 2700000;
+    var date2 = document.getElementById('date2');
+    max_end_date = String(date2.value);
+    day = max_end_date.substring(0,2);
+    month = max_end_date.substring(3,5);
+    year = max_end_date.substring(6,10);
+    max_end_date = new Date(year, month, day);
+    epoch_seconds_max_end = (max_end_date.getTime() - max_end_date.getMilliseconds()) / 1000 - 2700000;
+     
+    search_results.appendChild(document.createTextNode(String(epoch_seconds_min_start)));
+    search_results.appendChild(document.createTextNode(String(epoch_seconds_max_end)));
+
+    //search_results.appendChild(document.createTextNode(min_start_date + '\n'));
+    //search_results.appendChild(document.createTextNode(month + '\n' + day + '\n' + year));
+
+    if (query == "") 
+        search_results.appendChild(document.createTextNode('Please input a valid query!'));
+    else {
+        search_results.appendChild(document.createTextNode('The query is: ' + query));
+    }
+   
+    var api = '/api/1/search/crowd?';
+    var flag = 0;
+    if (query != '') {
+        api += 'q=' + query;
+        flag = 1;
+    }
+    /*
+    if (epoch_seconds_min_start < 0) {
+        if (flag == 1) api += '&';
+        api += 'min_start=' + String(epoch_seconds_min_start);
+        flag = 1;
+    }
+    if (epoch_seconds_max_end < 0) {
+        if (flag == 1) api += '&';
+        api += 'max_end=' + String(epoch_seconds_max_end);
+        flag = 1;
+    }
+    */
+
+
+    search_results.appendChild(document.createTextNode(api));
+    jQuery.getJSON(api, loadSearchResults);
+    $(window).resize(onResize());
+    
+    
+}
+
+
 </script>
 
 
@@ -151,21 +321,34 @@ function showNumUsers(newValue)
 
 
 {% block content %}
+    <div id="search_results">
+        <div id="mytable">
+        <table class="mytable">
+            <div id="query_title">
+            </div>
+            <div id="query_content">
+            </div>
+            <tbody id="dyTableBody">
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+
+    <div id="adv_search">
     <br><br><br>
-    <div class="onecol" id="advanced">
+    <div id="title"> 
     <h1 align=center>Advanced Search</h1>
     </div>
 
-    <form action="/search" method="get"><input id="q" name="q" type="hidden"/>
-
     <table id="advForm" cellspacing="0" align=center>
-    <tr><td class="find" colspan="2"><b>Find crowds based on...</b></td><td class="srch srcht"><input type=BUTTON value="Search" OnClick="location.href='list'"/></td></tr>
+    <tr><td class="find" colspan="2"><b>Find crowds based on...</b></td><td class="srch srcht"><input type=BUTTON value="Search" OnClick="search()"/></td></tr>
 
                                                         
-    <tr><th>Words</th><td class="l t">All of these words</td><td class="r t"><input class="long" id="ands" name="ands" type="text" /></td></tr>
+    <tr><th>Words</th><td class="l t">All of these words</td><td class="r t"><input id="searchBox" name="query" type="search" value=""/></td></tr>
     <tr><td colspan="3" class="sep"></td></tr>  
-    <tr><th>Dates</th><td class="l t">Since this date</td><td class="r t"><input name="date1" id="date1" class="date-pick" /></td><tr>
-    <tr><th></th><td class="l b">Until this date</td><td class="r b"><input name="date2" id="date2" class="date-pick" /></td><tr>
+    <tr><th>Dates</th><td class="l t">Since this date</td><td class="r t"><input id="date1" name="date1" class="date-pick" /></td><tr>
+    <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date2" name="date2" class="date-pick" /></td><tr>
     <tr><td colspan="3" class="sep"></td></tr>
     <!--
     <tr><th>Size</th><td class="l t">Min # of tweets in the crowd</td><td class="r t"><input class="int" name="num_tweets" id="num_tweets"/></td><tr>
@@ -181,6 +364,7 @@ function showNumUsers(newValue)
     </table>
     </form>
 
+    </div>
 
 
 {% endblock %}

@@ -13,6 +13,16 @@ import web
 
 if __name__ == '__main__':
     try:
+        import api.search
+        import intake.search
+        #if lucene is not installed, search won't work
+        searcher = intake.search.CrowdSearcher()
+        cherrypy.engine.subscribe('start_thread',
+            lambda x: searcher.jccvm.attachCurrentThread())
+    except ImportError:
+        print "WARNING: ignoring lucene"
+
+    try:
         maroon.Model.database = maroon.MongoDB(
             name=settings.mongo_database,
             host=settings.mongo_host)

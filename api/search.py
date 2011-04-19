@@ -3,6 +3,12 @@ from cherrypy import tools
 from api.models import Crowd
 from utils import parse_bool, parse_date, range_from_params
 
+try:
+    import intake.search
+except ImportError:
+    pass
+
+
 @cherrypy.expose
 @tools.json_out()
 def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
@@ -41,10 +47,14 @@ def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
     /api/1/search/crowd?simple=false&limit=10
         returns 10 crowds in the full format
     """
-    crowds = Crowd.find(
-            range_from_params(Crowd, 'start', parse_date, kwargs) &
-            range_from_params(Crowd, 'end', parse_date, kwargs) &
-            range_from_params(Crowd, 'size', int, kwargs),
-            limit=int(limit) if limit.lower()!="none" else None)
+    query = (
+        range_from_params(Crowd, 'start', parse_date, kwargs) &
+        range_from_params(Crowd, 'end', parse_date, kwargs) &
+        range_from_params(Crowd, 'size', int, kwargs))
+    if q:
+        cids = intake.search.CrowdSearcher().getCrowds(q)
+        query = query & Crowd._id.is_in(cids)
+    limit=int(limit) if limit.lower()!="none" else None
+    crowds = Crowd.find(query,limit=limit)
     transform = Crowd.simple if parse_bool(simple) else Crowd.to_d
     return [ transform(c) for c in crowds]
