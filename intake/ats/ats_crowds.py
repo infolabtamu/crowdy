@@ -258,14 +258,15 @@ class Crowd(object):
 class Crowds(object):
     def __init__(self, epoch, decayCoefficient = 1.0):
         self.epoch = epoch
-        self.crowds = {}
+        self.crowds = None
         self.decayCoefficient = decayCoefficient
     def getCrowds(self):
-        graphId = self.epoch.getGraphId()
-        for line in map(lambda l: l.strip().split(),
-                     open(self.epoch.getCrowdsFile(paramInfo = '%s'%self.decayCoefficient))):
-            crowd = Crowds.getCrowdFromLine(line, graphId)
-            if crowd!=None: self.crowds[crowd.crowdId] = crowd
+        if self.crowds==None:
+            graphId = self.epoch.getGraphId()
+            for line in map(lambda l: l.strip().split(),
+                         open(self.epoch.getCrowdsFile(paramInfo = '%s'%self.decayCoefficient))):
+                crowd = Crowds.getCrowdFromLine(line, graphId)
+                if crowd!=None: self.crowds[crowd.crowdId] = crowd
         return self.crowds
     @staticmethod
     def difference(crowd1, crowd2): return list(set(crowd1.users).intersection(set(crowd2.users)))
@@ -382,7 +383,122 @@ class Evolution(object):
 #            for user in filter(lambda u: u not in usersInNextCrowds, currentCrowd.users):
 #                UTC.saveUserToCrowd({'_id': user, 'r': [currentCrowd.crowdId], 'b': ''})
 
+    @staticmethod
+    def debugBuildCrowdEvolutionGraph(currentCrowdsObject, nextCrowdsObject, currentTime):
+        from operator import itemgetter
+        def getParentCrowds(possibleParentCrowds):
+            sizeToCrowdMap = {}
+            [sizeToCrowdMap.setdefault(possibleParentCrowds[c], []).append(c) for c in possibleParentCrowds.keys()]
+            sortedParentCrowds = sorted(sizeToCrowdMap.iteritems(), key=itemgetter(0), reverse=True)
+            if sortedParentCrowds: 
+                return sortedParentCrowds[0][1]
+            else: return ['None']
+        # Current crowds are the older crowds and the next crowds are the latest discovered crowds.
+#        currentCrowdsObject, nextCrowdsObject = Crowds(currentEpoch, decayCoefficient), Crowds(currentEpoch.next(), decayCoefficient)
+#        crowdsDB = CrowdsDB(crowds_collection, currentEpoch.next().ep)
+
+        crowdsDB = CrowdsDB(crowds_collection, currentTime)
+        currentCrowds, nextCrowds = currentCrowdsObject.getCrowds(), nextCrowdsObject.getCrowds()
+        crowdsWithChildren, usersInNextCrowds = [], []
+        # Build a map from user to crowd for current crowds
+        currentUserToCrowdMap = {}
+        for crowd in currentCrowds.itervalues(): [currentUserToCrowdMap.setdefault(user, crowd.crowdId) for user in crowd.users]
+        
+        for nextCrowd in nextCrowds.itervalues(): 
+            users, possibleParentCrowds = [], {}
+            users.extend(nextCrowd.users)
+            while users:
+                currentCrowdId = currentUserToCrowdMap.get(users[0])
+                if currentCrowdId != None:
+                    currentCrowd = currentCrowds[currentCrowdId]
+                    commonUsers = Crowds.difference(currentCrowd, nextCrowd)
+                    possibleParentCrowds[currentCrowd.crowdId] = len(commonUsers)
+                    [users.remove(u) for u in commonUsers]
+                else: users.remove(users[0])
+            parentCrowds = getParentCrowds(possibleParentCrowds)
+            if len(parentCrowds)==1:
+                if parentCrowds[0]=='None':
+                    # First time the crowd is observed.
+                    crowdsDB.save({'_id': nextCrowd.crowdId, 'users': nextCrowd.users, 'type': crowd_type})
+                    nextCrowds[nextCrowd.crowdId].parentCrowdId = nextCrowd.crowdId
+                else:
+                    # Crowd continues in the current interval with the same parent id.
+                    parentCrowd = parentCrowds[0]
+                    if parentCrowd not in crowdsWithChildren:
+                        # Crowd crowd continued as before.
+                        currentCrowd = currentCrowds[parentCrowd]
+                        pid=currentCrowd.parentCrowdId
+                        if pid=='None': pid=currentCrowd.crowdId
+                        crowdsDB.save({'_id': pid, 'users': nextCrowd.users})
+                        nextCrowds[nextCrowd.crowdId].parentCrowdId = pid
+                        crowdsWithChildren.append(currentCrowd.parentCrowdId)
+                    else:
+                        # The crowd split from the parent.
+                        crowdsDB.save({'_id': nextCrowd.crowdId, 'users': nextCrowd.users, 'type': crowd_type})
+                        nextCrowds[nextCrowd.crowdId].parentCrowdId = nextCrowd.crowdId
+                        crowdsDB.updateCrowdSplit(parentCrowd, nextCrowd.crowdId)
+            else:
+                # Select a parent that has not been already assigned as the parent.
+                has_parent, selected_current_crowd_id, selected_parent_crowd_id = False, None, None
+                for parentCrowd in parentCrowds:
+                    if parentCrowd not in crowdsWithChildren:
+                        has_parent, selected_current_crowd_id = True, parentCrowd
+                        currentCrowd = currentCrowds[parentCrowd]
+                        crowdsDB.save({'_id': currentCrowd.parentCrowdId, 'users': nextCrowd.users})
+                        nextCrowds[nextCrowd.crowdId].parentCrowdId = currentCrowd.parentCrowdId
+                        selected_parent_crowd_id = currentCrowd.parentCrowdId
+                        crowdsWithChildren.append(currentCrowd.parentCrowdId)
+                        break;
+                if not has_parent:
+                    # Parent crowds have split into more parts. Create a new crowd for this data.
+                    crowdsDB.save({'_id': nextCrowd.crowdId, 'users': nextCrowd.users, 'type': crowd_type})
+                    nextCrowds[nextCrowd.crowdId].parentCrowdId = nextCrowd.crowdId
+                    for parentCrowd in parentCrowds: crowdsDB.updateCrowdSplit(parentCrowd, nextCrowd.crowdId)
+                else:
+                    # Remaining parents either merge or split into this.
+                    for crowd in parentCrowds:
+                        if crowd!=selected_current_crowd_id:
+                            crowdUsers = set(currentCrowds[crowd].users)
+                            difference = crowdUsers.difference(set(nextCrowd.users))
+                            if len(difference)==0:
+                                # The crowd has merged into this crowd.
+                                crowdsDB.updateCrowdMerge(selected_parent_crowd_id, currentCrowds[crowd].parentCrowdId)
+                            else:
+                                # The crowd has split into this crowd.
+                                crowdsDB.updateCrowdSplit(currentCrowds[crowd].parentCrowdId, selected_parent_crowd_id)
+#            print parentCrowds
+#            CrowdsDB.saveCrowd({'_id': nextCrowd.crowdId, 'p' : parentCrowds})
+#            for parent in parentCrowds: CrowdsDB.saveCrowd({'_id': parent, 'c': [nextCrowd.crowdId]})
+#            for user in nextCrowd.users: UTC.saveUserToCrowd({'_id': user, 'b': nextCrowd.crowdId})
+#            crowdsWithChildren += parentCrowds
+#            usersInNextCrowds += nextCrowd.users
+##        
+        for currentCrowd in currentCrowds.itervalues():
+            if currentCrowd.parentCrowdId not in crowdsWithChildren: crowdsDB.updateEndTime(currentCrowd.parentCrowdId)
             
+        nextCrowdsObject.writeCrowds()
+        
+#                for user in currentCrowd.users: UTC.saveUserToCrowd({'_id': user, 'r': [currentCrowd.crowdId], 'b': ''})
+#            for user in filter(lambda u: u not in usersInNextCrowds, currentCrowd.users):
+#                UTC.saveUserToCrowd({'_id': user, 'r': [currentCrowd.crowdId], 'b': ''})
+
+def test_crowdEvolution():
+    def getCrowdsFromFile(file, id):
+        crowds={}
+        for line in open(file):
+            line=line.strip().split()
+            splitIndex, splitIndex2, splitIndex3 = line.index(':ilab:'), line.index(':ilab2:'), line.index(':ilab3:')
+            crowd = Crowd('%s:%s'%(id, line[0]), line[splitIndex3+1] ,line[1:splitIndex], 
+                             map(lambda id: int(id), line[splitIndex+1:splitIndex2]), 
+                             map(lambda id: int(id), line[splitIndex2+1:splitIndex3]))
+            crowds[crowd.crowdId]=crowd
+            crowdObject = Crowds(None)
+            crowdObject.crowds = crowds
+        return crowdObject
+    currentCrowdsObject, nextCrowdsObject = getCrowdsFromFile('crowds/crowds1', '1'), getCrowdsFromFile('crowds/crowds2', '2')
+    Evolution.debugBuildCrowdEvolutionGraph(currentCrowdsObject, nextCrowdsObject, 1)
+        
 if __name__ == '__main__':
-    MCL.demo()
+#    MCL.demo()
 #    Evolution.demo()    
+    test_crowdEvolution()
