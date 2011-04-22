@@ -107,6 +107,7 @@ class Crowd(TwitterModel):
     merge = ListProperty('merge')
     split = ListProperty('split')
     size = IntProperty('size')
+    star = BoolProperty('star')
 
     def simple(self):
         crowd = self.to_d()

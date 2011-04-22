@@ -1,7 +1,7 @@
 import cherrypy
 from cherrypy import tools
 from api.models import Crowd,User,Tweet,Edges
-from utils import get_or_404
+from utils import get_or_404, parse_bool
 
 @cherrypy.expose
 @tools.json_out()
@@ -32,3 +32,16 @@ def tweets(cid):
     crowd = get_or_404(Crowd,cid)
     tweets = crowd.tweets()
     return [t.to_d() for t in tweets]
+
+@cherrypy.expose
+@tools.json_out()
+def star(cid,starred='t'):
+    "star or unstar a crowd"
+    #FIXME: this should verify that it was a POST
+    crowd = get_or_404(Crowd,cid)
+    starred = parse_bool(starred)
+    if starred!=crowd.star:
+        crowd.star = starred
+        crowd.save()
+    return crowd.simple()
+
