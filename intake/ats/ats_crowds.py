@@ -330,8 +330,10 @@ class Evolution(object):
                     if parentCrowd not in crowdsWithChildren:
                         # Crowd crowd continued as before.
                         currentCrowd = currentCrowds[parentCrowd]
-                        crowdsDB.save({'_id': currentCrowd.parentCrowdId, 'users': nextCrowd.users})
-                        nextCrowds[nextCrowd.crowdId].parentCrowdId = currentCrowd.parentCrowdId
+                        pid=currentCrowd.parentCrowdId
+                        if pid=='None': pid=currentCrowd.crowdId
+                        crowdsDB.save({'_id': pid, 'users': nextCrowd.users})
+                        nextCrowds[nextCrowd.crowdId].parentCrowdId = pid
                         crowdsWithChildren.append(currentCrowd.parentCrowdId)
                     else:
                         # The crowd split from the parent.
