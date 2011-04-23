@@ -4,11 +4,10 @@ by Jeremy Kelley <jeremy@33ad.org> and Jeff McGee <JeffAMcGee@gmail.com>
 '''
 
 import pymongo
-from pymongo.database import Database
-from pymongo import ASCENDING, DESCENDING
+from maroondb import MaroonDB
 
 
-class MongoDB(Database):
+class MongoDB(pymongo.database.Database,MaroonDB):
     def __init__(self, connection=None, name='maroon', **kwargs):
         if connection==None:
             connection = pymongo.Connection(**kwargs)
@@ -29,30 +28,32 @@ class MongoDB(Database):
         model._id = d['_id'] # save the unique id from mongo
         return model
 
+    def merge(self, model):
+        d = model.to_d(dateformat="datetime")
+        del d['_id']
+        self._coll(model).find_and_modify(
+            {'_id':model._id},
+            {'$set':d},
+            upsert=True,
+            )
+
     def get_id(self, cls, _id):
         d = self[cls.__name__].find_one(_id)
         return cls(d) if d else None
 
-    def get_all(self, cls, **kwargs):
-        return self.find(cls,None,**kwargs)
-
-    def find(self, cls, q, limit=None, sort=None, descending=False, **kwargs):
+    def find(self, cls, q=None, limit=None, **kwargs):
         coll = self[cls.__name__]
         try:
             q = q.to_mongo_dict()
         except AttributeError:
             pass
         cursor = coll.find(q, **kwargs)
-        if sort !=None:
-            try:
-                name = sort.name
-            except AttributeError:
-                name = sort
-            cursor = cursor.sort(name,DESCENDING if descending else ASCENDING)
-        if limit != None:
-            cursor = cursor.limit(limit)
+        sort_args = self._sort_key_list(**kwargs)
+        if sort_args:
+            cursor.sort(sort_args)
+        if limit:
+            cursor.limit(limit)
         return (cls(d) for d in cursor)
 
     def in_coll(self, cls, _id):
         return bool(self[cls.__name__].find(dict(_id=_id)).count())
-
