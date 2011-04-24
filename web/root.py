@@ -33,8 +33,8 @@ def advanced_search():
     return _render('advanced_search.html')
 
 
-CHART_WIDTH = 335
-CHART_HEIGHT = 150
+CHART_WIDTH = 480
+CHART_HEIGHT = 240
 
 
 def _label_axis(axis,hours,delta,format):
@@ -58,19 +58,20 @@ def _chart_html(stamps):
     
     chart = google_chart_api.LineChart(data)
     if len(hours)>=48:
-        _label_axis(chart.bottom,hours,24,"%m/%e")
+        _label_axis(chart.bottom,hours,24,"%b %e")
     else:
         if len(hours)>=9:
             _label_axis(chart.bottom,hours,6,"%H:00")
         else:
             _label_axis(chart.bottom,hours,1,"%H:00")
         day_axis = chart.AddAxis(common.AxisPosition.BOTTOM, common.Axis())
-        _label_axis(day_axis,hours,24,"%m/%e")
+        _label_axis(day_axis,hours,24,"%b %e")
 
     chart.left.min = 0
     chart.left.max = max(data)
     chart.left.labels = [chart.left.max*i/4 for i in range(1,5)]
     chart.left.label_positions = chart.left.labels
+    chart.display.extra_params['chtt']="Tweets per Hour"
     
     return chart.display.Img(CHART_WIDTH, CHART_HEIGHT)
 
