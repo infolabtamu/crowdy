@@ -7,30 +7,6 @@
 
 <!--This code should go in static/scripts/crowd_network.js , but I kept it
 here for reference. - jeff -->
-<script>
- /*
-jQuery.getJSON('/api/1/crowd/users/{{cid}}', function(users) {
-    jQuery.getJSON('/api/1/crowd/tweets/{{cid}}', function(tweets) {
-        var uid_idx = {};
-        var nodes = jQuery.map(users, function(user,i) {
-            uid_idx[user._id] = i;
-            return {nodeName:user.sn};
-        });
-        var links = [];
-	var tweetInfo = '';
-        jQuery.each(tweets, function(i,tweet) {
-	    tweetInfo = tweet.uid + ' @ '
-            for(i in tweet.ats){
-		//document.createTextNode()
-                if(tweet.ats[i] in uid_idx)
-		    tweetInfo = tweetInfo + tweet.ats[i]+','
-                    links.push({
-                        source:uid_idx[tweet.uid],
-                        target:uid_idx[tweet.ats[i]]});
-            }
-	    tweetInfo = tweetInfo + ' : ' + tweet.tx + '<br/>'
-	    alert(tweetInfo)
-        });
-    });
-});*/
-</script>
+<div class="time_chart">
+  {{ time_chart }}
+</div>
