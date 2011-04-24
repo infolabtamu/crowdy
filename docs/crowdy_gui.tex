@@ -349,14 +349,10 @@ few keywords from each crowd.
 
 \subsubsection{List}
 
-The list view requires a dynamic table in which it display as many rows as the
+The list view requires a dynamic table in which it displays as many rows as the
 amount of crowds returned by the API. Concretely, we issue a jQuery for all the
 available crowds in the database. The javascript helps to create the dynamic
-table which includes the following columns: Period, Tweets, Users. Ideally,
-this table should support sorting by column. Other than that, we plan to 
-implement detail information box for the tweets and user column after a row 
-is selected. In order to provide users a more clean page view, we may 
-restrict 10 crowds per page and thus, a multiple page navigation is possible.
+table which includes the following columns: Like, Period and number of users in the crowd. Users can click on the ``like'' of each crowd to indicate the preference. The preferred crowds will be push up to the beginning of the list. Once a row of crowd is clicked, a slide down box with detail information(crowd user network, tweets) will be shown below. In order to provide users a cleaner page view, we restrict 5 tweets per page to show in the slide down box and thus, a multiple page navigation is possible.
 
 \subsubsection{Map}
 
@@ -388,7 +384,7 @@ conversation between two users.
 \section{Evaluation}
 
 \section{CONCLUSIONS}
-
+In conclusion, we have implemented the Social Crowd Visualization system as a web application that enable users to visualize,summarize and organize temporal crowd formation on Twitter. We studied several types of potential users and design the interface carefully to meet their needs. We implemented a few different layout format and a search component to ease the crowd retrieval effort on user. Finally, we design a sequence of possible evaluations for this system. The interface will be continually improved as it is also an on-going DARPA project with the InfoLab. As the next step, a few direction such as user model construction and map view implementation will be carried out.
 \section{FUTURE WORK}
 
 \bibliographystyle{abbrv}

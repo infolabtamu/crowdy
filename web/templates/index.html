@@ -92,6 +92,14 @@ function loadSearchResults(data) {
         };
     });
 
+
+    // Need to retrieve the earliest date and the latest date
+    if (events.length > 0) {
+        var start_date = events[0]['start'];
+        var end_date = events[events.length-1]['end'];
+
+    }
+
     var query_title = document.getElementById("query_title");
     var eventSource1 = new Timeline.DefaultEventSource();
 
@@ -107,6 +115,10 @@ function loadSearchResults(data) {
     query_text = document.createElement('strong');
     query_text.appendChild(document.createTextNode(query));
     query_title.appendChild(query_text);
+
+    query_title.appendChild(document.createTextNode(start_date));
+    query_title.appendChild(document.createTextNode(end_date));
+
 
 
 	var tl_el = document.getElementById("tl");
@@ -154,7 +166,7 @@ function search() {
 		query_title.appendChild(document.createTextNode('Please enter a valid query!'));
 	}
     else {
-        var api = '/api/1/search/crowd?q=' + query + '&limit=5';
+        var api = '/api/1/search/crowd?q=' + query + '&limit=50';
         jQuery.getJSON(api, loadSearchResults);
         $(window).resize(onResize());
     }
