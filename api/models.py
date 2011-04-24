@@ -1,4 +1,5 @@
 import datetime
+from datetime import timedelta
 try:
     import simplejson as json
 except:
@@ -107,6 +108,7 @@ class Crowd(TwitterModel):
     merge = ListProperty('merge')
     split = ListProperty('split')
     size = IntProperty('size')
+    star = BoolProperty('star',default=False)
 
     def simple(self):
         crowd = self.to_d()

@@ -2,6 +2,7 @@ import cherrypy
 from cherrypy import tools
 from api.models import Crowd
 from utils import parse_bool, parse_date, range_from_params
+from maroon import ASCENDING, DESCENDING
 
 try:
     import intake.search
@@ -55,6 +56,7 @@ def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
         cids = intake.search.CrowdSearcher().getCrowds(q)
         query = query & Crowd._id.is_in(cids)
     limit=int(limit) if limit.lower()!="none" else None
-    crowds = Crowd.find(query,limit=limit)
+    sl = [(Crowd.star,DESCENDING), (Crowd._id,ASCENDING)]
+    crowds = Crowd.find(query,limit=limit,sort_list=sl)
     transform = Crowd.simple if parse_bool(simple) else Crowd.to_d
     return [ transform(c) for c in crowds]

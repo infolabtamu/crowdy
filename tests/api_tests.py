@@ -58,6 +58,14 @@ class TestAPI(unittest.TestCase):
         self._assert_search_res("123")
         self._assert_search_res("12",min_start='1294185600')
         self._assert_search_res("13",max_size='3')
+    
+    def test_crowd_star(self):
+        api.crowd.star('test1','f')
+        crowd = api.crowd.id('test1')
+        self.failUnlessEqual(crowd['star'],False)
+        api.crowd.star('test1')
+        crowd = api.crowd.id('test1')
+        self.failUnlessEqual(crowd['star'],True)
 
 
 if __name__ == '__main__':

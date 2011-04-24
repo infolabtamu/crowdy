@@ -43,8 +43,9 @@ function loadData(data) {
                         detail.slideToggle();
                         var td = detail.children().first();
                         if(!td.contents.length==0) {
-                          td.load('/crowd/'+e.data.cid,function() {
-                              loadCrowdPopup(e.data.cid, detail);
+                          jQuery.getJSON('/crowd/'+e.data.cid, function(res) {
+                              td.html(res.html);
+                              loadCrowdPopup(e.data.cid,td,res.users,res.tweets);
                           });
                         }
                     }
@@ -149,8 +150,9 @@ function loadSearchResults(data) {
                         detail.slideToggle();
                         var td = detail.children().first();
                         if(!td.contents.length==0) {
-                          td.load('/crowd/'+e.data.cid,function() {
-                              loadCrowdPopup(e.data.cid, detail);
+                          jQuery.getJSON('/crowd/'+e.data.cid, function(res) {
+                              td.html(res.html);
+                              loadCrowdPopup(e.data.cid,td,res.users,res.tweets);
                           });
                         }
                     }
