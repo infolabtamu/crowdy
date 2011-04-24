@@ -12,7 +12,7 @@ from datetime import datetime
 #crawled_data_path = '/mnt/chevron/kykamath/data/twitter/ats/crawler/'
 #crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
 #data_dir = '/mnt/sid/hou_crowds'
-data_dir = '/data/twitter/crowdy/ats/hou'
+data_dir = '/home/kykamath/hou'
 crawled_data_path = '%s/crawler/'%data_dir
 crowd_path = data_dir
 crowd_type = 'ats'
@@ -230,7 +230,16 @@ class MCL(object):
             for i in data: graph_file.write('%s %s %d\n'%(dataMap[i[0]], dataMap[i[1]], i[2]))
             graph_file.close()
             os.system('mcl graph -q x -V all --abc -o graph.out')
-            for l in open('graph.out'): clusters.append([reverseDataMap[i] for i in l.strip().split()])
+#           for l in open('graph.out'): clusters.append([reverseDataMap[i] for i in l.strip().split()]) 
+            for l in open('graph.out'): 
+                clusterList=[]
+                for i in l.strip().split():
+                    try:
+                        clusterList.append(reverseDataMap[i]) 
+                    except KeyError: 
+                        print 'Key not found'
+                        pass
+                clusters.append(clusterList)
             os.system('rm -rf /tmp/mcl_dir/*')
         return clusters
     def writeClusters(self):
@@ -238,7 +247,7 @@ class MCL(object):
         data = []
         for line in open(self.epoch.getGraphFile(paramInfo = '%s'%self.decayCoefficient)):
             tempD = line.strip().split()
-            data.append((tempD[0], tempD[1], int(tempD[2])))
+            if len(tempD)>=3: data.append((tempD[0], tempD[1], int(tempD[2])))
         clusters, id = {}, 1
         for d in MCL._graphCluster(data): 
             clusters[id] = d
