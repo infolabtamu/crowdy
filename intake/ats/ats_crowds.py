@@ -230,7 +230,16 @@ class MCL(object):
             for i in data: graph_file.write('%s %s %d\n'%(dataMap[i[0]], dataMap[i[1]], i[2]))
             graph_file.close()
             os.system('mcl graph -q x -V all --abc -o graph.out')
-            for l in open('graph.out'): clusters.append([reverseDataMap[i] for i in l.strip().split()])
+#           for l in open('graph.out'): clusters.append([reverseDataMap[i] for i in l.strip().split()]) 
+            for l in open('graph.out'): 
+                clusterList=[]
+                for i in l.strip().split():
+                    try:
+                        clusterList.append(reverseDataMap[i]) 
+                    except KeyError: 
+                        print 'Key not found'
+                        pass
+                clusters.append(clusterList)
             os.system('rm -rf /tmp/mcl_dir/*')
         return clusters
     def writeClusters(self):
