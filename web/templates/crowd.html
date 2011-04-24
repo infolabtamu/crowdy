@@ -1,12 +1,19 @@
-<canvas></canvas>
-<ul class="mylist">
-	List of Threads --	
+<ul class="tabs">
+  <li><a href="#">Network</a></li>
+  <li><a href="#">Tweets</a></li>
+  <li><a href="#">Graph</a></li>
 </ul>
-<div class = "next"></div>
-<!--p>Here is a great place to put tweets ...</p-->
-
-<!--This code should go in static/scripts/crowd_network.js , but I kept it
-here for reference. - jeff -->
-<div class="time_chart">
-  {{ time_chart }}
+<div class="pane">
+  <canvas></canvas>
+</div>
+<div class="pane">
+  <ul class="mylist">
+    List of Threads --	
+  </ul>
+  <div class = "next"></div>
+</div>
+<div class="pane">
+  <div class="time_chart">
+    {{ time_chart }}
+  </div>
 </div>
