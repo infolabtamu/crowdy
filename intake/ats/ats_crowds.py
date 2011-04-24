@@ -247,7 +247,7 @@ class MCL(object):
         data = []
         for line in open(self.epoch.getGraphFile(paramInfo = '%s'%self.decayCoefficient)):
             tempD = line.strip().split()
-            data.append((tempD[0], tempD[1], int(tempD[2])))
+            if len(tempD)>=3: data.append((tempD[0], tempD[1], int(tempD[2])))
         clusters, id = {}, 1
         for d in MCL._graphCluster(data): 
             clusters[id] = d
