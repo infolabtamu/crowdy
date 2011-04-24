@@ -170,10 +170,8 @@ function showTweets(list,tweets,users,start,next){
 //	nextpage.onclick=showTweets(tweets,users,start);
 //}
 
-function loadCrowdPopup(cid,elem) {
-  jQuery.getJSON('/api/1/crowd/users/'+cid, function(users) {
-    jQuery.getJSON('/api/1/crowd/tweets/'+cid, function(tweets) {
-        loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
+function loadCrowdPopup(cid,elem,users,tweets) {
+    loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
 	var list = elem.find('.mylist');
 	var next = elem.find('.next');
 
@@ -188,6 +186,4 @@ function loadCrowdPopup(cid,elem) {
 			start += 5; 
 		});
 	}
-    });
-  });
 }

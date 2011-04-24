@@ -66,13 +66,11 @@ function onResize() {
 }
 
 Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
-    Boxy.load(evt._link, {
-        cache:true,
-        title:evt._description,
-        afterShow: function() {
-            loadCrowdPopup(evt._text,this.boxy);
-        }
-    });
+  box = new Boxy("<p>Loading...</p>",{title:evt._description});
+  jQuery.getJSON('/crowd/'+evt._text, function(res) {
+    box.setContent(res.html)
+    loadCrowdPopup(evt._text,box.boxy,res.users,res.tweets);
+  });
 }
 
 

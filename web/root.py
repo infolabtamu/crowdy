@@ -75,11 +75,11 @@ def _chart_html(stamps):
     return chart.display.Img(CHART_WIDTH, CHART_HEIGHT)
 
 
+@tools.json_out()
 @cherrypy.expose
 def crowd(cid):
+    users = api.crowd.users(cid)
     tweets = api.crowd.tweets(cid)
     stamps = [int(t['ca']) for t in tweets]
-
-    return _render('crowd.html',
-            cid=cid,
-            time_chart=_chart_html(stamps))
+    html = _render('crowd.html', time_chart=_chart_html(stamps))
+    return dict(users=users, tweets=tweets, html=html)
