@@ -236,7 +236,6 @@ function search() {
         since_date = new Date(year, month, day);
         var secs = (since_date.getTime() - since_date.getMilliseconds()) / 1000 - 18000; 
         api += "&min_start=" + String(secs);
-        query_title.appendChild(document.createTextNode(String(secs)));
     }
     var until_date_string = document.getElementById('date_pick_2').value; 
     if (until_date_string != "") {
@@ -246,7 +245,6 @@ function search() {
         until_date = new Date(year, month, day);
         var secs = (until_date.getTime() - until_date.getMilliseconds()) / 1000 - 18000; 
         api += "&max_end=" + String(secs);
-        query_title.appendChild(document.createTextNode(String(secs)));
     } 
 
     var num_users = document.getElementById('num_users').value;

@@ -28,11 +28,6 @@ def list():
     return _render('list.html')
 
 
-@cherrypy.expose
-def advanced_search():
-    return _render('advanced_search.html')
-
-
 CHART_WIDTH = 480
 CHART_HEIGHT = 240
 

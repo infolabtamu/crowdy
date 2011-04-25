@@ -5,6 +5,14 @@
 <script src="/static/scripts/arbor.js"></script>  
 <script src="/static/scripts/crowd_network.js"></script>  
 
+<!-- Date Input -->
+<!-- include jQuery FORM Tools (or any other combination) -->
+<script src="http://cdn.jquerytools.org/1.2.5/form/jquery.tools.min.js"></script>
+
+<!-- dateinput styling -->
+<link rel="stylesheet" type="text/css" href="/static/css/dateinput.css"/>
+
+
 <script>
 function loadData(data) {
 	var events = jQuery.map(data, function(crowd,i) {
@@ -73,19 +81,14 @@ $(document).ready(function() {
     $(window).resize(onResize());
 });
 
-function loadSearchResults(data) {
-	var events = jQuery.map(data, function(crowd,i) {
-        return {
-            'start': new Date(1000*crowd.start),
-            'end': new Date(1000*crowd.end),
-	        'users': crowd.users,
-            'title': crowd._id,
-            'description': 'a crowd of '+crowd.size+' people'
-        };
-        });
-        var jq_tbo = $('#dyTableBody');
 
-
+function search() {
+    //document.body.innerHTML = "";
+	var query_title=document.getElementById('query_title');
+    query_title.innerHTML = "";
+    var tbo=document.getElementById('dyTableBody');
+    tbo.innerHTML="";
+    
     // Here is the code to generate text "Search results for BLAHBLAH"
     
     var query_title=document.getElementById('query_title');
@@ -104,12 +107,51 @@ function loadSearchResults(data) {
     query_text.appendChild(document.createTextNode(query));
     cell.appendChild(query_text);
 
-
     row.appendChild(cell);
     query_title.appendChild(row);
+
+
+    // The defaut values for all the search options.
+    var api = '/api/1/search/crowd?';
+    var query = "";
+    var since_date = "";
+    var until_date = "";
+    var min_num_tweets = "0";
+    var min_num_users = "0";
+    var rpp = "100";
+
+    // get query. (If query is an empty string, return everything.
+    var searchBox = document.getElementById('searchBox');
+    query = searchBox.value;
+    if (query != "")
+        api += "q=" + query;
+   
+    var rpp_value = document.getElementById('rpp').value;
+    rpp = String(rpp_value);
+    api += "&limit=" + rpp;
+    var since_date_string = document.getElementById('date_pick_1').value; 
+    if (since_date_string != "") {
+        month = since_date_string.substring(0,2) - 1;
+        day = since_date_string.substring(3,5);
+        year = String(Number(since_date_string.substring(6,8)) + 2000);
+        since_date = new Date(year, month, day);
+        var secs = (since_date.getTime() - since_date.getMilliseconds()) / 1000 - 18000; 
+        api += "&min_start=" + String(secs);
+    }
+    var until_date_string = document.getElementById('date_pick_2').value; 
+    if (until_date_string != "") {
+        month = until_date_string.substring(0,2) - 1;
+        day = until_date_string.substring(3,5);
+        year = String(Number(until_date_string.substring(6,8)) + 2000);
+        until_date = new Date(year, month, day);
+        var secs = (until_date.getTime() - until_date.getMilliseconds()) / 1000 - 18000; 
+        api += "&max_end=" + String(secs);
+    } 
+
+    var num_users = document.getElementById('num_users').value;
+    api += "&min_size=" + String(num_users);
+
     
-
-
 	var tbo=document.getElementById('dyTableBody');
  
     row = document.createElement('tr');
@@ -125,66 +167,25 @@ function loadSearchResults(data) {
     tbo.appendChild(row);
 
 
-	for(var i=0;i<events.length;i++){
-		row=document.createElement('tr');
-		for(var j=0;j<3;j++){
-			cell=document.createElement('td');
-			switch(j)
-			{
-				case 0: 
-					var date1 = events[i]['start'];
-					var date2 = events[i]['end'];
-					cell.appendChild(document.createTextNode(date1.getFullYear()+'/'+date1.getMonth()+'/'+date1.getDate()+' '+date1.getHours()+':'+date1.getMinutes()+' To '+date2.getFullYear()+'/'+date2.getMonth()+'/'+date2.getDate()+' '+date2.getHours()+':'+date2.getMinutes())); 
-					break;
-				case 1: cell.appendChild(document.createTextNode(events[i]['title'])); break;
-				case 2: cell.appendChild(document.createTextNode(events[i]['description'])); break;
-			}
-			row.appendChild(cell);
-		}
-                tbo.appendChild(row);
-                //toggle the detailed view when the user clicks a row
-                jq_tbo.children().last().click(
-                    {cid:events[i]['title']},
-                    function(e) {
-                        var detail = $(this).next();
-                        detail.slideToggle();
-                        var td = detail.children().first();
-                        if(!td.contents.length==0) {
-                          jQuery.getJSON('/crowd/'+e.data.cid, function(res) {
-                              td.html(res.html);
-                              loadCrowdPopup(e.data.cid,td,res.users,res.tweets);
-                          });
-                        }
-                    }
-                );
-                jq_tbo.append('<tr style="display:none"><td colspan="3"></td></tr>');
-	}
+
+
+    jQuery.getJSON(api, loadData);
+    //$(window).resize(onResize());
+
 }
 
-function search() {
-    //document.body.innerHTML = "";
-	var query_title=document.getElementById('query_title');
-    query_title.innerHTML = "";
-    var tbo=document.getElementById('dyTableBody');
-    tbo.innerHTML="";
-    var searchBox = document.getElementById('searchBox');
-    var query = "";
-    query = searchBox.value;
-    row = document.createElement('tr');
-    cell=document.createElement('td');
-    if (query == "") {
-        cell.appendChild(document.createTextNode('Please enter a valid query!'));
-        row.appendChild(cell);
-        query_title.appendChild(row);
-    } else {
-        //cell.appendChild(document.createTextNode("The query is:" + query));
-        var api = '/api/1/search/crowd?q=' + query + '&limit=100';
-        jQuery.getJSON(api, loadSearchResults);
-        $(window).resize(onResize());
-    }
-    //document.appendChild(document.createTextNode("rPlease enter a valid query!"));
-    //document.createTextNode("rPlease enter a valid query!");
+
+function showNumTweets(newValue)
+{
+        document.getElementById("range_num_tweets").innerHTML=newValue;
 }
+
+function showNumUsers(newValue)
+{
+        document.getElementById("range_num_users").innerHTML=newValue;
+}
+
+
 
 </script>
 
@@ -194,30 +195,69 @@ function search() {
 
     <br>
     <div id="header">
-    <div id="headerContent">
-    <!--
-    <div id="logo"><a href="Crowdy Search"><img alt="crowdy-logo-small" src="crowdy-logo-pic" /></a></div>
-    -->
-    <div id="search_header">
-    <div id="searchEntry">
-    <input id="searchBox" name="q" placeholder="Enter your query" results="10" type="search" value="" />
-    </div>
-    <div id="searchButton">
-    <!--
-    <input type="submit" value="Search" />
-    -->
-    <input type=BUTTON value="Search" OnClick="search()"/>
-    </div>
-    <div id="searchOptionsCtrl">
-    <a href="/advanced_search" class="litnv">Advanced Search</a>
-    </div>
-    <p class="clearer"></p>
-    </form></div>   </div>
+        <div id="headerContent">
+        <!--
+        <div id="logo"><a href="Crowdy Search"><img alt="crowdy-logo-small" src="crowdy-logo-pic" /></a></div>
+        -->
+            <div id="search_header">
+                <div id="searchEntry">
+                    <input id="searchBox" name="q" placeholder="Enter your query" type="search" value=""/>
+                </div>
+                <div id="searchButton">
+                    <input type=BUTTON value="Search" OnClick="search()"/>
+                </div>
+                <div id="searchOptionsCtrl">
+                    <button id="button_to_adv">Switch to Adv-Search</button>
+                    <button id="button_to_basic" style="display: none">Switch to Basic-Search</button>
+                </div>
+    
+                <script>
+                    $("#button_to_adv").click(function () {
+                        $("#button_to_adv").toggle();
+                        $("#button_to_basic").toggle();
+                        $("#adv_search").toggle();
+                        //$('.date-pick').datePicker({startDate:'01/01/1996'});  
+                        $(":date").dateinput();
+                    });
+                    $("#button_to_basic").click(function () {
+                        $("#button_to_adv").toggle();
+                        $("#button_to_basic").toggle();
+                        $("#adv_search").toggle();
+                        //$('.date-pick').datePicker({startDate:'01/01/1996'});
+                    });
+                </script>
+                <p class="clearer"></p>
+            </div>
+        </div>
+        </div>
+    <br>
+
+    <div id="adv_search" style="display: none">
+        <div id="title">
+            <h1 align=center>Advanced Search</h1>
+        </div>
+        <table id="advForm" cellspacing="0" align=center>
+            <tr><td colspan="3" class="sep"></td></tr>
+            <tr><th>Dates </th></tr>
+            <tr><th></th><td class="l t">Since this date</td><td class="r t"><input id="date_pick_1" name="date_pick_1" type="date"/></td><tr>
+            <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date_pick_2" name="date_pick_2" type="date"/></td><tr>
+            <tr><td colspan="3" class="sep"></td></tr>
+            <tr><th>Size </th></tr>
+            <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span     id = "range_num_users"> 5</span></td><tr>
+            <tr><td colspan="3" class="sep"></td></tr>
+            <tr><th>Other </th><tr>
+            <tr><th></th><td class="l b">Results per page</td><td class="r t"><select id="rpp" name="rpp"><option value="10" >10</option><option value="20" >20</option><option value="30" >30</option><option     value="50" >50</option><option value="75" >75</option><option value="100" selected="selected">100</option></select> <span class="note">(persistent)</span></td></tr>
+            <tr><td colspan="3" class="sep"></td></tr>
+        </table>
+        <!-- make it happen -->
+        <script>
+            $(":date").dateinput();
+        </script>
+        <br><br>
     </div>
 
-    <br>
-    
     <div id="mytable">
+
         <table class="mytable">
             <div id="query_title">
             </div>
