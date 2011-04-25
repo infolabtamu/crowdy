@@ -46,7 +46,6 @@ class TestAPI(unittest.TestCase):
         self.failUnlessEqual(['jeffamcgee','nod'],names)
 
     def test_crowd_tweets(self):
-        settings.pdb()
         tweets = api.crowd.tweets('test1')
         self.failUnlessEqual(len(tweets),6)
 
@@ -59,6 +58,14 @@ class TestAPI(unittest.TestCase):
         self._assert_search_res("123")
         self._assert_search_res("12",min_start='1294185600')
         self._assert_search_res("13",max_size='3')
+    
+    def test_crowd_star(self):
+        api.crowd.star('test1','f')
+        crowd = api.crowd.id('test1')
+        self.failUnlessEqual(crowd['star'],False)
+        api.crowd.star('test1')
+        crowd = api.crowd.id('test1')
+        self.failUnlessEqual(crowd['star'],True)
 
 
 if __name__ == '__main__':

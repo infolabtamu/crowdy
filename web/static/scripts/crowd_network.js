@@ -130,12 +130,61 @@ function loadCrowdNetworkGraph(canvas,users,tweets) {
   sys.parameters({stiffness:600})
 }
 
-function loadCrowdPopup(cid,elem) {
-  jQuery.getJSON('/api/1/crowd/users/'+cid, function(users) {
-    jQuery.getJSON('/api/1/crowd/tweets/'+cid, function(tweets) {
-        loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
+function filterTweets(tweets,start,end){
+	var subTweet = new Array();
+	var count = 0;
+	var i = 0;
+	for (i = start; i < end; i++){
+		subTweet[count] = tweets[i];
+		count = count + 1;
+	}
+	return subTweet
+}
 
-        elem.find('p').html("This is a <i>wonderful</i> place to show tweets.");
-    });
-  });
+function showTweets(list,tweets,users,start,next){
+	if(tweets.length-start>5){
+                subTweets = filterTweets(tweets,start,start + 5);
+	}
+        else{
+		subTweets = filterTweets(tweets,start,tweets.length);
+		next.empty();
+	}
+
+	var nodes = {}
+        $.each(users, function(i,user) {
+                nodes[user._id] = user.sn;
+        });
+
+        var tweetInfo = '';
+	list.empty();
+	 
+        jQuery.each(subTweets, function(i,tweet) {
+        	tweetInfo = nodes[tweet.uid]+ ' : '
+		list.append("<li>"+tweetInfo+"<br>"+tweet.tx+"</li>");
+        });
+}
+
+//function nextPage(tweets,users,start){
+//	alert(start)
+//	var nextpage=document.getElementById('next');
+//	nextpage.onclick=showTweets(tweets,users,start);
+//}
+
+function loadCrowdPopup(cid,elem,users,tweets) {
+    elem.find('.tabs').tabs("div.pane")
+    loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
+	var list = elem.find('.mylist');
+	var next = elem.find('.next');
+
+	var start = 0;
+		
+	showTweets(list,tweets,users,start);
+	start += 5;
+	if(start < tweets.length){
+		next.append("<br><a>Next 5 tweets</a>");
+		next.click(function () { 
+			showTweets(list,tweets,users,start,next);
+			start += 5; 
+		});
+	}
 }

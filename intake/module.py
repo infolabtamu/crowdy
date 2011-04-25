@@ -2,7 +2,8 @@ import os,sys
 import logging
 import json
 
-from settings import settings
+from etc.settings import settings
+from api.models import *
 
 
 class Module(object):
@@ -73,6 +74,20 @@ class TweetFilter(Filter): # do we want this?
         pass
 
 
+class CrowdFilter(Filter):
+    def cfilter(self, crowds):
+        """ filters a list of crowds
+            crowds is an iterable that is a list of crowd dictionaries
+            yields crowd objects
+        """
+        raise NotImplementedError
+
+    def run(self):
+        crowds = Crowd.get_all()
+        for crowd in self.cfilter(crowds):
+            pass
+
+
 class Grouper(Filter):
     def group(self, users):
         """ breaks a list of users into groups
@@ -86,7 +101,7 @@ class Grouper(Filter):
             print json.dumps(group)
 
 
-def main(ModuleType):
+def main(ModuleType,*args):
     """This method should be called when a Module is executed as the
     __main__ module."""
     #Set up logging
@@ -96,5 +111,5 @@ def main(ModuleType):
         )
     logging.basicConfig(filename=filepath,level=logging.INFO)
     #create and run the module
-    mod = ModuleType(*sys.argv[1:])
+    mod = ModuleType(*args)
     mod.run()

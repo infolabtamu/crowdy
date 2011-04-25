@@ -8,7 +8,31 @@
 <link rel="stylesheet" type="text/css" href="/static/css/boxy.css"/>
 <script src="/static/scripts/jquery.boxy.js" type="text/javascript"></script> 
 
+
+<!-- required plugins -->
+<script type="text/javascript" src="/static/scripts/date.js"></script>
+<!--[if IE]><script type="text/javascript" src="scripts/jquery.bgiframe.min.js"></script><![endif]-->
+
+<!-- jquery.datePicker.js -->
+<script type="text/javascript" src="/static/scripts/jquery.datePicker.js"></script>
+
+<!-- datePicker required styles -->
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/datePicker.css">
+
+<!-- page specific styles -->
+<link rel="stylesheet" type="text/css" media="screen" href="/static/css/demo.css">
+
+
+<!-- Date Input -->
+<!-- include jQuery FORM Tools (or any other combination) -->
+<script src="http://cdn.jquerytools.org/1.2.5/form/jquery.tools.min.js"></script>
+
+<!-- dateinput styling -->
+<link rel="stylesheet" type="text/css" href="/static/css/dateinput.css"/>
+
+
 <script>
+
 
 var tl;
 function loadTimeline(data) {
@@ -66,13 +90,11 @@ function onResize() {
 }
 
 Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
-    Boxy.load(evt._link, {
-        cache:true,
-        title:evt._description,
-        afterShow: function() {
-            loadCrowdPopup(evt._text,this.boxy);
-        }
-    });
+  box = new Boxy("<p>Loading...</p>",{title:evt._description});
+  jQuery.getJSON('/crowd/'+evt._text, function(res) {
+    box.setContent(res.html)
+    loadCrowdPopup(evt._text,box.boxy,res.users,res.tweets);
+  });
 }
 
 
@@ -81,22 +103,326 @@ $(document).ready(function() {
     $(window).resize(onResize());
 });
 
+function loadSearchResults(data) {
+    var events = jQuery.map(data, function(crowd,i) {
+        return {
+            'start': new Date(1000*crowd.start),
+            'end': new Date(1000*crowd.end),
+            'title': crowd._id,
+            'link': '/crowd/'+crowd._id,
+            'description': 'a crowd of '+crowd.size+' people'
+        };
+    });
+
+
+    // Need to retrieve the earliest date and the latest date
+   
+    var min_date_secs = 4099999999;
+    var max_date_secs = 0;
+    var min_date;
+    var max_date;
+    for (var i = 0; i < events.length; i++) {
+        var date1 = events[i]['start']; 
+        var secs = (date1.getTime() - date1.getMilliseconds()) / 1000 - 18000;
+
+        if (secs < min_date_secs) {
+            min_date_secs = secs;
+            min_date = date1;
+        }
+
+        var date1 = events[i]['end']; 
+        var secs = (date1.getTime() - date1.getMilliseconds()) / 1000 - 18000;
+
+        if (secs > max_date_secs) {
+            max_date_secs = secs;
+            max_date = date1;
+        }
+    }
+    var start_date = min_date;
+    var end_date = max_date;
+
+    var query_title = document.getElementById("query_title");
+    var eventSource1 = new Timeline.DefaultEventSource();
+
+
+    query_title.innerHTML = "";
+
+    var searchBox = document.getElementById('searchBox');
+    var query = "";
+    query = searchBox.value;
+    query_title.appendChild(document.createTextNode('(Demo Example) for '));
+   
+    // Emphasize the query text.
+    query_text = document.createElement('strong');
+    query_text.appendChild(document.createTextNode(query));
+    query_title.appendChild(query_text);
+    
+    //query_title.appendChild(document.createTextNode(start_date));
+    //query_title.appendChild(document.createTextNode(end_date));
+
+    
+
+
+
+	var tl_el = document.getElementById("tl");
+
+
+    var theme1 = Timeline.ClassicTheme.create();
+    theme1.autoWidth = true; // Set the Timeline's "width" automatically.
+                             // Set autoWidth on the Timeline's first band's theme,
+                             // will affect all bands.
+
+    theme1.timeline_start = new Date(start_date);
+    theme1.timeline_stop  = new Date(end_date);
+    //theme1.timeline_start = new Date(Date.UTC(2010, 7, 1));
+    //theme1.timeline_stop  = new Date(Date.UTC(2011, 10, 1));
+
+    var bandInfos = [
+        Timeline.createBandInfo({
+            width:          45, // set to a minimum, autoWidth will then adjust
+            intervalUnit:   Timeline.DateTime.DAY,
+            intervalPixels: 200,
+            eventSource:    eventSource1,
+            date:           theme1.timeline_start,
+            theme:          theme1,
+            layout:         'original'  // original, overview, detailed
+        })
+    ];
+
+    // create the Timeline
+    tl = Timeline.create(tl_el, bandInfos, Timeline.HORIZONTAL);
+
+    var url = '.'; // The base url for image, icon and background image
+                   // references in the data
+    eventSource1.loadJSON({'events' : events} , url);
+                   // The data was stored into the
+                                               // timeline_data variable.
+    tl.layout(); // display the Timeline
+}
+
+
+function search() {
+    //document.body.innerHTML = "";
+    var query_title = document.getElementById("query_title");
+    query_title.innerHTML = "";
+    
+    
+    
+    
+    // The defaut values for all the search options.
+    var api = '/api/1/search/crowd?';
+    var query = "";
+    var since_date = "";
+    var until_date = "";
+    var min_num_tweets = "0";
+    var min_num_users = "0";
+    var rpp = "100";
+
+    // get query. (If query is an empty string, return everything.
+    var searchBox = document.getElementById('searchBox');
+    query = searchBox.value;
+    if (query != "")
+        api += "q=" + query;
+    
+    var rpp_value = document.getElementById('rpp').value;
+    rpp = String(rpp_value);
+    api += "&limit=" + rpp;
+
+    var since_date_string = document.getElementById('date_pick_1').value; 
+    if (since_date_string != "") {
+        month = since_date_string.substring(0,2) - 1;
+        day = since_date_string.substring(3,5);
+        year = String(Number(since_date_string.substring(6,8)) + 2000);
+        since_date = new Date(year, month, day);
+        var secs = (since_date.getTime() - since_date.getMilliseconds()) / 1000 - 18000; 
+        api += "&min_start=" + String(secs);
+    }
+    var until_date_string = document.getElementById('date_pick_2').value; 
+    if (until_date_string != "") {
+        month = until_date_string.substring(0,2) - 1;
+        day = until_date_string.substring(3,5);
+        year = String(Number(until_date_string.substring(6,8)) + 2000);
+        until_date = new Date(year, month, day);
+        var secs = (until_date.getTime() - until_date.getMilliseconds()) / 1000 - 18000; 
+        api += "&max_end=" + String(secs);
+    } 
+
+    var num_users = document.getElementById('num_users').value;
+    api += "&min_size=" + String(num_users);
+
+    jQuery.getJSON(api, loadSearchResults);
+    $(window).resize(onResize());
+    
+    
+    //document.appendChild(document.createTextNode("rPlease enter a valid query!"));
+    //document.createTextNode("rPlease enter a valid query!");
+}
+
+
+
+$(function()
+{
+    $('.date-pick').datePicker({startDate:'01/01/1996'});
+});
+
+Date.prototype.toFormattedString = function(include_time){
+    str = this.getFullYear() + "-" + Date.padded2(this.getMonth() + 1) + "-" +Date.padded2(this.getDate()); 
+    
+    if (include_time) { hour=this.getHours(); str += " " + this.getAMPMHour() + ":" + this.getPaddedMinutes() + " " + this.getAMPM() }
+        return str;
+}
+    
+Date.parseFormattedString = function (string) {
+    var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
+        "( ([0-9]{1,2}):([0-9]{2})? *(pm|am)" +
+        "?)?)?)?";
+    var d = string.match(new RegExp(regexp, "i"));
+    if (d==null) return Date.parse(string); // at least give javascript a crack at it.
+    var offset = 0;
+    var date = new Date(d[1], 0, 1);
+    if (d[3]) { date.setMonth(d[3] - 1); }
+    if (d[5]) { date.setDate(d[5]); }
+    if (d[7]) {
+        hours = parseInt(d[7], 10);
+        offset=0;
+        is_pm = (d[9].toLowerCase()=="pm")
+        if (is_pm && hours <= 11) hours+=12;
+        if (!is_pm && hours == 12) hours=0;
+        date.setHours(hours); 
+    }
+    if (d[8]) { date.setMinutes(d[8]); }
+    if (d[10]) { date.setSeconds(d[10]); }
+    if (d[12]) { date.setMilliseconds(Number("0." + d[12]) * 1000); }
+    if (d[14]) {
+        offset = (Number(d[16]) * 60) + Number(d[17]);
+        offset *= ((d[15] == '-') ? 1 : -1);
+    }
+    return date;
+}
+
+
+
+function showNumTweets(newValue)
+{
+    document.getElementById("range_num_tweets").innerHTML=newValue;
+}
+
+function showNumUsers(newValue)
+{
+    document.getElementById("range_num_users").innerHTML=newValue;
+}
+
+
 </script>
 {% endblock %}
 
 {% block content %}
-    <!--
-    <div class = "option">
-	<form id="form">
-	        <label>Search</label>:
-                <input id="" type="text" />
-                <button>Submit</button>
-		</br></br></br>
-	</form>
+    
+    <br>
+    <div id="header">
+        <div id="headerContent">
+        <!--
+        <div id="logo"><a href="Crowdy Search"><img alt="crowdy-logo-small" src="crowdy-logo-pic" /></a></div>
+        -->
+            <div id="search_header">
+            <!--
+            <form action="/search" id="searchForm" method="get">
+            -->
+                <div id="searchEntry">
+                    <input id="searchBox" name="q" placeholder="Enter your query" type="search" value=""/>
+                </div>
+                <div id="searchButton">
+                    <!--
+                    <input type="submit" value="Search" />
+                    -->
+                    <input type=BUTTON value="Search" OnClick="search()"/>
+                </div>
+                <div id="searchOptionsCtrl">    
+                <!-- <input type=BUTTON value="Activate Adv_Search" OnClick="adv_search()"/> -->
+                <button id="button_to_adv">Switch to Adv-Search</button>
+                <button id="button_to_basic" style="display: none">Switch to Basic-Search</button>
+    
+                </div>
+
+                <script>
+                $("#button_to_adv").click(function () {
+                    $("#button_to_adv").toggle();
+                    $("#button_to_basic").toggle();
+                    $("#adv_search").toggle();
+                    //$('.date-pick').datePicker({startDate:'01/01/1996'});  
+                    $(":date").dateinput();
+                });
+                $("#button_to_basic").click(function () {
+                    $("#button_to_adv").toggle();
+                    $("#button_to_basic").toggle();
+                    $("#adv_search").toggle();
+                    //$('.date-pick').datePicker({startDate:'01/01/1996'});
+                });
+                </script>
+
+                <p class="clearer"></p>
+                <!--
+                </form>
+                -->
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <div id="adv_search" style="display: none">
+        <div id="title">
+        <h1 align=center>Advanced Search</h1>
+        </div>
+
+        <table id="advForm" cellspacing="0" align=center>
+        <!--
+        <tr><td class="find" colspan="2"><b>Find crowds based on...</b></td><td class="srch srcht"><input type=BUTTON value="Search" OnClick="search()"/></td></tr>
+        <tr><th>Words</th><td class="l t">All of these words</td><td class="r t"><input id="searchBox" name="query" type="search" value=""/></td></tr>
+        -->
+        <tr><td colspan="3" class="sep"></td></tr>
+        <!--
+        <tr><th>Dates </th><td class="l t">Since this date</td><td class="r t"><input id="date_pick_1" name="date_pick_1" class="date-pick" /></td><tr>
+        <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date_pick_2" name="date_pick_2" class="date-pick" /></td><tr>
+        -->
+
+        <tr><th>Dates </th></tr>
+        <tr><th></th><td class="l t">Since this date</td><td class="r t"><input id="date_pick_1" name="date_pick_1" type="date"/></td><tr>
+        <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date_pick_2" name="date_pick_2" type="date"/></td><tr>
+        
+        <tr><td colspan="3" class="sep"></td></tr>
+        <!--
+        <tr><th>Size</th><td class="l t">Min # of tweets in the crowd</td><td class="r t"><input class="int" name="num_tweets" id="num_tweets"/></td><tr>
+        <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input class="int" name="num_users" id="num_users"/></td><tr>
+        -->
+        <tr><th>Size </th></tr>
+        <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span     id = "range_num_users"> 5</span></td><tr>
+        <!--
+        <tr><th>Size </th><td class="l t">Min # of tweets in the crowd</td><td class="r t"><input type="range" min="1" max="100" value="5" name="num_tweets" id="num_tweets" onchange="showNumTweets(this.value)    "/><span id="range_num_tweets"> 5</span></td><tr>
+        <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span     id = "range_num_users"> 5</span></td><tr>
+        <tr><td colspan="3" class="sep"></td></tr>
+        -->
+        <!--
+        <tr><th>Presentation</th><td class="l b">Type of Visualization</td><td class="r t"><select id="viz_type" name="viz_type"><option value="List" >List</option><option value="Timeline" >Timeline</option>    </select><span class="note"></span></td></tr>
+        -->
+        <tr><td colspan="3" class="sep"></td></tr>
+        <tr><th>Other </th><tr>
+        <tr><th></th><td class="l b">Results per page</td><td class="r t"><select id="rpp" name="rpp"><option value="10" >10</option><option value="20" >20</option><option value="30" >30</option><option     value="50" >50</option><option value="75" >75</option><option value="100" selected="selected">100</option></select> <span class="note">(persistent)</span></td></tr>
+        <tr><td colspan="3" class="sep"></td></tr>
+        </table>
+
+        <!-- make it happen -->
+        <script>
+        $(":date").dateinput();
+        </script>
 
     </div>
-    -->
+
+
+
+    <div id="timeline">
     <br><br>
+	<div id = 'query_title'>
+	</div>
     <fieldset>
     <legend> global view</legend>
 	    <div class="timelineC">
@@ -105,5 +431,6 @@ $(document).ready(function() {
     </fieldset>
     </br></br></br></br>
     <p id="tlinfo">none</p>
+    </div>
 {% endblock %}
 

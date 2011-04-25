@@ -10,7 +10,6 @@
 <path>/Crowdy/intake</path>
 <path>/Crowdy/api</path>
 <path>/Crowdy/maroon</path>
-<path>/Crowdy/src</path>
-<path>/Crowdy/search</path>
+<path>/Crowdy/tools</path>
 </pydev_pathproperty>
 </pydev_project>
