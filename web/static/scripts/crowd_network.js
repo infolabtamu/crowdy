@@ -171,6 +171,7 @@ function showTweets(list,tweets,users,start,next){
 //}
 
 function loadCrowdPopup(cid,elem,users,tweets) {
+    elem.find('.tabs').tabs("div.pane")
     loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
 	var list = elem.find('.mylist');
 	var next = elem.find('.next');
