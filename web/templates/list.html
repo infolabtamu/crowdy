@@ -6,6 +6,37 @@
 <script src="/static/scripts/crowd_network.js"></script>  
 
 <script>
+image0 =new Image();
+image1 =new Image();
+//image0.src ="http://students.cse.tamu.edu/pka293/yellow_star.jpg"
+image0.src ="/static/images/yellow_star.jpg"
+//image1.src ="http://students.cse.tamu.edu/pka293/red_star.jpg"
+image1.src ="/static/images/red_star.jpg"
+function image_click(imageid)
+{
+var i=imageid
+imgs=document.getElementsByTagName('img');
+//var j=document.images(i);
+//alert(imgs)
+for(j in imgs)
+ {
+  if(imgs[j].id==i)
+  {
+   //alert(imgs[j].id)
+   if(imgs[j].src==image1.src)
+    {
+	imgs[j].src=image0.src
+	break;
+    }
+    else
+    {
+	imgs[j].src=image1.src
+	break;
+    }
+  }
+ }
+//j.setAttribute('src', image0.src);
+}
 function loadData(data) {
 	var events = jQuery.map(data, function(crowd,i) {
         return {
@@ -13,7 +44,18 @@ function loadData(data) {
             'end': new Date(1000*crowd.end),
 	    'users': crowd.users,
             'title': crowd._id,
-            'description': 'a crowd of '+crowd.size+' people'
+            'description': 'a crowd of '+crowd.size+' people',
+	    'size': crowd.size,
+	    /*if (crowd.size==4)
+	    {
+		'star':image0.src
+	    }
+	    else
+	    {
+		'star':image1.src
+	    }*/
+	    'star' : crowd.star
+	    'starred': image1.src
         };
         });
         var jq_tbo = $('#dyTableBody');
@@ -34,6 +76,26 @@ function loadData(data) {
 			}
 			row.appendChild(cell);
 		}
+		//<a href="http://www.w3schools.com">
+		//<img src=events[i]['star'] id=events[i]['title'] width="32" height="32">
+		cell1=document.createElement('img');
+		/*if (events[i]['star']==false)
+	    	{
+			events[i]['starred']=image0.src;
+	    	}
+	    	else
+	    	{
+			events[i]['starred']=image1.src;
+	    	}*/
+		cell1.setAttribute('src', events[i]['starred']);
+		cell1.setAttribute('id', events[i]['title']+"img");
+		//cell1.setAttribute('href', 'http://www.google.com');
+		cell1.setAttribute('onclick', image_click(events[i]['title']+"img"));
+		cell1.setAttribute('height', '30px');
+		cell1.setAttribute('width', '30px');
+		
+		row.appendChild(cell1);
+		//alert(document.getElementById(events[i]['title']+"img").href)
                 tbo.appendChild(row);
                 //toggle the detailed view when the user clicks a row
                 jq_tbo.children().last().click(
@@ -49,13 +111,15 @@ function loadData(data) {
                         }
                     }
                 );
-                jq_tbo.append('<tr style="display:none"><td colspan="3"></td></tr>');
+		
+                jq_tbo.append('<tr style="display:none"><td colspan="4"></td></tr>');
 	}
 }
 
 
 $(document).ready(function() {
     jQuery.getJSON('/api/1/search/crowd?limit=1000', loadData);
+    jQuery.postJSON(loadData,'/api/1/search/crowd?limit=1000')
     $(window).resize(onResize());
 });
 </script>
@@ -65,7 +129,7 @@ $(document).ready(function() {
 {% block content %}
 <table class="mytable">
     <tbody id="dyTableBody">
-        <tr><th>Period</th><th>Tweets</th><th>Users</th></tr>
+        <tr><th>Period</th><th>Tweets</th><th>Users</th><th>Star</th></tr>
     </tbody>
 </table>
 {% endblock %}
