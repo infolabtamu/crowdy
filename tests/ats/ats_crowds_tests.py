@@ -5,10 +5,10 @@ Created on Feb 21, 2011
 '''
 import sys
 from pymongo.connection import Connection, database
-sys.path.append('../../intake')
+sys.path.append('../../intake/ats')
 import unittest
 from operator import itemgetter
-from ats.ats_crowds import Epoch, GraphReader, MCL, Evolution, CrowdsDB
+from ats_crowds import Epoch, GraphReader, MCL, Evolution, CrowdsDB
 
 #TEST_STARTING_EPOCH = 1280639087
 #TEST_ENDING_EPOCH = 1288846743
