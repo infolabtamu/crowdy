@@ -21,7 +21,15 @@
 
 <!-- page specific styles -->
 <link rel="stylesheet" type="text/css" media="screen" href="/static/css/demo.css">
-              
+
+
+<!-- Date Input -->
+<!-- include jQuery FORM Tools (or any other combination) -->
+<script src="http://cdn.jquerytools.org/1.2.5/form/jquery.tools.min.js"></script>
+
+<!-- dateinput styling -->
+<link rel="stylesheet" type="text/css" href="/static/css/dateinput.css"/>
+
 
 <script>
 
@@ -197,17 +205,56 @@ function search() {
     //document.body.innerHTML = "";
     var query_title = document.getElementById("query_title");
     query_title.innerHTML = "";
-    var searchBox = document.getElementById('searchBox');
+    
+    
+    
+    
+    // The defaut values for all the search options.
+    var api = '/api/1/search/crowd?';
     var query = "";
+    var since_date = "";
+    var until_date = "";
+    var min_num_tweets = "0";
+    var min_num_users = "0";
+    var rpp = "100";
+
+    // get query. (If query is an empty string, return everything.
+    var searchBox = document.getElementById('searchBox');
     query = searchBox.value;
-    if (query == "") {
-		query_title.appendChild(document.createTextNode('Please enter a valid query!'));
-	}
-    else {
-        var api = '/api/1/search/crowd?q=' + query + '&limit=100';
-        jQuery.getJSON(api, loadSearchResults);
-        $(window).resize(onResize());
+    if (query != "")
+        api += "q=" + query;
+    
+    var rpp_value = document.getElementById('rpp').value;
+    rpp = String(rpp_value);
+    api += "&limit=" + rpp;
+
+    var since_date_string = document.getElementById('date_pick_1').value; 
+    if (since_date_string != "") {
+        month = since_date_string.substring(0,2) - 1;
+        day = since_date_string.substring(3,5);
+        year = String(Number(since_date_string.substring(6,8)) + 2000);
+        since_date = new Date(year, month, day);
+        var secs = (since_date.getTime() - since_date.getMilliseconds()) / 1000 - 18000; 
+        api += "&min_start=" + String(secs);
+        query_title.appendChild(document.createTextNode(String(secs)));
     }
+    var until_date_string = document.getElementById('date_pick_2').value; 
+    if (until_date_string != "") {
+        month = until_date_string.substring(0,2) - 1;
+        day = until_date_string.substring(3,5);
+        year = String(Number(until_date_string.substring(6,8)) + 2000);
+        until_date = new Date(year, month, day);
+        var secs = (until_date.getTime() - until_date.getMilliseconds()) / 1000 - 18000; 
+        api += "&max_end=" + String(secs);
+        query_title.appendChild(document.createTextNode(String(secs)));
+    } 
+
+    var num_users = document.getElementById('num_users').value;
+    api += "&min_size=" + String(num_users);
+
+    jQuery.getJSON(api, loadSearchResults);
+    $(window).resize(onResize());
+    
     
     //document.appendChild(document.createTextNode("rPlease enter a valid query!"));
     //document.createTextNode("rPlease enter a valid query!");
@@ -272,36 +319,6 @@ function showNumUsers(newValue)
 {% endblock %}
 
 {% block content %}
-    <!--
-    <div class = "option">
-	<form id="form">
-	        <label>Search</label>:
-                <input id="" type="text" />
-                <button>Submit</button>
-		</br></br></br>
-	</form>
-
-    </div>
-    -->
-    <!--
-    <br><br><br>
-    <div id="search">
-    <form action="/search" id="searchForm" method="get">
-        <div id="searchEntry">
-        <input autosave="com.twitter.search" id="searchBox" name="q" placeholder="Enter your query" results="10" type="search" value=""/>
-        <div id="searchOptionsCtrl">
-        <a href="/advanced_search" class="litnv">Advanced Search</a>
-        </div>
-        </div>
-        <div id="searchButton">
-        <input type=BUTTON value="Search" OnClick="location.href='list'"/>
-        <input type=BUTTON value="Search" OnClick="search()"/>
-        </div>
-        <p class="clearer"></p>
-    </form>
-    </div>
-    </br></br></br></br>
-    -->
     
     <br>
     <div id="header">
@@ -334,11 +351,14 @@ function showNumUsers(newValue)
                     $("#button_to_adv").toggle();
                     $("#button_to_basic").toggle();
                     $("#adv_search").toggle();
+                    //$('.date-pick').datePicker({startDate:'01/01/1996'});  
+                    $(":date").dateinput();
                 });
                 $("#button_to_basic").click(function () {
                     $("#button_to_adv").toggle();
                     $("#button_to_basic").toggle();
                     $("#adv_search").toggle();
+                    //$('.date-pick').datePicker({startDate:'01/01/1996'});
                 });
                 </script>
 
@@ -352,7 +372,6 @@ function showNumUsers(newValue)
     <br>
 
     <div id="adv_search" style="display: none">
-        <br><br><br>
         <div id="title">
         <h1 align=center>Advanced Search</h1>
         </div>
@@ -363,24 +382,40 @@ function showNumUsers(newValue)
         <tr><th>Words</th><td class="l t">All of these words</td><td class="r t"><input id="searchBox" name="query" type="search" value=""/></td></tr>
         -->
         <tr><td colspan="3" class="sep"></td></tr>
+        <!--
         <tr><th>Dates </th><td class="l t">Since this date</td><td class="r t"><input id="date_pick_1" name="date_pick_1" class="date-pick" /></td><tr>
         <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date_pick_2" name="date_pick_2" class="date-pick" /></td><tr>
+        -->
+
+        <tr><th>Dates </th></tr>
+        <tr><th></th><td class="l t">Since this date</td><td class="r t"><input id="date_pick_1" name="date_pick_1" type="date"/></td><tr>
+        <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date_pick_2" name="date_pick_2" type="date"/></td><tr>
+        
         <tr><td colspan="3" class="sep"></td></tr>
         <!--
         <tr><th>Size</th><td class="l t">Min # of tweets in the crowd</td><td class="r t"><input class="int" name="num_tweets" id="num_tweets"/></td><tr>
         <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input class="int" name="num_users" id="num_users"/></td><tr>
         -->
+        <tr><th>Size </th></tr>
+        <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span     id = "range_num_users"> 5</span></td><tr>
+        <!--
         <tr><th>Size </th><td class="l t">Min # of tweets in the crowd</td><td class="r t"><input type="range" min="1" max="100" value="5" name="num_tweets" id="num_tweets" onchange="showNumTweets(this.value)    "/><span id="range_num_tweets"> 5</span></td><tr>
         <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span     id = "range_num_users"> 5</span></td><tr>
         <tr><td colspan="3" class="sep"></td></tr>
+        -->
         <!--
         <tr><th>Presentation</th><td class="l b">Type of Visualization</td><td class="r t"><select id="viz_type" name="viz_type"><option value="List" >List</option><option value="Timeline" >Timeline</option>    </select><span class="note"></span></td></tr>
         -->
         <tr><td colspan="3" class="sep"></td></tr>
-        <tr><th>Other </th><td class="l b">Results per page</td><td class="r t"><select id="rpp" name="rpp"><option value="10" >10</option><option value="20" >20</option><option value="30" >30</option><option     value="50" >50</option><option value="75" >75</option><option value="100" selected="selected">100</option></select> <span class="note">(persistent)</span></td></tr>
+        <tr><th>Other </th><tr>
+        <tr><th></th><td class="l b">Results per page</td><td class="r t"><select id="rpp" name="rpp"><option value="10" >10</option><option value="20" >20</option><option value="30" >30</option><option     value="50" >50</option><option value="75" >75</option><option value="100" selected="selected">100</option></select> <span class="note">(persistent)</span></td></tr>
         <tr><td colspan="3" class="sep"></td></tr>
         </table>
-        </form>
+
+        <!-- make it happen -->
+        <script>
+        $(":date").dateinput();
+        </script>
 
     </div>
 
