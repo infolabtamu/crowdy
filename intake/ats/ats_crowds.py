@@ -21,7 +21,7 @@ edge_threshold_weight = 1.3
 minimumNumberOfUsersInCrowd = 4
 
 # DB initialization
-mongodb_connection = Connection('localhost', 27020)
+mongodb_connection = Connection('localhost', 27017)
 crowds_db = mongodb_connection.hou
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
