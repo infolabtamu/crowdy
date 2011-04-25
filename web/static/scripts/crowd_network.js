@@ -170,7 +170,39 @@ function showTweets(list,tweets,users,start,next){
 //	nextpage.onclick=showTweets(tweets,users,start);
 //}
 
-function loadCrowdPopup(cid,elem,users,tweets) {
+function starclick()
+{
+	alert("clicked")
+}
+
+function loadCrowdPopup(cid,elem,users,tweets,star) {
+    image0=new Image();
+    image1=new Image();
+    image0.src ="/static/images/yellow_star.jpg";
+    image1.src ="/static/images/red_star.jpg";
+    var str = elem.find('.star');
+    if(star==true)
+    {
+	str.attr("src",image1.src);
+    }
+    else
+    {
+	str.attr("src",image0.src);
+    }
+    str.click(function(){
+	if(star==true)
+	{
+	 str.attr("src",image0.src);
+	 star=false;
+	 jQuery.getJSON('/api/1/crowd/star/'+cid+'?starred=0');
+	}
+	else
+	{
+	 str.attr("src",image1.src);
+	 star=true;
+	 jQuery.getJSON('/api/1/crowd/star/'+cid+'?starred=1');
+	} 
+    });
     elem.find('.tabs').tabs("div.pane")
     loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
 	var list = elem.find('.mylist');
