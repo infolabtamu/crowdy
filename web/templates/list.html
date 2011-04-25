@@ -97,7 +97,7 @@ function loadSearchResults(data) {
     row = document.createElement('tr');
     cell=document.createElement('td');
     //cell.appendChild(document.createTextNode('Results for ' + query));
-    cell.appendChild(document.createTextNode('(Demonstration Example) Results for '));
+    cell.appendChild(document.createTextNode('(Demo Example) for '));
    
     // Emphasize the query text.
     query_text = document.createElement('strong');
@@ -178,7 +178,7 @@ function search() {
         query_title.appendChild(row);
     } else {
         //cell.appendChild(document.createTextNode("The query is:" + query));
-        var api = '/api/1/search/crowd?q=' + query + '&limit=5';
+        var api = '/api/1/search/crowd?q=' + query + '&limit=100';
         jQuery.getJSON(api, loadSearchResults);
         $(window).resize(onResize());
     }

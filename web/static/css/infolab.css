@@ -385,7 +385,8 @@ way to fit your requirements.
 }
 
 #search_header #searchOptionsCtrl {
-    font-size: 15px;
+    font-size: 16px;
+    width: 180px;
 }
 
 #search_header #searchOptions {
@@ -420,6 +421,7 @@ way to fit your requirements.
 
 #search_header #searchButton input {
     margin-top: 5px;
+    width: 100px;
     font-size: 16px;
 }
 
