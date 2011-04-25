@@ -85,7 +85,8 @@ class CrowdFilter(Filter):
     def run(self):
         crowds = Crowd.get_all()
         for crowd in self.cfilter(crowds):
-            pass
+            if crowd:
+                crowd.save()
 
 
 class Grouper(Filter):
