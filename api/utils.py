@@ -15,7 +15,7 @@ def parse_date(dstr):
 def range_from_params(cls, key, filter, kwargs):
     start = kwargs.get('min_'+key)
     end = kwargs.get('max_'+key)
-    return getattr(cls,key).range(
+    return getattr(cls,cls.long_names[key]).range(
             None if start is None else filter(start),
             None if end is None else filter(end))
 

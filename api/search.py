@@ -31,6 +31,8 @@ def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
         when the crowd ended
     {min,max}_size
         the number of users involved in the crowd
+    {min,max}_clco
+        the clustering coefficient of the crowd (from 0 to 1.0)
 
     Here are some example calls:
 
@@ -49,6 +51,7 @@ def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
         returns 10 crowds in the full format
     """
     query = (
+        range_from_params(Crowd, 'clco', float, kwargs) &
         range_from_params(Crowd, 'start', parse_date, kwargs) &
         range_from_params(Crowd, 'end', parse_date, kwargs) &
         range_from_params(Crowd, 'size', int, kwargs))
