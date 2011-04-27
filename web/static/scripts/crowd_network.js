@@ -23,7 +23,7 @@ Renderer = function(canvas){
       ctx.strokeStyle = "#d3d3d3"
       particleSystem.eachEdge(function(edge, pt1, pt2){
           ctx.beginPath()
-          ctx.lineWidth = edge.data.weight;
+          ctx.lineWidth = Math.min(10,edge.data.weight);
           ctx.moveTo(pt1.x, pt1.y)
           ctx.lineTo(pt2.x, pt2.y)
           ctx.stroke()
