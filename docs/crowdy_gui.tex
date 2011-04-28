@@ -419,14 +419,14 @@ the crowds with the three options of perspectives.
 
 \begin{figure}
 \centering
-\epsfig{file=img/TimelineView.eps, width= 250pt }
+\includegraphics[width=\linewidth]{imgs/TimeLineView.png}
 \caption{Timeline View}
-\label{fig:Timeline View}
+\label{fig:TimelineView}
 \end{figure}
 
 \begin{figure}
 \centering
-\epsfig{file=img/CrowdViewInTimeline.eps, width= 250pt }
+\includegraphics[width=\linewidth]{imgs/CrowdViewInTimeLine.png}
 \caption{Crowd View In Timeline}
 \label{fig:CrowdViewInTimeline}
 \end{figure}
@@ -437,13 +437,13 @@ crowds at a given time span.  The timeline allows the analyist to zoom in on a
 specific time, and move forward and backward thorough time.  The visualization
 shows how long the crowd lasts, and the size of the crowd. We may make the
 crowd taller or shorter based on the size of the crowd.  We will also display a
-few keywords from each crowd. After a crowd in the timeline is clicked, a pop up ``Crowd View'' window will show the detailed information of this particular crowd (Figure \ref{}).
+few keywords from each crowd. After a crowd in the timeline is clicked, a pop up ``Crowd View'' window will show the detailed information of this particular crowd (Figure \ref{fig:CrowdViewInTimeline}).
 
 \subsubsection{List}
 
 \begin{figure}
 \centering
-\epsfig{file=img/ListView.eps, width= 250pt }
+\includegraphics[width=\linewidth]{imgs/ListView.png}
 \caption{Overall List View}
 \label{fig:ListView}
 \end{figure}
@@ -458,42 +458,42 @@ Each crowd has a star-feature attached to it which can be used by the user to ma
 
 \begin{figure}
 \centering
-\epsfig{file=img/Search.eps, width= 250pt }
+\includegraphics[width=\linewidth]{imgs/Search.png}
 \caption{Search}
 \label{fig:Search}
 \end{figure}
 In the search function of the system, we provide a main search box in which 
 users can type a textual query to search for crowds which contains the query.
 Besides, users can also click the link of advanced search, so that they can 
-choose options of words, time period of crowd, size of crowd, presentation ways,
+choose options of words, time period of crowd, size of crowd, value of clustering coefficient of crowds,
 and results they would like to see per page. The layout is shown in figure \ref{fig:Search}. We maintain indices for each kind
 of queries in the MongoDB database, so that we can efficiently return the results
 to users. Whenever a query is issued, the systems send a HTTP GET request to the
 backend, and the server would return the corresponding search results.
 
 In our future direction, we will also provide query options like location, user's
-screen name. So that users can search crowds that are in a specific city or an 
+screen name, . So that users can search crowds that are in a specific city or an 
 area, and also search crowds that a specific user is involved in.
 
 \subsubsection{Crowd View}
 
 \begin{figure}
 \centering
-\epsfig{file=img/NetworkInList.eps, width= 250pt }
+\includegraphics[width=\linewidth]{imgs/NetworkInList.png}
 \caption{Network View in List}
 \label{fig:NetworkInList}
 \end{figure}
 
 \begin{figure}
 \centering
-\epsfig{file=img/TweetsInList.eps, width= 250pt }
+\includegraphics[width=\linewidth]{imgs/TweetsInList.png}
 \caption{Tweets View in List}
 \label{fig:TweetInList}
 \end{figure}
 
 \begin{figure}
 \centering
-\epsfig{file=img/GraphInList.eps, width= 250pt }
+\includegraphics[width=\linewidth]{imgs/GraphInList.png}
 \caption{Graph View in List}
 \label{fig:GraphInList}
 \end{figure}
