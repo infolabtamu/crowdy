@@ -40,7 +40,7 @@ function loadTimeline(data) {
         return {
             'start': new Date(1000*crowd.start),
             'end': new Date(1000*crowd.end),
-            'title': crowd._id,
+            'title': crowd.title,
             'link': '/crowd/'+crowd._id,
             'description': 'a crowd of '+crowd.size+' people'
         };
@@ -53,7 +53,7 @@ function loadTimeline(data) {
     theme1.autoWidth = true; // Set the Timeline's "width" automatically.
                              // Set autoWidth on the Timeline's first band's theme,
                              // will affect all bands.
-    theme1.timeline_start = new Date(Date.UTC(2010, 8, 1));
+    theme1.timeline_start = new Date(Date.UTC(2010, 9, 1));
     theme1.timeline_stop  = new Date(Date.UTC(2011, 10, 1));
 
     var bandInfos = [
@@ -91,7 +91,7 @@ function onResize() {
 
 Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
   box = new Boxy("<p>Loading...</p>",{title:evt._description});
-  jQuery.getJSON('/crowd/'+evt._text, function(res) {
+  jQuery.getJSON('/crowd/'+evt.getLink(), function(res) {
     box.setContent(res.html)
     loadCrowdPopup(evt._text,box.boxy,res.users,res.tweets);
   });

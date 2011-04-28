@@ -51,8 +51,9 @@ function loadData(data) {
             'start': new Date(1000*crowd.start),
             'end': new Date(1000*crowd.end),
 	    'users': crowd.users,
-            'title': crowd._id,
-            'description': 'a crowd of '+crowd.size+' people',
+            'title': crowd.title,
+            '_id':crowd._id,
+            'description': ""+crowd.size,
 	    'size': crowd.size,
 	    /*if (crowd.size==4)
 	    {
@@ -84,27 +85,10 @@ function loadData(data) {
 			}
 			row.appendChild(cell);
 		}
-		//cell1=document.createElement('img');
-		/*if (events[i]['star']==false)
-	    	{
-			events[i]['starred']=image0.src;
-	    	}
-	    	else
-	    	{
-			events[i]['starred']=image1.src;
-	    	}*/
-		/*cell1.setAttribute('src', events[i]['starred']);
-		cell1.setAttribute('id', events[i]['title']+"img");
-		cell1.setAttribute('onclick', image_click(events[i]['title']+"img"));
-		cell1.setAttribute('height', '30px');
-		cell1.setAttribute('width', '30px');
-		
-		row.appendChild(cell1);*/
-		//alert(document.getElementById(events[i]['title']+"img").href)
                 tbo.appendChild(row);
                 //toggle the detailed view when the user clicks a row
                 jq_tbo.children().last().click(
-                    {cid:events[i]['title'],star:events[i]['star']},
+                    {cid:events[i]['_id'],star:events[i]['star']},
                     function(e) {
                         var detail = $(this).next();
                         detail.slideToggle();
@@ -121,18 +105,6 @@ function loadData(data) {
                 jq_tbo.append('<tr style="display:none"><td colspan="4">Loading...</td></tr>');
 	}
 }
-
-/*
-var resizeTimerID = null;
-function onResize() {
-    if (resizeTimerID == null) {
-        resizeTimerID = window.setTimeout(function() {
-            resizeTimerID = null;
-            tl.layout();
-        }, 500);
-    }
-}
-*/
 
 
 
@@ -341,7 +313,7 @@ function showClco(newValue)
             <div id="query_content">
             </div>
             <tbody id="dyTableBody">
-                <tr><th>Period</th><th>Tweets</th><th>Users</th></tr>
+                <tr><th>Period</th><th>Users</th><th>Size</th></tr>
             </tbody>
         </table>
     </div>

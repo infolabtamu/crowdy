@@ -36,6 +36,7 @@ class CrowdNetworkFilter(CrowdFilter):
         crowd.central_users = nlargest(10, deg.iterkeys(), key=deg.__getitem__)
 
     def set_title(self, crowd):
-        users = [User.get_id(uid,fields=['sn']) for uid in crowd.central_users[0:3]]
-        crowd.title = ", ".join(u.screen_name for u in users if u)
+        users = (User.get_id(uid,fields=['sn']) for uid in crowd.central_users)
+        names = [u.screen_name for u in users if u][0:2]
+        crowd.title = ", ".join(names+["..."])
         print crowd.title
