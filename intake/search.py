@@ -49,7 +49,7 @@ class CrowdIndexFilter(CrowdFilter):
         with CrowdIndexer() as index:
             for crowd in crowds:
                 print "indexing %s"%crowd._id
-                tweets = crowd.tweets(limit=None)
+                tweets = crowd.tweets(limit=0)
                 text = "\n".join(t.text for t in tweets)
                 index.addCrowd(crowd._id,text)
                 yield crowd
