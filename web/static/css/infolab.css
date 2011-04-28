@@ -538,8 +538,8 @@ way to fit your requirements.
      text-align: left;
      vertical-align: middle;
 
-     margin-left: 200px;
-     margin-right:200px;
+     margin-left: 100px;
+     margin-right:100px;
 }
 
 #query_title {
@@ -553,16 +553,16 @@ way to fit your requirements.
      text-align: left;
      vertical-align: middle;
 
-     margin-left: 200px;
-     margin-right:200px;
+     margin-left: 150px;
+     margin-right:150px;
 }
 
 #adv_search {
      text-align: middle;
      vertical-align: middle;
     
-     margin-left: 200px;
-     margin-right:200px;
+     margin-left: 150px;
+     margin-right:150px;
 }
 
 #adv_search #title {
@@ -573,8 +573,8 @@ way to fit your requirements.
      text-align: middle;
      vertical-align: middle;
      font-size: 16pt;
-     margin-left: 200px;
-     margin-right:200px;
+     margin-left: 150px;
+     margin-right:150px;
 }
 /*
  Added by Zhiyuan Cheng ends
