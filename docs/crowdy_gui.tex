@@ -416,6 +416,7 @@ The list view requires a dynamic table in which it displays as many rows as the
 amount of crowds returned by the API. Concretely, we issue a jQuery for all the
 available crowds in the database. The javascript helps to create the dynamic
 table which includes the following columns: Like, Period and number of users in the crowd. Users can click on the ``like'' of each crowd to indicate the preference. The preferred crowds will be push up to the beginning of the list. Once a row of crowd is clicked, a slide down box with detail information(crowd user network, tweets) will be shown below. In order to provide users a cleaner page view, we restrict 5 tweets per page to show in the slide down box and thus, a multiple page navigation is possible.
+Each crowd has a star-feature attached to it which can be used by the user to mark his favourite crowds.This feature is present in the detailed view of the crowd which is activated as said earlier by selecting the row of a crowd.This is used to rearrange the list of crowds with the starred crowds appearing at the top whenever the user comes back to the list view.The user can mark any crowd as starred or unstar the ones that are already starred at any point of time.
 
 \subsubsection{Search}
 
