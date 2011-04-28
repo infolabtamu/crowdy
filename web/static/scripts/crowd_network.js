@@ -164,11 +164,6 @@ function showTweets(list,tweets,users,start,next){
         });
 }
 
-//function nextPage(tweets,users,start){
-//	alert(start)
-//	var nextpage=document.getElementById('next');
-//	nextpage.onclick=showTweets(tweets,users,start);
-//}
 
 function starclick()
 {
@@ -213,7 +208,7 @@ function loadCrowdPopup(cid,elem,users,tweets,star) {
 	showTweets(list,tweets,users,start);
 	start += 5;
 	if(start < tweets.length){
-		next.append("<br><a>Next 5 tweets</a>");
+		next.append("<br><font color='red'><b><u>Next 5 tweets</u></b></font>");
 		next.click(function () { 
 			showTweets(list,tweets,users,start,next);
 			start += 5; 
