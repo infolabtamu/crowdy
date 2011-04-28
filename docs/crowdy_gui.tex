@@ -1,6 +1,6 @@
 \documentclass{sig-alternate}
-\usepackage{algorithm}
-\usepackage{algorithmic}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
 \usepackage{url}
 \usepackage{subfigure}
 
@@ -164,13 +164,6 @@ users to remember where to find the crowd/topic of interest that the user just
 encountered. We want to provide a Workspace panel so to release the stress on
 the memory requirement from the user.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\linewidth]{img/UIdesign.jpg}
-\caption{Crowdy User Interface Design}
-\label{fig:UIdesign}
-\end{figure*}
-
 \section{Related Work}
 Twitter\footnote{http://www.twitter.com} is a microblogging platform which is
 fast gaining popularity\cite{Oreilly:2009} among broad sections of society and
@@ -303,7 +296,7 @@ concerned with visualization.
 
 \section{Interface Design}
 
-Figure \ref{fig:UIdesign} shows an outline of the prototype. We want to provide
+This section illustrate an outline of the prototype. We want to provide
 the user with a simple and flexible interface to maximize their options for
 exploring while minimizing their memory overhead. Existing web applications
 show that the most general task should be the main focus and the other
@@ -423,8 +416,7 @@ The list view requires a dynamic table in which it displays as many rows as the
 amount of crowds returned by the API. Concretely, we issue a jQuery for all the
 available crowds in the database. The javascript helps to create the dynamic
 table which includes the following columns: Like, Period and number of users in the crowd. Users can click on the ``like'' of each crowd to indicate the preference. The preferred crowds will be push up to the beginning of the list. Once a row of crowd is clicked, a slide down box with detail information(crowd user network, tweets) will be shown below. In order to provide users a cleaner page view, we restrict 5 tweets per page to show in the slide down box and thus, a multiple page navigation is possible.
-
-\subsubsection{Map}
+Each crowd has a star-feature attached to it which can be used by the user to mark his favourite crowds.This feature is present in the detailed view of the crowd which is activated as said earlier by selecting the row of a crowd.This is used to rearrange the list of crowds with the starred crowds appearing at the top whenever the user comes back to the list view.The user can mark any crowd as starred or unstar the ones that are already starred at any point of time.
 
 \subsubsection{Search}
 
@@ -489,11 +481,6 @@ Besides, here are the open questions:
 \item Any other comments? 
 \end{itemize}
 
-
-\section{Future Plan of Development}
-
-BLAHBLAH
-
 \section{CONCLUSIONS}
 In conclusion, we have implemented the Social Crowd Visualization system as a
 web application that enable users to visualize,summarize and organize temporal
@@ -502,10 +489,15 @@ design the interface carefully to meet their needs. We implemented a few
 different layout format and a search component to ease the crowd retrieval
 effort on user. Finally, we design a sequence of possible evaluations for this
 system. The interface will be continually improved as it is also an on-going
-DARPA project with the InfoLab. As the next step, a few direction such as user
-model construction and map view implementation will be carried out.
+DARPA project with the InfoLab. 
 
 \section{FUTURE WORK}
+There are several natural extensions of this system that we will carry on in the near future. Fist of all, we see that building user model may be beneficial to enhance the user experience over different operation sessions. Currently, the user behaviors are recorded globally as if there is only one user using Crowdy. Once the user model component is implemented, we can seperate individual preference and possibly show the preference of users with different level granularity. In addition, we can better learn the user preference as different role and improve our data filtering mechanism accordingly.  
+
+Secondly, we will also consider implementing map view. The map view can better present the geographical aspect of the crowds. As a portion of the tweet data we have crawled contains location information, it would be interesting to show as a map how users in a crowd distribute.
+
+In third, we see a need to contextually summarize the crowds. With informative keywords to represent each crowd, we can obtain more valuable search results. For example, the search of ``howdy'' should be some crowds with ``howdy'' as the main theme instead of a big crowd with ``howdy'' appears in 1 tweet only. Besides, users of the system will be able to distinquish and identify crowds of interest at a first glance. This can ease the browsing expereince of users.
+
 
 \bibliographystyle{abbrv}
 \bibliography{reference} 

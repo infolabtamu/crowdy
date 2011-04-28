@@ -111,6 +111,7 @@ class Crowd(TwitterModel):
     clust_coeff = FloatProperty('clco')
     central_users = ListProperty('cenus')
     star = BoolProperty('star',default=False)
+    title = TextProperty('title')
 
     def simple(self):
         crowd = self.to_d()

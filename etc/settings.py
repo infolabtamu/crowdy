@@ -16,10 +16,12 @@ settings = SettingsBunch(
     pdb = pdb.set_trace,
 )
 
-for mod in ['settings_prod','settings_dev']:
+_s = {}
+try:
+    from etc.settings_prod import settings as _s
+except ImportError:
     try:
-        s = __import__(mod)
-        settings.update(s.settings)
-        break
+        from etc.settings_dev import settings as _s
     except ImportError:
         pass
+settings.update(_s)
