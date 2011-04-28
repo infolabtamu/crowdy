@@ -3,7 +3,7 @@ import operator
 from heapq import nlargest
 
 from etc.settings import settings
-from api.models import Crowd, Tweet
+from api.models import Crowd, Tweet, User
 from intake.module import CrowdFilter
 
 
@@ -15,6 +15,7 @@ class CrowdNetworkFilter(CrowdFilter):
             graph = self.make_graph(tweets)
             crowd.clust_coeff = self.clust_coeff(graph)
             self.central_users(crowd, graph)
+            self.set_title(crowd)
             yield crowd
 
     def make_graph(self, tweets):
@@ -33,3 +34,8 @@ class CrowdNetworkFilter(CrowdFilter):
             user['cent']=deg.get(user['id'],0)
         #pick the 10 users with the greatest centrality
         crowd.central_users = nlargest(10, deg.iterkeys(), key=deg.__getitem__)
+
+    def set_title(self, crowd):
+        users = [User.get_id(uid,fields=['sn']) for uid in crowd.central_users[0:3]]
+        crowd.title = ", ".join(u.screen_name for u in users if u)
+        print crowd.title
