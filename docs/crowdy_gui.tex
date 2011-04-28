@@ -448,9 +448,22 @@ few keywords from each crowd. After a crowd in the timeline is clicked, a pop up
 \label{fig:ListView}
 \end{figure}
 
-The list view as shown in Figure \ref{fig:ListView} requires a dynamic table in which it displays as many rows as the amount of crowds returned by the API. Concretely, we issue a jQuery for all the available crowds in the database. The javascript helps to create the dynamic table which includes the following columns: Period, Users and size of the crowd.Once a row of crowd is clicked, a slide down box with detail information(crowd user network, tweets) will be shown below. There are three types of information available for users to choose from: Network, Tweets and Graph and a ``star'' mark. 
+The list view as shown in Figure \ref{fig:ListView} requires a dynamic table in
+which it displays as many rows as the amount of crowds returned by the API.
+Concretely, we issue an HTTP request to get the crowds in the database in a
+JSON object. The javascript creates the dynamic table which includes the
+following columns: Period, Users and size of the crowd. Once a row of crowd is
+clicked, a slide down box with detail information(crowd user network, tweets)
+will be shown below. There are three types of information available for users
+to choose from: Network, Tweets and Graph and a ``star'' mark. 
 
-Each crowd has a star-feature attached to it which can be used by the user to mark his favourite crowds.This feature is present in the detailed view of the crowd which is activated as said earlier by selecting the row of a crowd.This is used to rearrange the list of crowds with the starred crowds appearing at the top whenever the user comes back to the list view.The user can mark any crowd as starred or unstar the ones that are already starred at any point of time. 
+Each crowd has a star-feature attached to it which can be used by the user to
+mark his favourite crowds. This feature is present in the detailed view of the
+crowd which is activated as said earlier by selecting the row of a crowd. This
+is used to rearrange the list of crowds with the starred crowds appearing at
+the top whenever the user comes back to the list view. The user can mark any
+crowd as starred or unstar the ones that are already starred at any point of
+time. 
 
 
 
@@ -501,12 +514,23 @@ When an analyst clicks a crowd in the list, timeline, or map view, we show an
 expanded view of the crowd. This is a form of progressive disclosure, where we
 give the analyst more information as they need it.  
 
-The default view is the Network information as shown in figure \ref{fig:NetworkInList} where nodes represent users, and edges represent the tweets. The network graph show the relationship of the users involved in this particular crowd based on the tweets mentioning activities. A thicker edge between two users indicate a tighter mentioning action between them. We plan to add the ability to drill down even more.  When the analyst clicks on a node, we can give the analyst more information about the user that was clicked on. When the analyst clicks on an edge, we can show the conversation between two users.
- %Jeff, would you like to talk more about the network%
+The default view is the Network information as shown in figure
+\ref{fig:NetworkInList} where nodes represent users, and edges represent the
+tweets. The network graph show the relationship of the users involved in this
+particular crowd based on the tweets mentioning activities. A thicker edge
+between two users indicates more tweets sent between that pair of users. In the
+future work section of this paper, we discuss ways that this could be improved
+to let the user drill down even more.
 
-In the Tweets tab we can see a set of tweets in this crowd like in figure \ref{fig:TweetInList}. In order to provide users a cleaner page view, we restrict 5 tweets per page to show in the slide down box and thus, a multiple page navigation is possible. Users can click on the ``Next 5 tweets'' if it is available.
+In the Tweets tab we can see a set of tweets in this crowd like in figure
+\ref{fig:TweetInList}. In order to provide users a cleaner page view, we
+restrict 5 tweets per page to show in the slide down box and thus, a multiple
+page navigation is possible. Users can click on the ``Next 5 tweets'' if it is
+available.
 
-The Graph view shows the activeness of the crowds in an hourly time basis. Figure \ref{fig:GraphInList} gives a crowd graph example. We can see how a crowd start to engage, develop and die over time.
+The Graph view shows the activeness of the crowds in an hourly time basis.
+Figure \ref{fig:GraphInList} gives a crowd graph example. We can see how a
+crowd start to engage, develop and die over time.
 
 
 \section{Evaluation Plan}
@@ -524,10 +548,12 @@ this report, we only focus on the design of the pilot study.
 
 \subsection{Pilot Study}
 
-The pilot study we propose contains basic demographic information, five questions with a
-five point Likert scale (i.e., strongly agree, agree
-neutral, disagree, and strongly disagree), and four open questions. The
-Likert scale questions are listed below:
+The pilot study we propose consists of two parts. First, we will ask the users
+to use our system to find seveal conversations that they find interesting.
+Next, we will use a questionnaire to gather basic demographic information and
+answers to seven questions with a five point Likert scale (i.e., strongly
+agree, agree neutral, disagree, and strongly disagree) and four open questions.
+The Likert scale questions are listed below:
 
 \begin{itemize}
 \item The interface for timeline view is easy to use.
@@ -535,6 +561,8 @@ Likert scale questions are listed below:
 \item The search feature for timeline view is easy to use.
 \item The search feature for list view is easy to use.
 \item I could use the search features to find crowds that I was interested in.
+\item The star feature helped me organize crowds.
+\item When I star a crowd, all the crowds on the page should be re-arranged in real time to place the starred crowd on top.
 \end{itemize}
 
 We would also ask some open-ended questions:
@@ -564,6 +592,11 @@ There are several natural extensions of this system that we will carry on in the
 Secondly, we will also consider implementing map view. The map view can better present the geographical aspect of the crowds. As a portion of the tweet data we have crawled contains location information, it would be interesting to show as a map how users in a crowd distribute.
 
 In third, we see a need to contextually summarize the crowds. With informative keywords to represent each crowd, we can obtain more valuable search results. For example, the search of ``howdy'' should be some crowds with ``howdy'' as the main theme instead of a big crowd with ``howdy'' appears in 1 tweet only. Besides, users of the system will be able to distinquish and identify crowds of interest at a first glance. This can ease the browsing expereince of users.
+
+Fourth, we can make the network view more interactive. For example, when the
+analyst clicks on a node, we can give the analyst more information about the
+Twitter user that was clicked on. When the analyst clicks on an edge, we can show the
+conversation between those two users.
 
 Finally, we want to improve the timeline component so it can support zoom in and zoom out functionality for better scaling flexibility. For example, crowds within the same day are grouped in the default view. The users might want to zoom in and see a hourly-display of crowds in each day or zoom out to browse crowds in each of the 12 months of a year.
 
