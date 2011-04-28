@@ -308,8 +308,7 @@ consider the needs of personalization for our potential users(e.g. Analyst).
 There is a global view panel and a personal workspace panel. The personal
 workspace panel distinguishes from the global view panel in a way that it only
 shows the set of crowds marked by the user when exploring in the global view
-panel. We have tabs to help our users quickly and easily transit between these
-two views. Inside each view, we need to decide the best format to condense
+panel. Inside each view, we need to decide the best format to condense
 a massive amount of data. Each crowd has metadata associated with it such as
 starting and ending time, crowd participants, topics, tweets,
 location data, etc. To effectively organize these properties to assist quick
@@ -322,12 +321,7 @@ also provide several filtering options for both timeline and list format in the
 option panel. Some detailed components in these three panels are listed below.
 
 \begin{itemize}
-    \item \textit{Global View Panel} : The global view shows the global crowds
-    in different format. When a crowded is marked by the user, a flag will be
-    placed in front of each crowd item in each format.
-
-    \begin{itemize}
-        \item Timeline format displays the evolution of each crowd.
+				\item Timeline format displays the evolution of each crowd.
         First of all, a crowd is shown as a line from the starting time
         to the ending time. The size of the participants over time is
         indicated by color(e.g., small-large-medium $\longrightarrow$
@@ -335,27 +329,48 @@ option panel. Some detailed components in these three panels are listed below.
         the crowd are displayed explicitly on the timeline along with
         the crowd line. Extra information about the crowd can be viewed
         in the pop up box when the user clicks on the crowd line.
+        
         \item List format displays each crowd with some specific
         sorting order. The default sorting order is by the starting
         time. Some other available sorting functions include the
         ending time, the size of crowds and the ranging time. In the
         list format, crowds are displayed explicitly in three columns:
-        time period, keywords and some of the participants. The latter
-        two columns are clickable. After clicked, it will show the list
-        of tweets and the full set of participants in a pop up window
+        time period, participants and size of the crowds. If the crowd is clicked, it will show the list
+        of tweets and other detailed information in a slide down window
         form.
-    \end{itemize}
-
-    \item \textit{Personal Workspace Panel} : Similar as the Global View Panel
-    but with only the set of crowds marked by the user in the Global View
-    Panel.
-    \item \textit{Filter Option Panel} : This panel explicitly displays a set of
-    the most frequently used filtering options such as search and timeline scaling.
-    We also provide the user with flexibility to adjust the default
-    settings we provided such as the primary display format in the View
-    Panel, list sorting function and time period filtering. Other filtering
-    options are hidden and can be expanded with a click on the right bottom corner
-    of the Panel.
+%    \item \textit{Global View Panel} : The global view shows the global crowds
+%    in different format. When a crowded is marked by the user, a flag will be
+%    placed in front of each crowd item in each format.
+%
+%    \begin{itemize}
+%        \item Timeline format displays the evolution of each crowd.
+%        First of all, a crowd is shown as a line from the starting time
+%        to the ending time. The size of the participants over time is
+%        indicated by color(e.g., small-large-medium $\longrightarrow$
+%        green-red-blue). The top three keywords that describe the topic of
+%        the crowd are displayed explicitly on the timeline along with
+%        the crowd line. Extra information about the crowd can be viewed
+%        in the pop up box when the user clicks on the crowd line.
+%        \item List format displays each crowd with some specific
+%        sorting order. The default sorting order is by the starting
+%        time. Some other available sorting functions include the
+%        ending time, the size of crowds and the ranging time. In the
+%        list format, crowds are displayed explicitly in three columns:
+%        time period, participants and size of the crowds. If the crowd is clicked, it will show the list
+%        of tweets and other detailed information in a slide down window
+%        form.
+%    \end{itemize}
+%
+%    \item \textit{Personal Workspace Panel} : Similar as the Global View Panel
+%    but with only the set of crowds marked by the user in the Global View
+%    Panel.
+%    \item \textit{Filter Option Panel} : This panel explicitly displays a set of
+%    the most frequently used filtering options such as search and timeline scaling.
+%    We also provide the user with flexibility to adjust the default
+%    settings we provided such as the primary display format in the View
+%    Panel, list sorting function and time period filtering. Other filtering
+%    options are hidden and can be expanded with a click on the right bottom corner
+%    of the Panel.
 \end{itemize}
 
 \section{Implementation}
@@ -402,29 +417,56 @@ the crowds with the three options of perspectives.
 
 \subsubsection{Timeline}
 
+\begin{figure}
+\centering
+\epsfig{file=img/TimelineView.eps, width= 250pt }
+\caption{Timeline View}
+\label{fig:Timeline View}
+\end{figure}
+
+\begin{figure}
+\centering
+\epsfig{file=img/CrowdViewInTimeline.eps, width= 250pt }
+\caption{Crowd View In Timeline}
+\label{fig:CrowdViewInTimeline}
+\end{figure}
+
 We apply the Simile Timeline library which is developed by MIT's Computer
-Science and Artificial Intelligence Laboratory. The timeline shows all of the
+Science and Artificial Intelligence Laboratory. The timeline as shown in figure \ref{fig:TimelineView} shows all of the
 crowds at a given time span.  The timeline allows the analyist to zoom in on a
 specific time, and move forward and backward thorough time.  The visualization
 shows how long the crowd lasts, and the size of the crowd. We may make the
 crowd taller or shorter based on the size of the crowd.  We will also display a
-few keywords from each crowd.
+few keywords from each crowd. After a crowd in the timeline is clicked, a pop up ``Crowd View'' window will show the detailed information of this particular crowd (Figure \ref{}).
 
 \subsubsection{List}
 
-The list view requires a dynamic table in which it displays as many rows as the
-amount of crowds returned by the API. Concretely, we issue a jQuery for all the
-available crowds in the database. The javascript helps to create the dynamic
-table which includes the following columns: Like, Period and number of users in the crowd. Users can click on the ``like'' of each crowd to indicate the preference. The preferred crowds will be push up to the beginning of the list. Once a row of crowd is clicked, a slide down box with detail information(crowd user network, tweets) will be shown below. In order to provide users a cleaner page view, we restrict 5 tweets per page to show in the slide down box and thus, a multiple page navigation is possible.
-Each crowd has a star-feature attached to it which can be used by the user to mark his favourite crowds.This feature is present in the detailed view of the crowd which is activated as said earlier by selecting the row of a crowd.This is used to rearrange the list of crowds with the starred crowds appearing at the top whenever the user comes back to the list view.The user can mark any crowd as starred or unstar the ones that are already starred at any point of time.
+\begin{figure}
+\centering
+\epsfig{file=img/ListView.eps, width= 250pt }
+\caption{Overall List View}
+\label{fig:ListView}
+\end{figure}
+
+The list view as shown in Figure \ref{fig:ListView} requires a dynamic table in which it displays as many rows as the amount of crowds returned by the API. Concretely, we issue a jQuery for all the available crowds in the database. The javascript helps to create the dynamic table which includes the following columns: Period, Users and size of the crowd.Once a row of crowd is clicked, a slide down box with detail information(crowd user network, tweets) will be shown below. There are three types of information available for users to choose from: Network, Tweets and Graph and a ``star'' mark. 
+
+Each crowd has a star-feature attached to it which can be used by the user to mark his favourite crowds.This feature is present in the detailed view of the crowd which is activated as said earlier by selecting the row of a crowd.This is used to rearrange the list of crowds with the starred crowds appearing at the top whenever the user comes back to the list view.The user can mark any crowd as starred or unstar the ones that are already starred at any point of time. 
+
+
 
 \subsubsection{Search}
 
+\begin{figure}
+\centering
+\epsfig{file=img/Search.eps, width= 250pt }
+\caption{Search}
+\label{fig:Search}
+\end{figure}
 In the search function of the system, we provide a main search box in which 
 users can type a textual query to search for crowds which contains the query.
 Besides, users can also click the link of advanced search, so that they can 
 choose options of words, time period of crowd, size of crowd, presentation ways,
-and results they would like to see per page. We maintain indices for each kind
+and results they would like to see per page. The layout is shown in figure \ref{fig:Search}. We maintain indices for each kind
 of queries in the MongoDB database, so that we can efficiently return the results
 to users. Whenever a query is issued, the systems send a HTTP GET request to the
 backend, and the server would return the corresponding search results.
@@ -434,14 +476,38 @@ screen name. So that users can search crowds that are in a specific city or an
 area, and also search crowds that a specific user is involved in.
 
 \subsubsection{Crowd View}
+
+\begin{figure}
+\centering
+\epsfig{file=img/NetworkInList.eps, width= 250pt }
+\caption{Network View in List}
+\label{fig:NetworkInList}
+\end{figure}
+
+\begin{figure}
+\centering
+\epsfig{file=img/TweetsInList.eps, width= 250pt }
+\caption{Tweets View in List}
+\label{fig:TweetInList}
+\end{figure}
+
+\begin{figure}
+\centering
+\epsfig{file=img/GraphInList.eps, width= 250pt }
+\caption{Graph View in List}
+\label{fig:GraphInList}
+\end{figure}
 When an analyst clicks a crowd in the list, timeline, or map view, we show an
 expanded view of the crowd. This is a form of progressive disclosure, where we
-give the analyst more information as they need it.  At the moment, we just show
-a network graph where nodes represent users, and edges represent the tweets
-between users. We plan to add the ability to drill down even more.  When the
-analyst clicks on a node, we can give the analyst more information about the
-user that was clicked on. When the analyst clicks on an edge, we can show the
-conversation between two users.
+give the analyst more information as they need it.  
+
+The default view is the Network information as shown in figure \ref{fig:NetworkInList} where nodes represent users, and edges represent the tweets. The network graph show the relationship of the users involved in this particular crowd based on the tweets mentioning activities. A thicker edge between two users indicate a tighter mentioning action between them. We plan to add the ability to drill down even more.  When the analyst clicks on a node, we can give the analyst more information about the user that was clicked on. When the analyst clicks on an edge, we can show the conversation between two users.
+ %Jeff, would you like to talk more about the network%
+
+In the Tweets tab we can see a set of tweets in this crowd like in figure \ref{fig:TweetInList}. In order to provide users a cleaner page view, we restrict 5 tweets per page to show in the slide down box and thus, a multiple page navigation is possible. Users can click on the ``Next 5 tweets'' if it is available.
+
+The Graph view shows the activeness of the crowds in an hourly time basis. Figure \ref{fig:GraphInList} gives a crowd graph example. We can see how a crowd start to engage, develop and die over time.
+
 
 \section{Evaluation Plan}
 In order to evaluate our system, we planned to conduct a 2-step usability study
@@ -498,6 +564,7 @@ Secondly, we will also consider implementing map view. The map view can better p
 
 In third, we see a need to contextually summarize the crowds. With informative keywords to represent each crowd, we can obtain more valuable search results. For example, the search of ``howdy'' should be some crowds with ``howdy'' as the main theme instead of a big crowd with ``howdy'' appears in 1 tweet only. Besides, users of the system will be able to distinquish and identify crowds of interest at a first glance. This can ease the browsing expereince of users.
 
+Finally, we want to improve the timeline component so it can support zoom in and zoom out functionality for better scaling flexibility. For example, crowds within the same day are grouped in the default view. The users might want to zoom in and see a hourly-display of crowds in each day or zoom out to browse crowds in each of the 12 months of a year.
 
 \bibliographystyle{abbrv}
 \bibliography{reference} 

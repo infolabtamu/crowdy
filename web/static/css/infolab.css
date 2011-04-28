@@ -178,6 +178,7 @@ input{
 }
 .mytable tr:hover td
 {
+	/*border: 1px solid black;*/
 	background: #d0dafd;
 	color: #339;
 }
