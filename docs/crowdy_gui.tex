@@ -381,7 +381,7 @@ The system is designed to run in a user's web browser. As a result, we decided
 to use some fairly standard web tools to implement the system. The system that
 we are building the user interface on top of exposes a RESTful API. Although
 it is not a part of this project, it is important to understand how the backend
-works, and how it fits into this project. The workflows of the system can be
+works, and how it fits into this project. The work flows of the system can be
 decomposed into following parts: (i) a crawler retrieves tweets from Twitter using
 Twitter's REST API, search API, and streaming API; (ii) the corresponding data
 go through several filters that add additional information to the users and
@@ -433,7 +433,7 @@ the crowds with the three options of perspectives.
 
 We apply the Simile Timeline library which is developed by MIT's Computer
 Science and Artificial Intelligence Laboratory. The timeline as shown in figure \ref{fig:TimelineView} shows all of the
-crowds at a given time span.  The timeline allows the analyist to zoom in on a
+crowds at a given time span.  The timeline allows the analyst to zoom in on a
 specific time, and move forward and backward thorough time.  The visualization
 shows how long the crowd lasts, and the size of the crowd. We may make the
 crowd taller or shorter based on the size of the crowd.  We will also display a
@@ -451,21 +451,21 @@ few keywords from each crowd. After a crowd in the timeline is clicked, a pop up
 The list view as shown in Figure \ref{fig:ListView} requires a dynamic table in
 which it displays as many rows as the amount of crowds returned by the API.
 Concretely, we issue an HTTP request to get the crowds in the database in a
-JSON object. The javascript creates the dynamic table which includes the
-following columns: Period, Users and size of the crowd. Once a row of crowd is
+JSON object. The Javascript creates the dynamic table which includes the
+following columns: Period, Users and size of the crowd. We pick the screen
+names of two users with the highest degree centrality to represent the crowd.
+Once the row that represents a crowd is
 clicked, a slide down box with detail information(crowd user network, tweets)
 will be shown below. There are three types of information available for users
 to choose from: Network, Tweets and Graph and a ``star'' mark. 
 
 Each crowd has a star-feature attached to it which can be used by the user to
-mark his favourite crowds. This feature is present in the detailed view of the
+mark his favorite crowds. This feature is present in the detailed view of the
 crowd which is activated as said earlier by selecting the row of a crowd. This
 is used to rearrange the list of crowds with the starred crowds appearing at
 the top whenever the user comes back to the list view. The user can mark any
 crowd as starred or unstar the ones that are already starred at any point of
 time. 
-
-
 
 \subsubsection{Search}
 
@@ -537,10 +537,10 @@ crowd start to engage, develop and die over time.
 In order to evaluate our system, we plan to conduct a 2-step usability study
 which includes a pilot study, and an evaluation study. In the pilot study, we
 will ask a relative small number of users (e.g., 5 - 10 people) to try our
-system, and fill in the usability questionaire. Then, we will refine the system
-based on the feedbacks from the pilot study (i.e., fixing bugs reported by users,
-modifying featuers that were not preferred). Finally, a large scale evaluation
-study also in the form of questionaire will be conducted on a user base of 30 -
+system, and fill in the usability questionnaire. Then, we will refine the system
+based on the feedback from the pilot study (i.e., fixing bugs reported by users,
+modifying features that were not preferred). Finally, a large scale evaluation
+study also in the form of questionnaire will be conducted on a user base of 30 -
 50 users including three types of users we mentioned earlier: normal users, 
 Twitter users, and analysts. The refinement step and the large-scale detailed
 evaluation study will be generated after the step of the pilot study. Thus, in
@@ -549,7 +549,7 @@ this report, we only focus on the design of the pilot study.
 \subsection{Pilot Study}
 
 The pilot study we propose consists of two parts. First, we will ask the users
-to use our system to find seveal conversations that they find interesting.
+to use our system to find several conversations that they find interesting.
 Next, we will use a questionnaire to gather basic demographic information and
 answers to seven questions with a five point Likert scale (i.e., strongly
 agree, agree neutral, disagree, and strongly disagree) and four open questions.
@@ -574,7 +574,7 @@ We would also ask some open-ended questions:
 \end{itemize}
 
 Once we have the results of the pilot study, we can refine the test procedures
-and questionnaire. We will run this study on a larger group of poeple.
+and questionnaire. We will run this study on a larger group of people.
 
 \section{CONCLUSIONS}
 In conclusion, we have implemented the Social Crowd Visualization system as a
@@ -587,11 +587,11 @@ system. The interface will be continually improved as it is also an on-going
 DARPA project with the InfoLab. 
 
 \section{FUTURE WORK}
-There are several natural extensions of this system that we will carry on in the near future. Fist of all, we see that building user model may be beneficial to enhance the user experience over different operation sessions. Currently, the user behaviors are recorded globally as if there is only one user using Crowdy. Once the user model component is implemented, we can seperate individual preference and possibly show the preference of users with different level granularity. In addition, we can better learn the user preference as different role and improve our data filtering mechanism accordingly.  
+There are several natural extensions of this system that we will carry on in the near future. Fist of all, we see that building user model may be beneficial to enhance the user experience over different operation sessions. Currently, the user behaviors are recorded globally as if there is only one user using Crowdy. Once the user model component is implemented, we can separate individual preference and possibly show the preference of users with different level granularity. In addition, we can better learn the user preference as different role and improve our data filtering mechanism accordingly.  
 
 Secondly, we will also consider implementing map view. The map view can better present the geographical aspect of the crowds. As a portion of the tweet data we have crawled contains location information, it would be interesting to show as a map how users in a crowd distribute.
 
-In third, we see a need to contextually summarize the crowds. With informative keywords to represent each crowd, we can obtain more valuable search results. For example, the search of ``howdy'' should be some crowds with ``howdy'' as the main theme instead of a big crowd with ``howdy'' appears in 1 tweet only. Besides, users of the system will be able to distinquish and identify crowds of interest at a first glance. This can ease the browsing expereince of users.
+In third, we see a need to contextually summarize the crowds. With informative keywords to represent each crowd, we can obtain more valuable search results. For example, the search of ``howdy'' should be some crowds with ``howdy'' as the main theme instead of a big crowd with ``howdy'' appears in 1 tweet only. Besides, users of the system will be able to distinguish and identify crowds of interest at a first glance. This can ease the browsing experience of users.
 
 Fourth, we can make the network view more interactive. For example, when the
 analyst clicks on a node, we can give the analyst more information about the
