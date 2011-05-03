@@ -1,0 +1,13 @@
+#TeXlipse project settings
+#Mon May 02 20:41:39 CDT 2011
+builderNum=2
+outputDir=docs/csce_675/
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=docs/csce_675
+mainTexFile=paper.tex
+outputFile=paper.pdf
+langSpell=
+markDer=true
+srcDir=docs/csce_675/
