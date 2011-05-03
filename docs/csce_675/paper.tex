@@ -78,9 +78,23 @@ In this project, we want to build a digital library for transient crowds in high
 \end{center}
 \end{figure}
 
+An architecture for the proposed solution is shown in Figure 1. The various modules of this architecture are as follows:
+
+\begin{itemize}
+  \item \noindent\textbf{Crawler}: This module deals with interacting with social media websites to collect information. For this project we will be collecting data from Twitter using Twitter Streaming APIs.
+  \item \noindent\textbf{Filter}: This module removes unwanted data like spam messages, from data collected by the crawler.
+  \item \noindent\textbf{Grouper}: The grouper module analyses the data collected, to determine crowds and adds them to the DBMS. 
+  \item \noindent\textbf{HTTP JSON RESTful APIs}: This module will expose a HTTP-based API that clients can query to get data from the collection. The API will return crowds, users, and their tweets.
+\end{itemize}
+
+\begin{itemize}
+  \item \noindent\textbf{Beanstalk}: Beanstalk is a simple, fast work queue. We use it to connect the crawlers, filters, and groupers together.
+   \item \noindent\textbf{Tornado}: Tornado is an open source, non-blocking web server.  We choose it because it is fast and scalable.
+   \item \noindent\textbf{MongoDB}: MongoDB is a scalable, high-performance, open source, document-oriented database. We store the crowds discovered by the framework in this DB. The API module interacts with this database to retrieve collections as required by the user query.
+\end{itemize}
+
 \section{Crowd Discovery Algorithm}
 \label{sec:crowd_algorithm}
-
 The grouper deals with the transient crowd discovery and tracking in systems like Facebook and Twitter. For practical crowd discovery and tracking in a large time-evolving communication network, however, we face four key challenges:
 
 \begin{list}{\labelitemi}{\leftmargin= 0.3cm}
