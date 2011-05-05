@@ -219,7 +219,7 @@ two hops, meaning that an edge insertion has only a local effect.
 
 \medskip Hence, we can take advantage of both, local changes to the overall
 communication network (spatial locality) and recent changes to the network
-(temporal locality), for supporting efficient transient crowd discovery. The complete algorithm is decsribed in \cite{Kamath:2011:TCD}
+(temporal locality), for supporting efficient transient crowd discovery. The complete algorithm is described in \cite{Kamath:2011:TCD}
 
 \subsection{Sample Crowds Discovered}
 \begin{figure}[!t]
@@ -281,19 +281,19 @@ Bryan/College Station data.
 
 \subsubsection{GeoStream}
 This crawler listens to Twitter's
-streaming API to find geo-located tweets.  It recieves every geo-located tweet
+streaming API to find geo-located tweets.  It receives every geo-located tweet
 posted from anywhere in the world.  In the future, this data may be used to
 show crowds on a map.
 
 \subsection{Grouper}
 Groupers detect crowds in the data collected by a crawler.  The precise
 definition of a crowd depends on the implementation of the grouper.  A grouper
-could create crowds based on comunication patterns, geographical proximity, or
+could create crowds based on communication patterns, geographical proximity, or
 textual similarity. Once crowds are discovered, this module formats crowds to a
 well defined crowds object and adds it to a DBMS.
 
 \subsubsection{Mentions}
-For this project, we exclusivly discover crowds based on communication.  The
+For this project, we exclusively discover crowds based on communication.  The
 mentions grouper looks for sets of people who are communicating with each
 other.  The algorithm to discover crowds is described in
 Section~\ref{sec:crowd_algorithm}.
