@@ -330,7 +330,15 @@ workflow is an important part of our design.
 \item Summarize the tweets from a crowd.
 \end{itemize}
 
-\subsection{HTTP JSON RESTful APIs}: This module provides client an interface to the digital library. The module exposes JSON APIs that the clients can use to browse and search the crowds archive.
+\subsection{HTTP JSON RESTful APIs}: This module provides client an interface to the digital library. The module exposes JSON APIs that the clients can use to browse and search the crowds archive. Here is a brief description of the more important methods:
+\begin{description}
+ \item[search/crowd] Find crowds sorted by relevance or time.
+ \item[crowd/id] Retrieve all of the data for a crowd.
+ \item[crowd/users] Retrieve a list of all the users in the crowd.
+ \item[crowd/tweets] Retrieve a list of all the tweets in the crowd.
+ \item[crowd/star] Mark a crowd as significant.
+ \item[user/edges] Retrieve the friend and follower relationships for a given user.
+\begin{description}
 
 \subsection{Tools}
 
