@@ -35,49 +35,6 @@
 
 
 var tl;
-function loadTimeline(data) {
-    var events = jQuery.map(data, function(crowd,i) {
-        return {
-            'start': new Date(1000*crowd.start),
-            'end': new Date(1000*crowd.end),
-            'title': crowd.title,
-            'link': '/crowd/'+crowd._id,
-            'description': 'a crowd of '+crowd.size+' people'
-        };
-    });
-
-    var tl_el = document.getElementById("tl");
-    var eventSource1 = new Timeline.DefaultEventSource();
-
-    var theme1 = Timeline.ClassicTheme.create();
-    theme1.autoWidth = true; // Set the Timeline's "width" automatically.
-                             // Set autoWidth on the Timeline's first band's theme,
-                             // will affect all bands.
-    theme1.timeline_start = new Date(Date.UTC(2010, 9, 1));
-    theme1.timeline_stop  = new Date(Date.UTC(2011, 10, 1));
-
-    var bandInfos = [
-        Timeline.createBandInfo({
-            width:          45, // set to a minimum, autoWidth will then adjust
-            intervalUnit:   Timeline.DateTime.DAY,
-            intervalPixels: 100,
-            eventSource:    eventSource1,
-            date:           theme1.timeline_start,
-            theme:          theme1,
-            layout:         'original'  // original, overview, detailed
-        })
-    ];
-
-    // create the Timeline
-    tl = Timeline.create(tl_el, bandInfos, Timeline.HORIZONTAL);
-
-    var url = '.'; // The base url for image, icon and background image
-                   // references in the data
-    eventSource1.loadJSON({'events' : events} , url);
-                   // The data was stored into the
-                                               // timeline_data variable.
-    tl.layout(); // display the Timeline
-}
 
 var resizeTimerID = null;
 function onResize() {
@@ -103,12 +60,12 @@ $(document).ready(function() {
     $(window).resize(onResize());
 });
 
-function loadSearchResults(data) {
+function loadTimeline(data) {
     var events = jQuery.map(data, function(crowd,i) {
         return {
             'start': new Date(1000*crowd.start),
             'end': new Date(1000*crowd.end),
-            'title': crowd._id,
+            'title': crowd.title,
             'link': '/crowd/'+crowd._id,
             'description': 'a crowd of '+crowd.size+' people'
         };
@@ -148,21 +105,15 @@ function loadSearchResults(data) {
     query_title.innerHTML = "";
 
     var searchBox = document.getElementById('searchBox');
-    var query = "";
-    query = searchBox.value;
-    query_title.appendChild(document.createTextNode('(Demo Example) for '));
-   
-    // Emphasize the query text.
-    query_text = document.createElement('strong');
-    query_text.appendChild(document.createTextNode(query));
-    query_title.appendChild(query_text);
-    
-    //query_title.appendChild(document.createTextNode(start_date));
-    //query_title.appendChild(document.createTextNode(end_date));
-
-    
-
-
+    var query = searchBox.value;
+    if(query) {
+        query_title.appendChild(document.createTextNode('Results for '));
+       
+        // Emphasize the query text.
+        query_text = document.createElement('strong');
+        query_text.appendChild(document.createTextNode(query));
+        query_title.appendChild(query_text);
+    }
 
 	var tl_el = document.getElementById("tl");
 
@@ -174,14 +125,12 @@ function loadSearchResults(data) {
 
     theme1.timeline_start = new Date(start_date);
     theme1.timeline_stop  = new Date(end_date);
-    //theme1.timeline_start = new Date(Date.UTC(2010, 7, 1));
-    //theme1.timeline_stop  = new Date(Date.UTC(2011, 10, 1));
 
     var bandInfos = [
         Timeline.createBandInfo({
             width:          45, // set to a minimum, autoWidth will then adjust
             intervalUnit:   Timeline.DateTime.DAY,
-            intervalPixels: 200,
+            intervalPixels: 100,
             eventSource:    eventSource1,
             date:           theme1.timeline_start,
             theme:          theme1,
@@ -255,7 +204,7 @@ function search() {
 
 
 
-    jQuery.getJSON(api, loadSearchResults);
+    jQuery.getJSON(api, loadTimeline);
     $(window).resize(onResize());
     
     
