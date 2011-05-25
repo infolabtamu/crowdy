@@ -14,37 +14,7 @@
 
 
 <script>
-//image0 =new Image();
-//image1 =new Image();
-//image0.src ="http://students.cse.tamu.edu/pka293/yellow_star.jpg"
-//image0.src ="/static/images/yellow_star.jpg"
-//image1.src ="http://students.cse.tamu.edu/pka293/red_star.jpg"
-//image1.src ="/static/images/red_star.jpg"
-/*function image_click(imageid)
-{
-var i=imageid
-imgs=document.getElementsByTagName('img');
-//var j=document.images(i);
-//alert(imgs)
-for(j in imgs)
- {
-  if(imgs[j].id==i)
-  {
-   //alert(imgs[j].id)
-   if(imgs[j].src==image1.src)
-    {
-	imgs[j].src=image0.src
-	break;
-    }
-    else
-    {
-	imgs[j].src=image1.src
-	break;
-    }
-  }
- }
-//j.setAttribute('src', image0.src);
-}*/
+
 function loadData(data) {
 	var events = jQuery.map(data, function(crowd,i) {
         return {
@@ -55,16 +25,8 @@ function loadData(data) {
             '_id':crowd._id,
             'description': ""+crowd.size,
 	    'size': crowd.size,
-	    /*if (crowd.size==4)
-	    {
-		'star':image0.src
-	    }
-	    else
-	    {
-		'star':image1.src
-	    }*/
+
 	    'star' : crowd.star
-	    //'starred': image1.src
         };
         });
         var jq_tbo = $('#dyTableBody');
