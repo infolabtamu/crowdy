@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block head_extra %}
-<script src="/static/scripts/arbor.js"></script>  
-<script src="/static/scripts/crowd_network.js"></script>  
 <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
 
 <link rel="stylesheet" type="text/css" href="/static/css/boxy.css"/>
@@ -22,13 +20,6 @@
 <!-- page specific styles -->
 <link rel="stylesheet" type="text/css" media="screen" href="/static/css/demo.css">
 
-
-<!-- Date Input -->
-<!-- include jQuery FORM Tools (or any other combination) -->
-<script src="http://cdn.jquerytools.org/1.2.5/form/jquery.tools.min.js"></script>
-
-<!-- dateinput styling -->
-<link rel="stylesheet" type="text/css" href="/static/css/dateinput.css"/>
 
 
 <script>
@@ -56,11 +47,11 @@ Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
 
 
 $(document).ready(function() {
-    jQuery.getJSON('/api/1/search/crowd?limit=1000', loadTimeline);
+    jQuery.getJSON('/api/1/search/crowd?limit=1000', loadData);
     $(window).resize(onResize());
 });
 
-function loadTimeline(data) {
+function loadData(data) {
     var events = jQuery.map(data, function(crowd,i) {
         return {
             'start': new Date(1000*crowd.start),
@@ -155,61 +146,12 @@ function search() {
     var query_title = document.getElementById("query_title");
     query_title.innerHTML = "";
     
+
+    //FIXME!!!
+    search();
     
-    
-    
-    // The defaut values for all the search options.
-    var api = '/api/1/search/crowd?';
-    var query = "";
-    var since_date = "";
-    var until_date = "";
-    var min_num_tweets = "0";
-    var min_num_users = "0";
-    var rpp = "100";
-
-    // get query. (If query is an empty string, return everything.
-    var searchBox = document.getElementById('searchBox');
-    query = searchBox.value;
-    if (query != "")
-        api += "q=" + query;
-    
-    var rpp_value = document.getElementById('rpp').value;
-    rpp = String(rpp_value);
-    api += "&limit=" + rpp;
-
-    var since_date_string = document.getElementById('date_pick_1').value; 
-    if (since_date_string != "") {
-        month = since_date_string.substring(0,2) - 1;
-        day = since_date_string.substring(3,5);
-        year = String(Number(since_date_string.substring(6,8)) + 2000);
-        since_date = new Date(year, month, day);
-        var secs = (since_date.getTime() - since_date.getMilliseconds()) / 1000 - 18000; 
-        api += "&min_start=" + String(secs);
-    }
-    var until_date_string = document.getElementById('date_pick_2').value; 
-    if (until_date_string != "") {
-        month = until_date_string.substring(0,2) - 1;
-        day = until_date_string.substring(3,5);
-        year = String(Number(until_date_string.substring(6,8)) + 2000);
-        until_date = new Date(year, month, day);
-        var secs = (until_date.getTime() - until_date.getMilliseconds()) / 1000 - 18000; 
-        api += "&max_end=" + String(secs);
-    } 
-
-    var num_users = document.getElementById('num_users').value;
-    api += "&min_size=" + String(num_users);
-
-    var clco = document.getElementById('clco').value;
-    api += "&min_clco=" + String(clco);
-
-
-
-    jQuery.getJSON(api, loadTimeline);
+      jQuery.getJSON(api, loadTimeline);
     $(window).resize(onResize());
-    
-    
-    //document.appendChild(document.createTextNode("rPlease enter a valid query!"));
-    //document.createTextNode("rPlease enter a valid query!");
 }
 
 
@@ -219,140 +161,11 @@ $(function()
     $('.date-pick').datePicker({startDate:'01/01/1996'});
 });
 
-Date.prototype.toFormattedString = function(include_time){
-    str = this.getFullYear() + "-" + Date.padded2(this.getMonth() + 1) + "-" +Date.padded2(this.getDate()); 
-    
-    if (include_time) { hour=this.getHours(); str += " " + this.getAMPMHour() + ":" + this.getPaddedMinutes() + " " + this.getAMPM() }
-        return str;
-}
-    
-Date.parseFormattedString = function (string) {
-    var regexp = "([0-9]{4})(-([0-9]{2})(-([0-9]{2})" +
-        "( ([0-9]{1,2}):([0-9]{2})? *(pm|am)" +
-        "?)?)?)?";
-    var d = string.match(new RegExp(regexp, "i"));
-    if (d==null) return Date.parse(string); // at least give javascript a crack at it.
-    var offset = 0;
-    var date = new Date(d[1], 0, 1);
-    if (d[3]) { date.setMonth(d[3] - 1); }
-    if (d[5]) { date.setDate(d[5]); }
-    if (d[7]) {
-        hours = parseInt(d[7], 10);
-        offset=0;
-        is_pm = (d[9].toLowerCase()=="pm")
-        if (is_pm && hours <= 11) hours+=12;
-        if (!is_pm && hours == 12) hours=0;
-        date.setHours(hours); 
-    }
-    if (d[8]) { date.setMinutes(d[8]); }
-    if (d[10]) { date.setSeconds(d[10]); }
-    if (d[12]) { date.setMilliseconds(Number("0." + d[12]) * 1000); }
-    if (d[14]) {
-        offset = (Number(d[16]) * 60) + Number(d[17]);
-        offset *= ((d[15] == '-') ? 1 : -1);
-    }
-    return date;
-}
-
-
-
-function showNumTweets(newValue)
-{
-    document.getElementById("range_num_tweets").innerHTML=newValue;
-}
-
-function showNumUsers(newValue)
-{
-    document.getElementById("range_num_users").innerHTML=newValue;
-}
-
-function roundNumber(num, dec) {
-        var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
-            return result;
-}
-
-function showClco(newValue)
-{
-    document.getElementById("range_clco").innerHTML=roundNumber(newValue, 2);
-}
 
 </script>
 {% endblock %}
 
-{% block content %}
-    
-    <br>
-    <div id="header">
-        <div id="headerContent">
-            <div id="search_header">
-                <div id="searchEntry">
-                    <input id="searchBox" name="q" placeholder="Enter your query" type="search" value=""/>
-                </div>
-                <div id="searchButton">
-                    <input type=BUTTON value="Search" OnClick="search()"/>
-                </div>
-                <div id="searchOptionsCtrl">    
-                <button id="button_to_adv">Switch to Adv-Search</button>
-                <button id="button_to_basic" style="display: none">Switch to Basic-Search</button>
-    
-                </div>
-
-                <script>
-                $("#button_to_adv").click(function () {
-                    $("#button_to_adv").toggle();
-                    $("#button_to_basic").toggle();
-                    $("#adv_search").toggle();
-                    $(":date").dateinput();
-                });
-                $("#button_to_basic").click(function () {
-                    $("#button_to_adv").toggle();
-                    $("#button_to_basic").toggle();
-                    $("#adv_search").toggle();
-                });
-                </script>
-
-                <p class="clearer"></p>
-                <!--
-                </form>
-                -->
-            </div>
-        </div>
-    </div>
-    <br>
-
-    <div id="adv_search" style="display: none">
-        <div id="title">
-        <h1 align=center>Advanced Search</h1>
-        </div>
-
-        <table id="advForm" cellspacing="0" align=center>
-        <tr><td colspan="3" class="sep"></td></tr>
-
-        <tr><th>Dates </th></tr>
-        <tr><th></th><td class="l t">Since this date</td><td class="r t"><input id="date_pick_1" name="date_pick_1" type="date"/></td><tr>
-        <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date_pick_2" name="date_pick_2" type="date"/></td><tr>
-        
-        <tr><td colspan="3" class="sep"></td></tr>
-        <tr><th>Size </th></tr>
-        <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span     id = "range_num_users"> 5</span></td><tr>
-
-        <tr><td colspan="3" class="sep"></td></tr>
-        <tr><th>Structure </th></tr>
-        <tr><th></th><td class="l b">Min <a href="http://en.wikipedia.org/wiki/Clustering_coefficient">Clustering Coefficient</a> of the crowd</td><td class="r b"><input type="range" min="0.0" max="0.8" value="0.0" step ='0.01' name="clco" id="clco" onchange="showClco(this.value)"/><span id = "range_clco">0.0</span></td><tr>
-        <tr><td colspan="3" class="sep"></td></tr>
-        <tr><th>Other </th><tr>
-        <tr><th></th><td class="l b">Results per page</td><td class="r t"><select id="rpp" name="rpp"><option value="10" >10</option><option value="20" >20</option><option value="30" >30</option><option     value="50" >50</option><option value="75" >75</option><option value="100" selected="selected">100</option></select> <span class="note">(persistent)</span></td></tr>
-        <tr><td colspan="3" class="sep"></td></tr>
-        </table>
-
-        <!-- make it happen -->
-        <script>
-        $(":date").dateinput();
-        </script>
-
-    </div>
-
-
+{% block search_results_block %}
 
     <div id="timeline">
     <br><br>
