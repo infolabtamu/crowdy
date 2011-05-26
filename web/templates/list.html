@@ -56,13 +56,6 @@ function loadData(data) {
 	}
 }
 
-
-
-$(document).ready(function() {
-    jQuery.getJSON('/api/1/search/crowd?limit=1000', loadData);
-});
-
-
 function search() {
     //document.body.innerHTML = "";
 	var query_title=document.getElementById('query_title');
@@ -91,9 +84,7 @@ function search() {
     row.appendChild(cell);
     query_title.appendChild(row);
 
-    //FIXME!!!
-    doSearch();
-
+    var api = make_search_url();
 
     
 	var tbo=document.getElementById('dyTableBody');
@@ -110,12 +101,7 @@ function search() {
     row.appendChild(th);
     tbo.appendChild(row);
 
-
-
-
     jQuery.getJSON(api, loadData);
-    //$(window).resize(onResize());
-
 }
 
 

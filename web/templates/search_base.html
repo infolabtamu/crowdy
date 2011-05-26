@@ -20,7 +20,7 @@ $(document).ready(function() {
 });
 
 
-function search() {
+function make_search_url() {
 
     // The defaut values for all the search options.
     var api = '/api/1/search/crowd?';
@@ -64,6 +64,7 @@ function search() {
 
     var clco = document.getElementById('clco').value;
     api += "&min_clco=" + String(clco);
+    return api;
 }
 
 function showNumTweets(newValue)

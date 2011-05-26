@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'search_base.html' %}
 
 {% block head_extra %}
 <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
@@ -32,7 +32,8 @@ function onResize() {
     if (resizeTimerID == null) {
         resizeTimerID = window.setTimeout(function() {
             resizeTimerID = null;
-            tl.layout();
+            if(tl) 
+                tl.layout();
         }, 500);
     }
 }
@@ -145,12 +146,10 @@ function search() {
     //document.body.innerHTML = "";
     var query_title = document.getElementById("query_title");
     query_title.innerHTML = "";
-    
 
-    //FIXME!!!
-    search();
+    var api = make_search_url();
     
-      jQuery.getJSON(api, loadTimeline);
+    jQuery.getJSON(api, loadTimeline);
     $(window).resize(onResize());
 }
 
