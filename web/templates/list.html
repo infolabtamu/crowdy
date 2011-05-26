@@ -1,64 +1,57 @@
 {% extends 'search_base.html' %}
 
 {% block search_head_extra %}
+
+<script type="text/javascript" src="/static/scripts/jquery.strftime-minified.js" charset='utf-8'></script>
+
 <script>
 
 function loadData(data) {
-	var events = jQuery.map(data, function(crowd,i) {
+    var events = jQuery.map(data, function(crowd,i) {
         return {
             'start': new Date(1000*crowd.start),
             'end': new Date(1000*crowd.end),
-	    'users': crowd.users,
+            'users': crowd.users,
             'title': crowd.title,
             '_id':crowd._id,
             'description': ""+crowd.size,
-	    'size': crowd.size,
-
-	    'star' : crowd.star
+            'size': crowd.size,
+            'star' : crowd.star
         };
-        });
-        var jq_tbo = $('#dyTableBody');
-	var tbo=document.getElementById('dyTableBody');
-	for(var i=0;i<events.length;i++){
-		row=document.createElement('tr');
-		for(var j=0;j<3;j++){
-			cell=document.createElement('td');
-			switch(j)
-			{
-				case 0: 
-					var date1 = events[i]['start'];
-					var date2 = events[i]['end'];
-					cell.appendChild(document.createTextNode(date1.getFullYear()+'/'+(date1.getMonth()+1)+'/'+date1.getDate()+' '+date1.getHours()+':'+date1.getMinutes()+' To '+date2.getFullYear()+'/'+(date2.getMonth()+1)+'/'+date2.getDate()+' '+date2.getHours()+':'+date2.getMinutes())); 
-					break;
-				case 1: cell.appendChild(document.createTextNode(events[i]['title'])); break;
-				case 2: cell.appendChild(document.createTextNode(events[i]['description'])); break;
-			}
-			row.appendChild(cell);
-		}
-                tbo.appendChild(row);
-                //toggle the detailed view when the user clicks a row
-                jq_tbo.children().last().click(
-                    {cid:events[i]['_id'],star:events[i]['star']},
-                    function(e) {
-                        var detail = $(this).next();
-                        detail.slideToggle();
-                        var td = detail.children().first();
-                        if(!td.contents.length==0) {
-                          jQuery.getJSON('/crowd/'+e.data.cid, function(res) {
-                              td.html(res.html);
-                              loadCrowdPopup(e.data.cid,td,res.users,res.tweets,e.data.star);
-                          });
-                        }
-                    }
-                );
-		
-                jq_tbo.append('<tr style="display:none"><td colspan="4">Loading...</td></tr>');
-	}
+    });
+    var tbo = $('#dyTableBody');
+    for(var i=0;i<events.length;i++){
+        var row = $('#listTemplate').clone();
+        var date1 = $.strftime('%Y/%m/%d %H:%M', events[i]['start']);
+        var date2 = $.strftime('%Y/%m/%d %H:%M', events[i]['end']);
+        row.find('.listPeriod').text(date1+' To '+date2);
+        row.find('.listUsers').text(events[i]['title']);
+        row.find('.listSize').text(events[i]['description']);
+        row.show()
+        tbo.append(row);
+
+        //toggle the detailed view when the user clicks a row
+        row.click(
+            {cid:events[i]['_id'],star:events[i]['star']},
+            function(e) {
+                var detail = $(this).next();
+                detail.slideToggle();
+                var td = detail.children().first();
+                if(!td.contents.length==0) {
+                  jQuery.getJSON('/crowd/'+e.data.cid, function(res) {
+                      td.html(res.html);
+                      loadCrowdPopup(e.data.cid,td,res.users,res.tweets,e.data.star);
+                  });
+                }
+            }
+        );
+        tbo.append($('#expandTemplate').clone());
+    }
 }
 
 function search() {
     //document.body.innerHTML = "";
-	var query_title=document.getElementById('query_title');
+    var query_title=document.getElementById('query_title');
     query_title.innerHTML = "";
     var tbo=document.getElementById('dyTableBody');
     tbo.innerHTML="";
@@ -73,8 +66,7 @@ function search() {
     query = searchBox.value;
     row = document.createElement('tr');
     cell=document.createElement('td');
-    //cell.appendChild(document.createTextNode('Results for ' + query));
-    cell.appendChild(document.createTextNode('(Demo Example) for '));
+    cell.appendChild(document.createTextNode('Results for ' ));
    
     // Emphasize the query text.
     query_text = document.createElement('strong');
@@ -87,7 +79,7 @@ function search() {
     var api = make_search_url();
 
     
-	var tbo=document.getElementById('dyTableBody');
+    var tbo=document.getElementById('dyTableBody');
  
     row = document.createElement('tr');
     th = document.createElement('th');
@@ -121,6 +113,14 @@ function search() {
             </div>
             <tbody id="dyTableBody">
                 <tr><th>Period</th><th>Users</th><th>Size</th></tr>
+                <tr id="listTemplate" style="display:none">
+                    <td class="listPeriod"></td>
+                    <td class="listUsers"></td>
+                    <td class="listSize"></td>
+                </tr>
+                <tr id="expandTemplate" style="display:none">
+                    <td colspan="4">Loading...</td>
+                </tr>
             </tbody>
         </table>
     </div>
