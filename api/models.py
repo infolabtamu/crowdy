@@ -131,3 +131,10 @@ class Crowd(TwitterModel):
             Tweet.created_at.range(self.start, self.end),
             limit=limit,
             sort=Tweet._id)
+
+
+class GraphSnapshot(TwitterModel):
+    _id = DateTimeProperty('_id')
+    from_ids = ListProperty('fids',int)
+    to_ids = ListProperty('tids',int)
+    weights = ListProperty('ws')
