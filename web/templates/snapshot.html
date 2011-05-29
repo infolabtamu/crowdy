@@ -23,6 +23,8 @@ $(document).ready(function() {
 function getSnapshot() {
   time+=300;
   jQuery.getJSON('/api/1/crowd/snapshot/'+time, loadSnapshot);
+  d = new Date(time*1000);
+  $('#timer').text(d.toString());
 }
 
 function loadSnapshot(data) {
@@ -71,6 +73,7 @@ function nameNode(id, oth) {
 
 <div class="pane">
   <canvas></canvas>
+  <p id="timer"></p>
 </div>
 
 {% endblock %}

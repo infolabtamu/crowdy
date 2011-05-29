@@ -10,7 +10,7 @@ from api.models import Tweet, User, GraphSnapshot
 from datetime import datetime, timedelta
 
 
-TIME_DELAY = timedelta(seconds=900)
+TIME_DELAY = timedelta(seconds=300)
 
 
 def make_snapshots(year, month, day):
