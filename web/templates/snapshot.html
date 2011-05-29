@@ -40,7 +40,7 @@ function loadSnapshot(data) {
   }
   var trash = Array()
   sys.eachEdge(function(edge, pt1, pt2) {
-    edge.data.weight = edge.data.weight*.84;
+    edge.data.weight = edge.data.weight*.92;
     if(edge.data.weight<.25)
       trash.push(edge);
   });
