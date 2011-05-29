@@ -28,6 +28,11 @@ def list():
     return _render('list.html')
 
 
+@cherrypy.expose
+def snapshot():
+    return _render('snapshot.html')
+
+
 CHART_WIDTH = 480
 CHART_HEIGHT = 240
 

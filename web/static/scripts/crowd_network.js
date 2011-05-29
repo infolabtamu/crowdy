@@ -9,11 +9,9 @@ Renderer = function(canvas){
   var that = {
     init:function(system){
       particleSystem = system
-      particleSystem.screen({padding:[10, 50, 10, 50]})
+      particleSystem.screen({padding:30})
 
-      //$(window).resize(that.resize)
       that.resize()
-    
       that.initMouseHandling()
     },
     redraw:function(){
@@ -23,27 +21,22 @@ Renderer = function(canvas){
       ctx.strokeStyle = "#d3d3d3"
       particleSystem.eachEdge(function(edge, pt1, pt2){
           ctx.beginPath()
-          ctx.lineWidth = Math.min(10,edge.data.weight);
+          ctx.lineWidth = Math.min(10,2*edge.data.weight);
           ctx.moveTo(pt1.x, pt1.y)
           ctx.lineTo(pt2.x, pt2.y)
           ctx.stroke()
       })
 
       particleSystem.eachNode(function(node, pt){
-        var label = node.data.sn||""
-        var w = ctx.measureText(label).width + 6
+        var label = node.name||""
         pt.x = Math.floor(pt.x)
         pt.y = Math.floor(pt.y)
 
-        ctx.clearRect(pt.x-w/2, pt.y-7, w,14)
-
-        // draw the text
-        if (label){
-          ctx.font = "bold 11px Arial"
-          ctx.textAlign = "center"
-          ctx.fillStyle = "#888888"
-          ctx.fillText(label, pt.x, pt.y+4)
-        }
+        var lls = String(label)
+        ctx.fillStyle = '#' + lls.substring(lls.length-3,lls.length)
+        ctx.beginPath()
+        ctx.arc(pt.x,pt.y,3,0,2*Math.PI)
+        ctx.fill()
       })    		
     },
     resize:function(){

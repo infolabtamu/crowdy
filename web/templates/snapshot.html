@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block head_extra %}
+
+<script src="/static/scripts/arbor.js"></script>  
+<script src="/static/scripts/crowd_network.js"></script>  
+
+<script>
+var sys;
+var time = 1301616000;
+
+$(document).ready(function() {
+  //start the force directed layout
+  var canvas = $('.pane').find('canvas')
+  sys = arbor.ParticleSystem(500, 500, 0.7, 55)
+  sys.renderer = Renderer(canvas)
+  sys.parameters({stiffness:600})
+
+  window.setInterval(getSnapshot,1000);
+  getSnapshot()
+});
+
+function getSnapshot() {
+  time+=300;
+  jQuery.getJSON('/api/1/crowd/snapshot/'+time, loadSnapshot);
+}
+
+function loadSnapshot(data) {
+  for(var i in data.fids){
+    nameNode(data.fids[i], data.tids[i]);
+    nameNode(data.tids[i], data.fids[i]);
+
+    var from = ""+data.fids[i]
+    var to = ""+data.tids[i]
+    var edge = sys.getEdges(from,to);
+    if(edge.length)
+      edge[0].data.weight += data.ws[i];
+    else
+      var mine = sys.addEdge(from, to, {weight:data.ws[i]});
+  }
+  var trash = Array()
+  sys.eachEdge(function(edge, pt1, pt2) {
+    edge.data.weight = edge.data.weight*.84;
+    if(edge.data.weight<.25)
+      trash.push(edge);
+  });
+  $.each(trash, function(i,edge) {
+    sys.pruneEdge(edge);
+  });
+  sys.prune(function(node,edges){
+    return (!edges.from.length)&&(!edges.to.length);
+  });
+}
+
+function nameNode(id, oth) {
+  if (!sys.getNode(""+id)) {
+    var othnode = sys.getNode(""+oth);
+    if (othnode) {
+      sys.addNode(""+id,{sn:id, x:othnode.p.x, y:othnode.p.y});
+    } else {
+      sys.addNode(""+id,{sn:id, x:Math.random()*.01, y:Math.random()*.01});
+    }
+  }
+}
+
+
+</script>
+
+{% endblock %}
+{% block content %}
+
+<div class="pane">
+  <canvas></canvas>
+</div>
+
+{% endblock %}
