@@ -12,11 +12,10 @@ var time = 1301616000;
 $(document).ready(function() {
   //start the force directed layout
   var canvas = $('.pane').find('canvas')
-  sys = arbor.ParticleSystem(500, 500, 0.7, 55)
+  sys = arbor.ParticleSystem(500, 500, 0.7, false, 30)
   sys.renderer = Renderer(canvas)
-  sys.parameters({stiffness:600})
 
-  window.setInterval(getSnapshot,1000);
+  window.setInterval(getSnapshot,300);
   getSnapshot()
 });
 
@@ -42,9 +41,15 @@ function loadSnapshot(data) {
   }
   var trash = Array()
   sys.eachEdge(function(edge, pt1, pt2) {
-    edge.data.weight = edge.data.weight*.92;
-    if(edge.data.weight<.25)
-      trash.push(edge);
+    edge.data.weight = edge.data.weight*.9715;
+    //connected edges last 4 hours, lone edges last one hour
+    if(edge.data.weight<.25 || (
+        edge.data.weight<.707 &&
+        sys.getEdgesTo(edge.source).length==0 &&
+        sys.getEdgesFrom(edge.target).length==0
+    )) {
+      trash.push(edge)
+    }
   });
   $.each(trash, function(i,edge) {
     sys.pruneEdge(edge);

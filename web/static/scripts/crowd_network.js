@@ -117,10 +117,9 @@ function loadCrowdNetworkGraph(canvas,users,tweets) {
     }
   });
   //start the force directed layout
-  var sys = arbor.ParticleSystem(500, 500, 0.7, 55)
+  var sys = arbor.ParticleSystem(500, 500, 0.7, 30)
   sys.renderer = Renderer(canvas)
   sys.merge({nodes:nodes, edges:edges})
-  sys.parameters({stiffness:600})
 }
 
 function filterTweets(tweets,start,end){
