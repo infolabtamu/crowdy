@@ -5,6 +5,7 @@ Renderer = function(canvas){
   canvas = $(canvas).get(0)
   var ctx = canvas.getContext("2d")
   var particleSystem = null
+  var labeled = null
 
   var that = {
     init:function(system){
@@ -37,7 +38,18 @@ Renderer = function(canvas){
         ctx.beginPath()
         ctx.arc(pt.x,pt.y,3,0,2*Math.PI)
         ctx.fill()
-      })    		
+      })
+      if(labeled) {
+        var node = particleSystem.getNode(""+labeled._id)
+        var pt = particleSystem.toScreen(node.p)
+        var label = labeled.sn
+        var w = ctx.measureText(label).width + 6
+        ctx.clearRect(pt.x+3, pt.y+3, w,14)
+        ctx.font = "bold 11px Arial"
+        ctx.textAlign = "center"
+        ctx.fillStyle = "#888888"
+        ctx.fillText(label, pt.x+3+w/2, pt.y+10)
+      }
     },
     resize:function(){
       var w = 480, //$(window).width(),
@@ -48,36 +60,50 @@ Renderer = function(canvas){
     },
     initMouseHandling:function(){
       // no-nonsense drag and drop (thanks springy.js)
-      selected = null;
-      nearest = null;
-      var dragged = null;
-      var oldmass = 1
+      var dragged = null
+      var startTime = null
+
+      $(canvas).click(function(e){
+        if (new Date()-startTime>500)
+          return
+        var pos = $(this).offset();
+        var p = {x:e.pageX-pos.left, y:e.pageY-pos.top}
+        var clicked = particleSystem.nearest(p);
+        if (!labeled || clicked.node.name != labeled._id) {
+          labeled = null
+          $.getJSON('/api/1/user/id/'+clicked.node.name,function(user){
+            labeled = user
+          });
+        }else {
+          labeled = null
+        }
+      });
 
       $(canvas).mousedown(function(e){
           var pos = $(this).offset();
           var p = {x:e.pageX-pos.left, y:e.pageY-pos.top}
-          selected = nearest = dragged = particleSystem.nearest(p);
+          dragged = particleSystem.nearest(p);
+          startTime = new Date()
 
-          if (selected.node !== null){
-          dragged.node.fixed = true
+          if (dragged.node !== null){
+            dragged.node.fixed = true
           }
           return false
       });
 
       $(canvas).mousemove(function(e){
-        var old_nearest = nearest && nearest.node._id
           var pos = $(this).offset();
           var s = {x:e.pageX-pos.left, y:e.pageY-pos.top};
 
-          nearest = particleSystem.nearest(s);
-        if (!nearest) return
+          var nearest = particleSystem.nearest(s);
+          if (!nearest) return
 
           if (dragged !== null && dragged.node !== null){
           var p = particleSystem.fromScreen(s)
               dragged.node.p = {x:p.x, y:p.y}
           }
 
-        return false
+          return false
       });
 
       $(window).bind('mouseup',function(e){
@@ -85,7 +111,6 @@ Renderer = function(canvas){
         dragged.node.fixed = false
         dragged.node.tempMass = 100
           dragged = null;
-          selected = null
           return false
       });
     }
