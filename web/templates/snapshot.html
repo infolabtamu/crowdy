@@ -7,7 +7,8 @@
 
 <script>
 var sys;
-var time = 1301616000;
+//var time = 1301616000;
+var time = 1304294400;
 
 $(document).ready(function() {
   //start the force directed layout
@@ -15,7 +16,7 @@ $(document).ready(function() {
   sys = arbor.ParticleSystem(500, 500, 0.7, false, 30)
   sys.renderer = Renderer(canvas)
 
-  window.setInterval(getSnapshot,300);
+  window.setInterval(getSnapshot,2000);
   getSnapshot()
 });
 
@@ -38,6 +39,8 @@ function loadSnapshot(data) {
       edge[0].data.weight += data.ws[i];
     else
       var mine = sys.addEdge(from, to, {weight:data.ws[i]});
+    if(i>200)
+      break;
   }
   var trash = Array()
   sys.eachEdge(function(edge, pt1, pt2) {
