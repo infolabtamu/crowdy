@@ -16,12 +16,8 @@ settings = SettingsBunch(
     pdb = pdb.set_trace,
 )
 
-_s = {}
 try:
-    from etc.settings_prod import settings as _s
+    from etc.settings_local import settings as _s
+    settings.update(_s)
 except ImportError:
-    try:
-        from etc.settings_dev import settings as _s
-    except ImportError:
-        pass
-settings.update(_s)
+    pass
