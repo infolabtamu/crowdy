@@ -8,7 +8,6 @@ from mock import MockDB
 import unittest
 
 import maroon
-import maroondb
 from maroon import Model, TextProperty, IntProperty, ListProperty, BogusQuery
 
 
@@ -134,27 +133,15 @@ class TestQueries(unittest.TestCase):
         self.failUnlessEqual(range(11), _query_to_list({}))
 
     def test_sort(self):
-        #sort by property
         sorted = [nm.n for nm in NumberModel.find(sort=NumberModel.n)]
         self.failUnlessEqual(range(11), sorted)
-        #sort by a field name
-        subset = NumberModel.n.range(4,8)
-        res = NumberModel.find(subset,sort='quad')
-        self.failUnlessEqual([0,1,1,4], [nm.quad for nm in res])
-        #sort by a list of fields
-        res = NumberModel.find(subset,sort_list=['quad',NumberModel.n])
-        self.failUnlessEqual([5,4,6,7], [nm.n for nm in res])
-        res = NumberModel.find(subset,sort_list=['quad',('n',maroondb.DESCENDING)])
-        self.failUnlessEqual([5,6,4,7], [nm.n for nm in res])
+        results = NumberModel.find(NumberModel.n.range(4,8),sort='quad')
+        self.failUnlessEqual([0,1,1,4], [nm.quad for nm in results])
 
 
 if __name__ == '__main__':
-    db = sys.argv[1]
-    if db=='mongo':
-        Model.database = MongoDB(None,'test_maroon',port=2727)
-        Model.database.NumberModel.remove()
-    elif db=='mock':
-        Model.database = MockDB(None)
+    Model.database = MockDB(None)
+    #Model.database = MongoDB(None,'test_maroon',port=2727)
+    #Model.database.NumberModel.remove()
     _number_set_up()
-    del sys.argv[1]
     unittest.main()

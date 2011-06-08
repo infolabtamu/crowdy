@@ -351,7 +351,8 @@ class ModelPart(object):
             if val is None or name in self.ignored: continue
             prop = getattr(model,name,None)
             if isinstance(prop, Property):
-                d[prop.name]=prop.to_d(val, **kwargs)
+                key = name if kwargs.get('long_names') else prop.name
+                d[key]=prop.to_d(val, **kwargs)
             else:
                 try:
                     d[name]=val.to_d()
@@ -388,6 +389,11 @@ class ModelListProperty(ListProperty):
 
     def to_d(self, val, **kwargs):
         return [x.to_d(**kwargs) for x in val]
+                                                                                
+    def validated_item(self, val):
+        if not isinstance(val, self._kind):
+            return self._kind(val)
+        return val
 
 
 class Model(ModelPart):
@@ -441,11 +447,26 @@ class Model(ModelPart):
 
 
 class ModelCache(dict):
-    def __init__(self, Class, **kwargs):
-        dict.__init__(self, **kwargs)
+    def __init__(self, Class, limit=10000, **kwargs):
+        dict.__init__(self)
         self.Class = Class
+        self.limit = limit
+        self.kwargs = kwargs
 
     def __missing__(self, key):
-        obj = self.Class.get_id(key)
+        if len(self)>=self.limit:
+            #random cache replacement policy
+            for x in xrange(len(self)/2):
+                self.popitem()
+        obj = self.Class.get_id(key, **self.kwargs)
         self[key] = obj
         return obj
+
+    def ensure_ids(self, ids):
+        """make sure that all of the objects with an id in ids are in the cache.
+        This exists to reduce the number of database calls made."""
+        #FIXME: make a couch version
+        ids = [id for id in ids if id not in self]
+        if ids:
+            for obj in self.Class.find(Model._id.is_in(ids)):
+                self[obj._id] = obj

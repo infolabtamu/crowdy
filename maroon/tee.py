@@ -11,7 +11,6 @@ except:
 import itertools
 
 
-#We do not extend MaroonDB because we want to call the methods in self._db
 class TeeDB(object):
     def __init__(self, path, db):
         self._db = db
