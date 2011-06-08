@@ -8,8 +8,6 @@ from datetime import datetime, timedelta
 import os
 import errno
 
-from etc.settings import settings
-
 
 def find_tris(year, month, startday, days):
     hour_edges = range(24)

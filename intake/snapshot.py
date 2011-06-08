@@ -4,9 +4,10 @@ sys.path.append('..')
 from collections import defaultdict
 
 import maroon
+import os
 
-from etc.settings import settings
 from api.models import Tweet, User, GraphSnapshot
+from etc.settings import settings
 from datetime import datetime, timedelta
 
 
@@ -15,15 +16,23 @@ TIME_DELAY = timedelta(seconds=300)
 
 def make_snapshots(year, month, day):
     users = set(u._id for u in User.find(fields=[]))
-    time = datetime(int(year), int(month), int(day))
-    while(time.day==int(day)):
-        graph = make_graph(time, users)
-        graph.save()
-        time += TIME_DELAY
-    print "saved %r"%time
+    import pdb; pdb.set_trace()
+    for hour in xrange(24):
+        #load tri_edges
+        path = os.path.join("tri_edges", year, month, day, str(hour))
+        tri_edges = set(
+            tuple(int(id) for id in line.split())
+            for line in open(path))
+        #process this hour
+        time = datetime(int(year), int(month), int(day), hour)
+        while time.hour==int(hour):
+            graph = make_graph(time, users, tri_edges)
+            graph.save()
+            time += TIME_DELAY
+    print "saved %s/%s/%s"%(year,month,day)
 
 
-def make_graph(time, users):
+def make_graph(time, users, tri_edges):
     tweets = Tweet.find(Tweet.created_at.range(time, time+TIME_DELAY))
     edges = ((tweet.user_id,at)
         for tweet in tweets
@@ -32,7 +41,8 @@ def make_graph(time, users):
 
     graph = defaultdict(int)
     for e in edges:
-        graph[e]+=1
+        if tuple(sorted(e)) in tri_edges:
+            graph[e]+=1
 
     return GraphSnapshot(
         _id = time,
