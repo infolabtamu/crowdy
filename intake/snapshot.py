@@ -11,15 +11,14 @@ from etc.settings import settings
 from datetime import datetime, timedelta
 
 
-TIME_DELAY = timedelta(seconds=300)
+TIME_DELAY = timedelta(seconds=60)
 
 
 def make_snapshots(year, month, day):
     users = set(u._id for u in User.find(fields=[]))
-    import pdb; pdb.set_trace()
     for hour in xrange(24):
         #load tri_edges
-        path = os.path.join("tri_edges", year, month, day, str(hour))
+        path = os.path.join("../tri_edge", year, month, day, str(hour))
         tri_edges = set(
             tuple(int(id) for id in line.split())
             for line in open(path))
