@@ -2,7 +2,7 @@
 import sys
 sys.path.append('..')
 
-from collections import defaultdict
+from collections import defaultdict, deque
 from itertools import chain
 from datetime import datetime, timedelta
 import os
@@ -10,13 +10,17 @@ import errno
 
 
 def find_tris(year, month, startday, days):
-    hour_edges = range(24)
+    hour_edges = deque(maxlen=7)
     start = datetime(int(year), int(month), int(startday))
     hour = timedelta(hours=1)
-    
-    for x in xrange(24*(int(days)+1)):
-        read = start+(x-12)*hour
-        write = start+(x-24)*hour
+
+    #pre-fill the buffer
+    for x in xrange(-3,3):
+        graph_for_hour(start + x*hour, hour_edges)
+
+    for x in xrange(24*(int(days))):
+        read = start+(x+3)*hour
+        write = start+x*hour
         graph_for_hour(read, hour_edges)
         if write>=start:
             print "write",
@@ -31,7 +35,7 @@ def graph_for_hour(time, hour_edges):
     for line in open(path):
         a,b = sorted(int(uid) for uid in line.split()[2:])
         graph[a].add(b)
-    hour_edges[time.hour] = graph
+    hour_edges.append(graph)
 
 
 def merge_graph(hour_edges):
