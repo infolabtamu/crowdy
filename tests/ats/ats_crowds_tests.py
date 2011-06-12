@@ -56,8 +56,8 @@ class DemoCrowdGeneration:
             currentEpoch = currentEpoch.next()
     @staticmethod
     def demo():
-        DemoCrowdGeneration.test_graphReader()
-#        DemoCrowdGeneration.test_mcl()
+#        DemoCrowdGeneration.test_graphReader()
+        DemoCrowdGeneration.test_mcl()
 #        DemoCrowdGeneration.test_evolution()        
     
 
