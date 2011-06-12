@@ -127,7 +127,8 @@ class Epoch(object):
         return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
     def getTweetFile(self):
         tm = time.localtime(self.ep)
-        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
+#        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
+        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
     def getGraphFile(self, create = False, paramInfo = ''):
         tm = time.localtime(self.ep)
         filePath = os.sep.join([crowd_path, paramInfo, 'graphs', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)]) 
