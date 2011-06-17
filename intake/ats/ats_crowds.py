@@ -13,7 +13,7 @@ from datetime import datetime
 #crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
 #data_dir = '/mnt/sid/hou_crowds'
 #data_dir = '/data/twitter/crowdy/ats1/'
-data_dir = '/home/kykamath/tri_ats_new'
+data_dir = '/home/kykamath/tri_ats'
 crawled_data_path = '%s/crawler/'%data_dir
 crowd_path = data_dir
 crowd_type = 'ats'
