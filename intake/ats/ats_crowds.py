@@ -13,7 +13,7 @@ from datetime import datetime
 #crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
 #data_dir = '/mnt/sid/hou_crowds'
 #data_dir = '/data/twitter/crowdy/ats1/'
-data_dir = '/home/kykamath/tri_ats'
+data_dir = '/home/kykamath/tri_ats_new'
 crawled_data_path = '%s/crawler/'%data_dir
 crowd_path = data_dir
 crowd_type = 'ats'
@@ -22,7 +22,7 @@ minimumNumberOfUsersInCrowd = 3
 
 # DB initialization
 mongodb_connection = Connection('localhost', 27017)
-crowds_db = mongodb_connection.tri_ats
+crowds_db = mongodb_connection.tri_ats_new
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
 
