@@ -14,9 +14,9 @@ from ats_crowds import Epoch, GraphReader, MCL, Evolution, CrowdsDB
 #TEST_ENDING_EPOCH = 1288846743
 #TEST_CURRENT_EPOCH = 1283317200
 
-TEST_STARTING_EPOCH = 1304226000
+TEST_STARTING_EPOCH = 1304208000
 #TEST_STARTING_EPOCH = 1291348799
-TEST_ENDING_EPOCH = 1306645199
+TEST_ENDING_EPOCH = 1306886399
 TEST_CURRENT_EPOCH = 1283317200
 TEST_TYPE = 'ats'
 
@@ -56,9 +56,9 @@ class DemoCrowdGeneration:
             currentEpoch = currentEpoch.next()
     @staticmethod
     def demo():
-#        DemoCrowdGeneration.test_graphReader()
+        DemoCrowdGeneration.test_graphReader()
 #        DemoCrowdGeneration.test_mcl()
-        DemoCrowdGeneration.test_evolution()        
+#        DemoCrowdGeneration.test_evolution()        
     
 
 class CrowdsDBTests(unittest.TestCase):
