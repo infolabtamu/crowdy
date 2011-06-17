@@ -120,22 +120,22 @@ class Edges(object):
 
 class Epoch(object):
     def __init__(self, ep):
-        self.ep = ep+18000
+        self.ep = ep
         self.dt = datetime.fromtimestamp(self.ep)
     def getGraphId(self):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
         return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
     def getTweetFile(self):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
 #        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
         return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
     def getGraphFile(self, create = False, paramInfo = ''):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
         filePath = os.sep.join([crowd_path, paramInfo, 'graphs', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)]) 
         if create: self._createDirectory(filePath)
         return filePath
     def getCrowdsFile(self, create = False, paramInfo = ''):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
         filePath = os.sep.join([crowd_path, paramInfo, 'crowds', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)]) 
         if create: self._createDirectory(filePath)
         return filePath
