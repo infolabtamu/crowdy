@@ -120,7 +120,7 @@ class Edges(object):
 
 class Epoch(object):
     def __init__(self, ep):
-        self.ep = ep
+        self.ep = ep+18000
         self.dt = datetime.fromtimestamp(self.ep)
     def getGraphId(self):
         tm = time.localtime(self.ep)
