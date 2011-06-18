@@ -34,10 +34,10 @@ class CrowdsDB:
         self.collection = collection
         self.currentTime = currentTime
     def save(self, data):
-        if data['_id']!=None and data['_id']!='None' :
-            crowd = self.collection.find_one({'_id': data['_id']})
-            if crowd==None: self.__add(data)
-            else: self.__update(crowd, data)
+#        if data['_id']!=None and data['_id']!='None' :
+        crowd = self.collection.find_one({'_id': data['_id']})
+        if crowd==None: self.__add(data)
+        else: self.__update(crowd, data)
     def __add(self, data):
         crowd_object_in_db =  {'_id': data['_id'], 'start': self.currentTime, 'end': None, 'users': [], 
                                'type': crowd_type, 'merge' : [], 'split' : [] }
@@ -91,7 +91,7 @@ class CrowdsDB:
         self.collection.save(crowd)
     
     def updateCrowdSplit(self, crowd_id, split_crowd_id):
-        print crowd_id
+#        print crowd_id
         crowd = self.collection.find_one({'_id': crowd_id})
         split_information = [split_crowd_id, self.currentTime]
         crowd['split'].append(split_information)
