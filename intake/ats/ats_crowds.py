@@ -1,7 +1,7 @@
 '''
 Created on Feb 16, 2011
 
-@author: kykamath
+@author: kykamath 
 '''
 import math, time, os
 from pymongo import Connection
