@@ -91,6 +91,7 @@ class CrowdsDB:
         self.collection.save(crowd)
     
     def updateCrowdSplit(self, crowd_id, split_crowd_id):
+        print crowd_id
         crowd = self.collection.find_one({'_id': crowd_id})
         split_information = [split_crowd_id, self.currentTime]
         crowd['split'].append(split_information)
