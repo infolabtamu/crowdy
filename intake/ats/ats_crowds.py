@@ -1,7 +1,7 @@
 '''
 Created on Feb 16, 2011
 
-@author: kykamath
+@author: kykamath 
 '''
 import math, time, os
 from pymongo import Connection
@@ -22,7 +22,7 @@ minimumNumberOfUsersInCrowd = 3
 
 # DB initialization
 mongodb_connection = Connection('localhost', 27017)
-crowds_db = mongodb_connection.tri_ats
+crowds_db = mongodb_connection.tri_ats_new
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
 
@@ -34,6 +34,7 @@ class CrowdsDB:
         self.collection = collection
         self.currentTime = currentTime
     def save(self, data):
+#        if data['_id']!=None and data['_id']!='None' :
         crowd = self.collection.find_one({'_id': data['_id']})
         if crowd==None: self.__add(data)
         else: self.__update(crowd, data)
@@ -90,6 +91,7 @@ class CrowdsDB:
         self.collection.save(crowd)
     
     def updateCrowdSplit(self, crowd_id, split_crowd_id):
+#        print crowd_id
         crowd = self.collection.find_one({'_id': crowd_id})
         split_information = [split_crowd_id, self.currentTime]
         crowd['split'].append(split_information)
@@ -123,19 +125,19 @@ class Epoch(object):
         self.ep = ep
         self.dt = datetime.fromtimestamp(self.ep)
     def getGraphId(self):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
         return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
     def getTweetFile(self):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
 #        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
         return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
     def getGraphFile(self, create = False, paramInfo = ''):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
         filePath = os.sep.join([crowd_path, paramInfo, 'graphs', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)]) 
         if create: self._createDirectory(filePath)
         return filePath
     def getCrowdsFile(self, create = False, paramInfo = ''):
-        tm = time.localtime(self.ep)
+        tm = time.localtime(self.ep+18000)
         filePath = os.sep.join([crowd_path, paramInfo, 'crowds', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)]) 
         if create: self._createDirectory(filePath)
         return filePath
