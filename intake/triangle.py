@@ -15,7 +15,7 @@ class TriangleFinder():
         self.edges = set()
         self.window = window_size
 
-    def find_tris(self, year, month, startday, days):
+    def find_tris(self, year, month, startday, days=1):
         start = datetime(int(year), int(month), int(startday))
         hour = timedelta(hours=1)
 
@@ -79,7 +79,7 @@ def _path_time(label, time):
     return os.path.join(label, *[str(n) for n in time.timetuple()[:4]])
 
 
-def tri_filter(year, month, startday, days):
+def tri_filter(year, month, startday, days=1):
     time = start = datetime(int(year), int(month), int(startday))
     end = start+timedelta(days=int(days))
 
