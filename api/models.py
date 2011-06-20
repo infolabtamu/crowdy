@@ -138,3 +138,16 @@ class GraphSnapshot(TwitterModel):
     from_ids = ListProperty('fids',int)
     to_ids = ListProperty('tids',int)
     weights = ListProperty('ws')
+
+
+class CrowdTime(TwitterModel):
+    _id = DateTimeProperty('_id')
+    value = DictProperty('value')
+
+
+class CrowdTweets(TwitterModel):
+    _id = TextProperty('_id')
+    user_ids = ListProperty('uids',int)
+    at_ids = ListProperty('aids',int)
+    tweet_ids = ListProperty('tids',int)
+    times = ListProperty('dts')
