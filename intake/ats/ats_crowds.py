@@ -17,7 +17,7 @@ data_dir = '/home/kykamath/fake'
 crawled_data_path = '%s/crawler/'%data_dir
 crowd_path = data_dir
 crowd_type = 'ats'
-edge_threshold_weight = 1.3
+edge_threshold_weight = 0.7
 minimumNumberOfUsersInCrowd = 3
 
 # DB initialization
