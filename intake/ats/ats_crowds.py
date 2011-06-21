@@ -126,7 +126,8 @@ class Epoch(object):
         self.dt = datetime.fromtimestamp(self.ep)
     def getGraphId(self):
         tm = time.localtime(self.ep+18000)
-        return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
+#        return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
+        return time.strftime('%Y:%m:%d:%H', tm)
     def getTweetFile(self):
         tm = time.localtime(self.ep+18000)
 #        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
@@ -508,4 +509,8 @@ def test_crowdEvolution():
 if __name__ == '__main__':
 #    MCL.demo()
 #    Evolution.demo()    
-    test_crowdEvolution()
+#    test_crowdEvolution()
+
+    ep = 1308696030
+    tm = time.localtime(1308696030)
+    print str(time.strftime('%Y:%m:%d:%H', tm))
