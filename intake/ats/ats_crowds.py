@@ -39,7 +39,7 @@ class CrowdsDB:
         if crowd==None: self.__add(data)
         else: self.__update(crowd, data)
     def __add(self, data):
-        crowd_object_in_db =  {'_id': data['_id'], 'start': self.currentTime, 'end': None, 'users': [], 
+        crowd_object_in_db =  {'_id': data['_id'], 'start': self.currentTime-3600, 'end': None, 'users': [], 
                                'type': crowd_type, 'merge' : [], 'split' : [] }
         for user in data['users']: crowd_object_in_db['users'].append({'id': user,'history': [[self.currentTime, None]]})
         crowd_object_in_db['size'] = len(crowd_object_in_db['users'])
