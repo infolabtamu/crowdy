@@ -40,7 +40,7 @@ function loadData(data) {
                 if(!td.contents.length==0) {
                   jQuery.getJSON('/crowd/'+e.data.cid, function(res) {
                       td.html(res.html);
-                      loadCrowdPopup(e.data.cid,td,res.users,res.tweets,e.data.star);
+                      loadCrowdPopup(e.data.cid,td,res);
                   });
                 }
             }

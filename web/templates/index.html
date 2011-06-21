@@ -27,7 +27,7 @@ Timeline.OriginalEventPainter.prototype._showBubble = function(x, y, evt) {
   box = new Boxy("<p>Loading...</p>",{title:evt._description});
   jQuery.getJSON('/crowd/'+evt.getLink(), function(res) {
     box.setContent(res.html)
-    loadCrowdPopup(evt._text,box.boxy,res.users,res.tweets);
+    loadCrowdPopup(evt._text,box.boxy,res);
   });
 }
 

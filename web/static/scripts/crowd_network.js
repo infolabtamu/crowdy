@@ -118,29 +118,25 @@ Renderer = function(canvas){
   return that
 }
 
-function loadCrowdNetworkGraph(canvas,users,tweets) {
+function loadCrowdNetworkGraph(canvas, users, index) {
   var nodes = {}
   $.each(users, function(i,user) {
       nodes[user._id] = user;
   });
   var edges = {};
   // make edges into a weighted undirected graph
-  $.each(tweets, function(i,tweet) {
-    if('ats' in tweet) {
-      $.each(tweet.ats, function(j,at) {
-        if(at in nodes && tweet.uid in nodes) {
-          from = Math.min(tweet.uid,at);
-          to = Math.max(tweet.uid,at);
-          if(!(from in edges))
-            edges[from] = {}
-          if(to in edges[from])
-            edges[from][to].weight+=1;
-          else
-            edges[from][to] = {weight:1};
-        }
-      });
-    }
-  });
+  for(var i in index.uids) {
+      var aid = index.aids[i];
+      var uid = index.uids[i];
+      from = Math.min(uid,aid);
+      to = Math.max(uid,aid);
+      if(!(from in edges))
+        edges[from] = {}
+      if(to in edges[from])
+        edges[from][to].weight+=1;
+      else
+        edges[from][to] = {weight:1};
+  }
   //start the force directed layout
   var sys = arbor.ParticleSystem(500, 500, 0.7, 30)
   sys.renderer = Renderer(canvas)
@@ -187,47 +183,20 @@ function starclick()
 	alert("clicked")
 }
 
-function loadCrowdPopup(cid,elem,users,tweets,star) {
-    image0=new Image();
-    image1=new Image();
-    image0.src ="/static/images/yellow_star.jpg";
-    image1.src ="/static/images/red_star.jpg";
-    var str = elem.find('.star');
-    if(star==true)
-    {
-	str.attr("src",image1.src);
-    }
-    else
-    {
-	str.attr("src",image0.src);
-    }
-    str.click(function(){
-	if(star==true)
-	{
-	 str.attr("src",image0.src);
-	 star=false;
-	 jQuery.getJSON('/api/1/crowd/star/'+cid+'?starred=0');
-	}
-	else
-	{
-	 str.attr("src",image1.src);
-	 star=true;
-	 jQuery.getJSON('/api/1/crowd/star/'+cid+'?starred=1');
-	} 
-    });
+function loadCrowdPopup(cid, elem, crowd_info) {
     elem.find('.tabs').tabs("div.pane")
-    loadCrowdNetworkGraph(elem.find('canvas'),users,tweets);
+    loadCrowdNetworkGraph(elem.find('canvas'), crowd_info.users, crowd_info.index);
 	var list = elem.find('.mylist');
 	var next = elem.find('.next');
 
 	var start = 0;
 		
-	showTweets(list,tweets,users,start);
+	showTweets(list, crowd_info.tweets, crowd_info.users, start);
 	start += 5;
 	if(start < tweets.length){
 		next.append("<br><font color='red'><b><u>Next 5 tweets</u></b></font>");
 		next.click(function () { 
-			showTweets(list,tweets,users,start,next);
+			showTweets(list, crowd_info.tweets, crowd_info.users, start, next);
 			start += 5; 
 		});
 	}
