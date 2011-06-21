@@ -57,8 +57,8 @@ class DemoCrowdGeneration:
     @staticmethod
     def demo():
 #        DemoCrowdGeneration.test_graphReader()
-        DemoCrowdGeneration.test_mcl()
-#        DemoCrowdGeneration.test_evolution()        
+#        DemoCrowdGeneration.test_mcl()
+        DemoCrowdGeneration.test_evolution()        
     
 
 class CrowdsDBTests(unittest.TestCase):
