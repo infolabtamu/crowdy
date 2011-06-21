@@ -1,6 +1,6 @@
 import cherrypy
 from cherrypy import tools
-from api.models import Crowd,User,Tweet,Edges, GraphSnapshot
+from api.models import Crowd,User,Tweet,Edges, GraphSnapshot, CrowdTweets
 from utils import get_or_404, parse_bool, parse_date
 
 @cherrypy.expose
@@ -25,13 +25,23 @@ def users(cid):
     users = User.find(User._id.is_in(uids))
     return [u.to_d() for u in users]
 
+
 @cherrypy.expose
 @tools.json_out()
-def tweets(cid):
+def tweets(cid, page=0):
     "returns all the tweets in a crowd"
-    crowd = get_or_404(Crowd,cid)
-    tweets = crowd.tweets()
+    index = get_or_404(CrowdTweets,cid)
+    tweets = index.tweets(int(page))
     return [t.to_d() for t in tweets]
+
+
+@cherrypy.expose
+@tools.json_out()
+def tweet_index(cid):
+    "returns the edges that make up the crowd"
+    index = get_or_404(CrowdTweets,cid)
+    return index.to_d()
+
 
 @cherrypy.expose
 @tools.json_out()

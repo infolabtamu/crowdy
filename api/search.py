@@ -59,7 +59,7 @@ def crowd(q="", limit='100', sort=None, simple='t', **kwargs):
         cids = intake.search.CrowdSearcher().getCrowds(q)
         query = query & Crowd._id.is_in(cids)
     limit=int(limit) if limit.lower()!="none" else None
-    sl = [(Crowd.star,DESCENDING), (Crowd._id,ASCENDING)]
-    crowds = Crowd.find(query,limit=limit,sort_list=sl)
+    #sl = [(Crowd.star,DESCENDING), (Crowd._id,ASCENDING)]
+    crowds = Crowd.find(query, limit=limit, )#sort_list=sl)
     transform = Crowd.simple if parse_bool(simple) else Crowd.to_d
     return [ transform(c) for c in crowds]

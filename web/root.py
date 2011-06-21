@@ -81,6 +81,8 @@ def _chart_html(stamps):
 def crowd(cid):
     users = api.crowd.users(cid)
     tweets = api.crowd.tweets(cid)
-    stamps = [int(t['ca']) for t in tweets]
+    index = api.crowd.tweet_index(cid)
+    del index['tids']
+    stamps = [int(t) for t in index['dts']]
     html = _render('crowd.html', time_chart=_chart_html(stamps))
-    return dict(users=users, tweets=tweets, html=html)
+    return dict(users=users, tweets=tweets, html=html, index=index)

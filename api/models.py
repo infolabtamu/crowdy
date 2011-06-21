@@ -1,3 +1,4 @@
+import calendar
 import datetime
 from datetime import timedelta
 try:
@@ -120,18 +121,6 @@ class Crowd(TwitterModel):
         crowd['users'] = [u['id'] for u in crowd['users']]
         return crowd
 
-    def tweets(self,limit=1000):
-        "returns all of the tweets involved in the crowd"
-        if self.type!='ats':
-            raise NotImplementedError
-        uids = [u['id'] for u in self.users]
-        return Tweet.find(
-            Tweet.user_id.is_in(uids)&
-            Tweet.mentions.is_in(uids)&
-            Tweet.created_at.range(self.start, self.end),
-            limit=limit,
-            sort=Tweet._id)
-
 
 class GraphSnapshot(TwitterModel):
     _id = DateTimeProperty('_id')
@@ -149,5 +138,21 @@ class CrowdTweets(TwitterModel):
     _id = TextProperty('_id')
     user_ids = ListProperty('uids',int)
     at_ids = ListProperty('aids',int)
-    tweet_ids = ListProperty('tids',int)
+    tweet_ids = ListProperty('tids')
     times = ListProperty('dts')
+
+    def tweets(self, page=0):
+        "returns all of the tweets involved in the crowd"
+        page_size = 100
+        return Tweet.find(
+            Tweet._id.is_in(self.tweet_ids[page*page_size:(page+1)*page_size]),
+            sort=Tweet._id)
+
+    def to_d(self):
+        #make the values in self.times in epoch format
+        return dict(
+                tids = self.tweet_ids,
+                uids = self.user_ids,
+                aids = self.at_ids,
+                dts = [calendar.timegm(t.timetuple()) for t in self.times],
+        )

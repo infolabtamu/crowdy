@@ -3,26 +3,30 @@ import operator
 from heapq import nlargest
 
 from etc.settings import settings
-from api.models import Crowd, Tweet, User
+from api.models import Crowd, CrowdTweets, User
 from intake.module import CrowdFilter
 
 
 class CrowdNetworkFilter(CrowdFilter): 
     def cfilter(self, crowds):
         for crowd in crowds:
-            print "analyzing network for %s"%crowd._id
-            tweets = crowd.tweets(limit=0)
-            graph = self.make_graph(tweets)
+            graph = self.make_graph(crowd._id)
+            if not graph:
+                print "skipping %s"%crowd._id
+                continue
             crowd.clust_coeff = self.clust_coeff(graph)
             self.central_users(crowd, graph)
             self.set_title(crowd)
             yield crowd
 
-    def make_graph(self, tweets):
-        edges = [(tweet.user_id,at)
-            for tweet in tweets
-            for at in tweet.mentions
-            if tweet.user_id!=at]
+    def make_graph(self, cid):
+        tweets = CrowdTweets.get_id(cid)
+        if not tweets:
+            return None
+        edges = [ e
+            for e in zip(tweets.user_ids, tweets.at_ids)
+            if e[0]!=e[1]
+        ]
         return nx.Graph(edges)
 
     def clust_coeff(self, graph):
@@ -39,4 +43,3 @@ class CrowdNetworkFilter(CrowdFilter):
         users = (User.get_id(uid,fields=['sn']) for uid in crowd.central_users)
         names = [u.screen_name for u in users if u][0:2]
         crowd.title = ", ".join(names+["..."])
-        print crowd.title

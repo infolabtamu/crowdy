@@ -12,6 +12,7 @@ import maroon
 from api.models import Crowd, CrowdTime, CrowdTweets
 from etc.settings import settings
 
+
 def mr_crowds(db):
     map = Code("""
         function() {
