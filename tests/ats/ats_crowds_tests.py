@@ -62,7 +62,6 @@ class DemoCrowdGeneration:
         crowds_collection = crowds_db.Crowd
         for crowd in crowds_collection.find():
             for k in ['start','end']:
-                print crowd[k]
                 crowd[k] = dt.utcfromtimestamp(crowd[k]) if crowd[k] else dt(2011,6,1)
             end = crowd['end']
             for user in crowd['users']:
