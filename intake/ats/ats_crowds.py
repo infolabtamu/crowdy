@@ -17,12 +17,12 @@ data_dir = '/home/kykamath/tri_ats'
 crawled_data_path = '%s/crawler/'%data_dir
 crowd_path = data_dir
 crowd_type = 'ats'
-edge_threshold_weight = 1.3
+edge_threshold_weight = 0.3
 minimumNumberOfUsersInCrowd = 3
 
 # DB initialization
 mongodb_connection = Connection('localhost', 27017)
-crowds_db = mongodb_connection.tri_ats_new
+crowds_db = mongodb_connection.tri_ats
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
 
@@ -39,7 +39,7 @@ class CrowdsDB:
         if crowd==None: self.__add(data)
         else: self.__update(crowd, data)
     def __add(self, data):
-        crowd_object_in_db =  {'_id': data['_id'], 'start': self.currentTime, 'end': None, 'users': [], 
+        crowd_object_in_db =  {'_id': data['_id'], 'start': self.currentTime-3600, 'end': None, 'users': [], 
                                'type': crowd_type, 'merge' : [], 'split' : [] }
         for user in data['users']: crowd_object_in_db['users'].append({'id': user,'history': [[self.currentTime, None]]})
         crowd_object_in_db['size'] = len(crowd_object_in_db['users'])
@@ -126,7 +126,8 @@ class Epoch(object):
         self.dt = datetime.fromtimestamp(self.ep)
     def getGraphId(self):
         tm = time.localtime(self.ep+18000)
-        return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
+#        return ':'.join([str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday), str(tm.tm_hour)])
+        return time.strftime('%Y:%m:%d:%H', tm)
     def getTweetFile(self):
         tm = time.localtime(self.ep+18000)
 #        return os.sep.join([crawled_data_path, 'time', str(tm.tm_year), str(tm.tm_mon), str(tm.tm_mday)])
@@ -508,4 +509,8 @@ def test_crowdEvolution():
 if __name__ == '__main__':
 #    MCL.demo()
 #    Evolution.demo()    
-    test_crowdEvolution()
+#    test_crowdEvolution()
+
+    ep = 1308696030
+    tm = time.localtime(1308696030)
+    print str(time.strftime('%Y:%m:%d:%H', tm))

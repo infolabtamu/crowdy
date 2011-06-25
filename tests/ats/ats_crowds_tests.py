@@ -9,6 +9,7 @@ sys.path.append('../../intake/ats')
 import unittest
 from operator import itemgetter
 from ats_crowds import Epoch, GraphReader, MCL, Evolution, CrowdsDB
+from datetime import datetime as dt
 
 #TEST_STARTING_EPOCH = 1280639087
 #TEST_ENDING_EPOCH = 1288846743
@@ -55,10 +56,26 @@ class DemoCrowdGeneration:
             Evolution.buildCrowdEvolutionGraph(currentEpoch)
             currentEpoch = currentEpoch.next()
     @staticmethod
+    def test_postPorcessing():
+        mongodb_connection = Connection('localhost', 27017)
+        crowds_db = mongodb_connection.tri_ats
+        crowds_collection = crowds_db.Crowd
+        for crowd in crowds_collection.find():
+            for k in ['start','end']:
+                crowd[k] = dt.utcfromtimestamp(crowd[k]) if crowd[k] else dt(2011,6,1)
+            end = crowd['end']
+            for user in crowd['users']:
+                user['id'] = int(user['id'])
+                for h in user['history']:
+                    for x in xrange(2):
+                        h[x] = dt.utcfromtimestamp(h[x]) if h[x] else end
+            crowds_collection.save(crowd)
+    @staticmethod
     def demo():
-#        DemoCrowdGeneration.test_graphReader()
-#        DemoCrowdGeneration.test_mcl()
-        DemoCrowdGeneration.test_evolution()        
+#       DemoCrowdGeneration.test_graphReader()
+#       DemoCrowdGeneration.test_mcl()
+ #       DemoCrowdGeneration.test_evolution()        
+        DemoCrowdGeneration.test_postPorcessing()
     
 
 class CrowdsDBTests(unittest.TestCase):
