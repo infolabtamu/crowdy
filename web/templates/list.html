@@ -21,7 +21,7 @@ function loadData(data) {
     });
     var tbo = $('#dyTableBody');
     for(var i=0;i<events.length;i++){
-        var row = $('#listTemplate').clone();
+        var row = $('#listTemplate').clone().removeAttr('id');
         var date1 = $.strftime('%Y/%m/%d %H:%M', events[i]['start']);
         var date2 = $.strftime('%Y/%m/%d %H:%M', events[i]['end']);
         row.find('.listPeriod').text(date1+' To '+date2);
@@ -45,19 +45,13 @@ function loadData(data) {
                 }
             }
         );
-        tbo.append($('#expandTemplate').clone());
+        tbo.append($('#expandTemplate').clone().removeAttr('id'));
     }
 }
 
 function search() {
-    //document.body.innerHTML = "";
-    var query_title=document.getElementById('query_title');
-    query_title.innerHTML = "";
-    var tbo=document.getElementById('dyTableBody');
-    tbo.innerHTML="";
-    
-    // Here is the code to generate text "Search results for BLAHBLAH"
-    
+    //get rid of the old rows
+    $('#expandTemplate').nextAll().remove();
     var query_title=document.getElementById('query_title');
     query_title.innerHTML = "";
 
@@ -77,21 +71,6 @@ function search() {
     query_title.appendChild(row);
 
     var api = make_search_url();
-
-    
-    var tbo=document.getElementById('dyTableBody');
- 
-    row = document.createElement('tr');
-    th = document.createElement('th');
-    th.appendChild(document.createTextNode('Period'));
-    row.appendChild(th);
-    th = document.createElement('th');
-    th.appendChild(document.createTextNode('Tweets'));
-    row.appendChild(th);
-    th = document.createElement('th');
-    th.appendChild(document.createTextNode('Users'));
-    row.appendChild(th);
-    tbo.appendChild(row);
 
     jQuery.getJSON(api, loadData);
 }

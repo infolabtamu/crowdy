@@ -16,7 +16,7 @@
 <script>
 
 $(document).ready(function() {
-    jQuery.getJSON('/api/1/search/crowd?limit=1000', loadData);
+    jQuery.getJSON('/api/1/search/crowd?limit=100&min_start=1304380800', loadData);
 });
 
 
@@ -60,10 +60,12 @@ function make_search_url() {
     } 
 
     var num_users = document.getElementById('num_users').value;
-    api += "&min_size=" + String(num_users);
+    if(parseInt(num_users)>3)
+        api += "&min_size=" + String(num_users);
 
     var clco = document.getElementById('clco').value;
-    api += "&min_clco=" + String(clco);
+    if(parseFloat(clco))
+        api += "&min_clco=" + String(clco);
     return api;
 }
 
