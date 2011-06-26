@@ -59,13 +59,17 @@ def crowd_tweets(year, month, startday, days=1):
         else:
             print "no crowds at %r"%time
             crowds = []
+        krishna_time = time+timedelta(hours=1)
         for crowd in crowds:
             #figure out who is in the crowd this hour
             members = set(
                 user['id']
                 for user in crowd.users
-                if user['history'][0][0]<=time<=user['history'][-1][-1]
+                if user['history'][0][0]<=krishna_time<=user['history'][-1][-1]
             )
+            if not members:
+                print "an empty crowd?"
+                import pdb; pdb.set_trace()
             #find tweets between crowd members
             d = defaultdict(list)
             for tweet in tweets:
