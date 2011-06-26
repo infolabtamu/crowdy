@@ -13,10 +13,10 @@ class CrowdNetworkFilter(CrowdFilter):
             graph = self.make_graph(crowd._id)
             if not graph:
                 print "skipping %s"%crowd._id
-                continue
-            crowd.clust_coeff = self.clust_coeff(graph)
-            self.central_users(crowd, graph)
-            self.set_title(crowd)
+            else:
+                crowd.clust_coeff = self.clust_coeff(graph)
+                self.central_users(crowd, graph)
+                self.set_title(crowd)
             yield crowd
 
     def make_graph(self, cid):
