@@ -72,8 +72,8 @@ class DemoCrowdGeneration:
             crowds_collection.save(crowd)
     @staticmethod
     def demo():
-        DemoCrowdGeneration.test_graphReader()
-#       DemoCrowdGeneration.test_mcl()
+#        DemoCrowdGeneration.test_graphReader()
+       DemoCrowdGeneration.test_mcl()
  #       DemoCrowdGeneration.test_evolution()        
  #       DemoCrowdGeneration.test_postPorcessing()
     
