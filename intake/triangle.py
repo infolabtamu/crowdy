@@ -106,7 +106,7 @@ def tri_filter(year, month, startday, days=1):
 if __name__ == '__main__':
     cmd = sys.argv[1]
     if cmd=='find':
-        TriangleFinder(window_size=3).find_tris(*sys.argv[2:])
+        TriangleFinder(window_size=2).find_tris(*sys.argv[2:])
     elif cmd=='filter':
         tri_filter(*sys.argv[2:])
     else:
