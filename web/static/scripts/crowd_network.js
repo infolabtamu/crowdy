@@ -138,7 +138,8 @@ function loadCrowdNetworkGraph(canvas, users, index) {
         edges[from][to] = {weight:1};
   }
   //start the force directed layout
-  var sys = arbor.ParticleSystem(500, 500, 0.7, 30)
+  var sys = arbor.ParticleSystem(
+          {friction:.3, stiffness:100, repulsion:10000, fps:30})
   sys.renderer = Renderer(canvas)
   sys.merge({nodes:nodes, edges:edges})
 }
