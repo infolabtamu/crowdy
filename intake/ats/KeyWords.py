@@ -21,9 +21,7 @@ class KeyWords:
         tweets = []
         for id in tids:
             tweet = KeyWords.tweets.find_one({'_id': id}, fields=['tx'])
-            if tweet!=None: 
-                print tweet
-                tweets.append(tweet['tx'])
+            if tweet!=None: tweets.append(tweet['tx'])
         return tweets
     @staticmethod
     def getKeyWordsFromDocuments(documents):
