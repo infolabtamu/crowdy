@@ -17,9 +17,9 @@ def mr_crowds(db):
     map = Code("""
         function() {
             var seconds = 1000;
-            var t = 3600*Math.floor(this.start/3600/seconds);
+            var t = 3600*Math.floor(this.start/3600/seconds)-3600;
             var end = this.end/seconds|| 1288224000;
-            while(t<end) {
+            while(t<=end) {
                 emit( new Date(t*1000), {crowds:[this._id]} );
                 t+=3600;
             }
@@ -59,13 +59,13 @@ def crowd_tweets(year, month, startday, days=1):
         else:
             print "no crowds at %r"%time
             crowds = []
-        krishna_time = time+timedelta(hours=1)
         for crowd in crowds:
             #figure out who is in the crowd this hour
             members = set(
                 user['id']
                 for user in crowd.users
-                if user['history'][0][0]<=krishna_time<=user['history'][-1][-1]
+                if user['history'][0][0]-timedelta(hours=2) <= time and
+                   time <= user['history'][-1][-1]
             )
             if not members:
                 print "an empty crowd?"
