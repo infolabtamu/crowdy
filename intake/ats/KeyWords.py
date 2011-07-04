@@ -26,7 +26,7 @@ class KeyWords:
     @staticmethod
     def getKeyWordsFromDocuments(documents):
         phrases = []
-        for d in documents: phrases+=getPhrases(getWordsFromRawEnglishMessage(d), 1, 1)
+        for d in documents: phrases+=getPhrases(getWordsFromRawEnglishMessage(d), 2, 2)
         phrasesDistribution = sorted([(k, len(list(g))) for k,g in groupby(sorted(phrases))], key=itemgetter(1), reverse=True)
         hashtags, nonhashtags = [], []
         for p,_ in phrasesDistribution:
