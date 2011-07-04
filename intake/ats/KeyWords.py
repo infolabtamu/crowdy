@@ -21,7 +21,7 @@ class KeyWords:
         tweets = []
         for id in tids:
             tweet = KeyWords.tweets.find_one({'_id': id}, fields=['tx'])
-            if 'tx' in tweet: 
+            if tweet!=None: 
                 print tweet
                 tweets.append(tweet['tx'])
         return tweets
