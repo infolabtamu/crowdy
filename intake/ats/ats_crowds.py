@@ -406,7 +406,6 @@ def test_crowdEvolution():
         return crowdObject
     currentCrowdsObject, nextCrowdsObject = getCrowdsFromFile('crowds/crowds1', '1'), getCrowdsFromFile('crowds/crowds2', '2')
     Evolution.debugBuildCrowdEvolutionGraph(currentCrowdsObject, nextCrowdsObject, 1)
-        
 
 if __name__ == '__main__':
     MCL.demo()
