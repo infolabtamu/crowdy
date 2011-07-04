@@ -36,7 +36,6 @@ class KeyWords:
         i = 1
         for crowd in KeyWords.crowds.find(limit=10):
             crowdId = crowd['_id']
-            print crowd
             crowd['kw'] = KeyWords.getKeyWordsFromDocuments(KeyWords.getTweetsForCrowdId(crowdId))
             print i, crowd['kw']
             i+=1
