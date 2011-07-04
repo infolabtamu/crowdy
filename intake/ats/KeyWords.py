@@ -18,7 +18,10 @@ class KeyWords:
     @staticmethod
     def getTweetsForCrowdId(crowdId):
         tids = KeyWords.crowdTweets.find_one({'_id': crowdId}, fields=['tids'])['tids']
-        tweets = [KeyWords.tweets.find_one({'_id': id}, fields=['tx'])['tx'] for id in tids]
+        tweets = []
+        for id in tids:
+            tweet = KeyWords.tweets.find_one({'_id': id}, fields=['tx'])
+            if 'tx' in tweet: tweets.append(tweet['tx'])
         return tweets
     @staticmethod
     def getKeyWordsFromDocuments(documents):
