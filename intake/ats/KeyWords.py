@@ -29,7 +29,9 @@ class KeyWords:
         for p,_ in phrasesDistribution:
             if p.startswith('#'): hashtags.append(p)
             else: nonhashtags.append(p)
-        return nonhashtags[:3]+hashtags[:3]
+        numberOfNonHashtags = 3
+        if len(hashtags[:3])<3: numberOfNonHashtags=6-len(hashtags[:3])
+        return nonhashtags[:numberOfNonHashtags]+hashtags[:3]
     
     @staticmethod
     def addKeyWordsForCrowds():
