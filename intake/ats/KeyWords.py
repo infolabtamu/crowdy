@@ -37,8 +37,9 @@ class KeyWords:
     def addKeyWordsForCrowds():
         i = 1
         for crowd in KeyWords.crowds.find():
+            print i, crowd['_id']
             crowd['kw'] = KeyWords.getKeyWordsFromDocuments(KeyWords.getTweetsForCrowdId(crowd['_id']))
-            print i, crowd['_id'], crowd['kw']
+            print crowd['kw']
 #            KeyWords.crowds.save(crowd)
             i+=1
 
