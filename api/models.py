@@ -130,6 +130,7 @@ class GraphSnapshot(TwitterModel):
 
 
 class CrowdTime(TwitterModel):
+    # This is generated via a map/reduce call.
     _id = DateTimeProperty('_id')
     value = DictProperty('value')
 
@@ -156,3 +157,7 @@ class CrowdTweets(TwitterModel):
                 aids = self.at_ids,
                 dts = [calendar.timegm(t.timetuple()) for t in self.times],
         )
+
+class CrowdSize(TwitterModel):
+    _id = DateTimeProperty('_id')
+    crowd_sizes = DictProperty('cs')

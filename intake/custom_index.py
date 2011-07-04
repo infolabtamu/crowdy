@@ -9,7 +9,7 @@ from bisect import bisect_right
 from bson.code import Code
 import maroon
 
-from api.models import Crowd, CrowdTime, CrowdTweets
+from api.models import Crowd, CrowdTime, CrowdTweets, CrowdSize
 from etc.settings import settings
 
 
@@ -42,6 +42,22 @@ def _path_time(label, time):
     return os.path.join(label, *[str(n) for n in time.timetuple()[:4]])
 
 
+def crowd_sizes(year, month, startday, days=1):
+    time = start = datetime(int(year), int(month), int(startday))
+    end = start+timedelta(days=int(days))
+    while time <end:
+        print "crowds for %r"%time
+        crowd_time = CrowdTime.get_id(time)
+        crowds = Crowd.find(Crowd._id.is_in(crowd_time.value['crowds']))
+        sizes = dict(
+                    (crowd._id, len(crowd_members(crowd, time)))
+                    for crowd in crowds
+                )
+        cs = CrowdSize(_id=time, crowd_sizes=sizes)
+        cs.save()
+        time = time+timedelta(hours=1)
+ 
+
 def crowd_tweets(year, month, startday, days=1):
     time = start = datetime(int(year), int(month), int(startday))
     end = start+timedelta(days=int(days))
@@ -61,12 +77,7 @@ def crowd_tweets(year, month, startday, days=1):
             crowds = []
         for crowd in crowds:
             #figure out who is in the crowd this hour
-            members = set(
-                user['id']
-                for user in crowd.users
-                if user['history'][0][0]-timedelta(hours=2) <= time and
-                   time <= user['history'][-1][-1]
-            )
+            members = crowd_members(crowd, time)
             if not members:
                 print "an empty crowd?"
                 import pdb; pdb.set_trace()
@@ -87,6 +98,15 @@ def crowd_tweets(year, month, startday, days=1):
         time = time+timedelta(hours=1)
 
 
+def crowd_members(crowd, time):
+    return set(
+        user['id']
+        for user in crowd.users
+        if user['history'][0][0]-timedelta(hours=2) <= time and
+           time <= user['history'][-1][-1]
+    )
+
+
 if __name__ == '__main__':
     db = maroon.Model.database = maroon.MongoDB(
         name="hou",
@@ -94,6 +114,8 @@ if __name__ == '__main__':
     cmd = sys.argv[1]
     if cmd=='hourly':
         mr_crowds(db)
+    elif cmd=='size':
+        crowd_sizes(*sys.argv[2:])
     elif cmd=='index':
         crowd_tweets(*sys.argv[2:])
     else:
