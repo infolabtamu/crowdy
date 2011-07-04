@@ -10,7 +10,7 @@ from itertools import groupby
 from operator import itemgetter
 
 class KeyWords:
-    mongodb_connection = Connection('sarge', 27017)
+    mongodb_connection = Connection('sid', 27017)
     tweets = mongodb_connection.hou.Tweet
     crowds = mongodb_connection.hou.Crowd
     crowdTweets = mongodb_connection.hou.CrowdTweets
@@ -37,9 +37,8 @@ class KeyWords:
     def addKeyWordsForCrowds():
         i = 1
         for crowd in KeyWords.crowds.find():
-            print i, crowd['_id']
             crowd['kw'] = KeyWords.getKeyWordsFromDocuments(KeyWords.getTweetsForCrowdId(crowd['_id']))
-            print crowd['kw']
+            print i, crowd['_id'], crowd['kw']
 #            KeyWords.crowds.save(crowd)
             i+=1
 
