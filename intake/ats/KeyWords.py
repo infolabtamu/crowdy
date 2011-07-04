@@ -38,7 +38,7 @@ class KeyWords:
             crowdId = crowd['_id']
             print crowd
             crowd['kw'] = KeyWords.getKeyWordsFromDocuments(KeyWords.getTweetsForCrowdId(crowdId))
-            print i, crowd
+            print i, crowd['kw']
             i+=1
 
 if __name__ == '__main__':
