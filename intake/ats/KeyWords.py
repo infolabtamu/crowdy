@@ -35,14 +35,13 @@ class KeyWords:
         numberOfNonHashtags = 3
         if len(hashtags[:3])<3: numberOfNonHashtags=6-len(hashtags[:3])
         return nonhashtags[:numberOfNonHashtags]+hashtags[:3]
-    
     @staticmethod
     def addKeyWordsForCrowds():
         i = 1
         for crowd in KeyWords.crowds.find():
             crowd['kw'] = KeyWords.getKeyWordsFromDocuments(KeyWords.getTweetsForCrowdId(crowd['_id']))
             print i, crowd['_id'], crowd['kw']
-#            KeyWords.crowds.save(crowd)
+            KeyWords.crowds.save(crowd)
             i+=1
 
 if __name__ == '__main__':
