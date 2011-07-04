@@ -33,9 +33,13 @@ class KeyWords:
     
     @staticmethod
     def addKeyWordsForCrowds():
-        for crowd in KeyWords.crowds.find(limit=100):
+        i = 1
+        for crowd in KeyWords.crowds.find(limit=10):
             crowdId = crowd['_id']
-            print KeyWords.getKeyWordsFromDocuments(KeyWords.getTweetsForCrowdId(crowdId))
+            print crowd
+            crowd['kw'] = KeyWords.getKeyWordsFromDocuments(KeyWords.getTweetsForCrowdId(crowdId))
+            print i, crowd
+            i+=1
 
 if __name__ == '__main__':
     KeyWords.addKeyWordsForCrowds()
