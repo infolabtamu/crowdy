@@ -33,10 +33,10 @@ function loadCrowdSizes(data) {
   for(var cid in data.cs) {
     var div = $('#crowdTempl').clone().removeAttr('id')
     div.html(data.cs[cid])
-    scaled = 4*Math.sqrt(data.cs[cid]);
+    scaled = 3*Math.sqrt(data.cs[cid]);
     div.width(scaled)
     div.height(scaled)
-    div.css('font-size', (2*Math.sqrt(data.cs[cid])) +'px')
+    div.css('font-size', (1.7*Math.sqrt(data.cs[cid])) +'px')
     $("#crowds").append(div)
   }
   var sorted = $("#crowds .crowdSum").sort(function(a,b) {
