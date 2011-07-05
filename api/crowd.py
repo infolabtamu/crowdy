@@ -1,6 +1,6 @@
 import cherrypy
 from cherrypy import tools
-from api.models import Crowd,User,Tweet,Edges, GraphSnapshot, CrowdTweets
+from api.models import Crowd,User,Tweet,Edges, GraphSnapshot, CrowdTweets, CrowdSizes
 from utils import get_or_404, parse_bool, parse_date
 
 @cherrypy.expose
@@ -55,7 +55,13 @@ def star(cid,starred='t'):
         crowd.save()
     return crowd.simple()
 
+@cherrypy.expose
+@tools.json_out()
+def sizes(date):
+    sizes = get_or_404(CrowdSizes, parse_date(date))
+    return sizes.to_d()
 
+#This should go somewhere else. Tweet?
 @cherrypy.expose
 @tools.json_out()
 def snapshot(date):

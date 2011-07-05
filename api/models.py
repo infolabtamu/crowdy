@@ -158,6 +158,6 @@ class CrowdTweets(TwitterModel):
                 dts = [calendar.timegm(t.timetuple()) for t in self.times],
         )
 
-class CrowdSize(TwitterModel):
+class CrowdSizes(TwitterModel):
     _id = DateTimeProperty('_id')
     crowd_sizes = DictProperty('cs')

@@ -9,7 +9,7 @@ from bisect import bisect_right
 from bson.code import Code
 import maroon
 
-from api.models import Crowd, CrowdTime, CrowdTweets, CrowdSize
+from api.models import Crowd, CrowdTime, CrowdTweets, CrowdSizes
 from etc.settings import settings
 
 
@@ -53,7 +53,7 @@ def crowd_sizes(year, month, startday, days=1):
                     (crowd._id, len(crowd_members(crowd, time)))
                     for crowd in crowds
                 )
-        cs = CrowdSize(_id=time, crowd_sizes=sizes)
+        cs = CrowdSizes(_id=time, crowd_sizes=sizes)
         cs.save()
         time = time+timedelta(hours=1)
  

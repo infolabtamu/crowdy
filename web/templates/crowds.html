@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block head_extra %}
+<style>
+.crowdSum {
+  display: block;
+  float: left;
+  margin: 1px;
+  text-align: center;
+  background-color: #ccc;
+  -moz-border-radius: 100px;
+  border-radius: 100px;
+}
+</style>
+<script>
+var time = 1304294400;
+
+$(document).ready(function() {
+  //start the force directed layout
+  window.setInterval(getCrowds,2000);
+  getCrowds()
+});
+
+function getCrowds() {
+  time+=3600;
+  jQuery.getJSON('/api/1/crowd/sizes/'+time, loadCrowdSizes);
+  d = new Date(time*1000);
+  $('#timer').text(d.toString());
+}
+
+function loadCrowdSizes(data) {
+  $("#crowds").empty()
+  for(var cid in data.cs) {
+    var div = $('#crowdTempl').clone().removeAttr('id')
+    div.html(data.cs[cid])
+    scaled = 4*Math.sqrt(data.cs[cid]);
+    div.width(scaled)
+    div.height(scaled)
+    div.css('font-size', (2*Math.sqrt(data.cs[cid])) +'px')
+    $("#crowds").append(div)
+  }
+  var sorted = $("#crowds .crowdSum").sort(function(a,b) {
+    return parseInt(a.innerText)-parseInt(b.innerText);
+  });
+  sorted.appendTo('#crowds');
+}
+
+</script>
+
+{% endblock %}
+{% block content %}
+
+<div class="pane" id="crowds">
+</div>
+<div id="crowdTempl" class="crowdSum">
+</div>
+
+{% endblock %}

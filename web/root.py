@@ -33,6 +33,11 @@ def snapshot():
     return _render('snapshot.html')
 
 
+@cherrypy.expose
+def crowds():
+    return _render('crowds.html')
+
+
 CHART_WIDTH = 480
 CHART_HEIGHT = 240
 
