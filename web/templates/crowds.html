@@ -2,8 +2,16 @@
 
 {% block head_extra %}
 <style>
+#crowds {
+  position: relative;
+  background-color: #eee;
+  width: 800px;
+  height: 500px;
+}
+
 .crowdSum {
   display: block;
+  position: absolute;
   float: left;
   margin: 1px;
   text-align: center;
@@ -17,7 +25,8 @@ var time = 1304294400;
 
 $(document).ready(function() {
   //start the force directed layout
-  window.setInterval(getCrowds,2000);
+//  window.setInterval(getCrowds,10000);
+  window.setInterval(animateCrowds,1000);
   getCrowds()
 });
 
@@ -33,16 +42,46 @@ function loadCrowdSizes(data) {
   for(var cid in data.cs) {
     var div = $('#crowdTempl').clone().removeAttr('id')
     div.html(data.cs[cid])
-    scaled = 4*Math.sqrt(data.cs[cid]);
-    div.width(scaled)
-    div.height(scaled)
+    radius = 2*Math.sqrt(data.cs[cid])
+    div.width(radius*2)
+    div.height(radius*2)
     div.css('font-size', (2*Math.sqrt(data.cs[cid])) +'px')
+    div.data({
+      x : Math.random()*800,
+      y : Math.max(0,400-data.cs[cid]),
+      r : radius
+    })
+    div.offset(coordForLoc(div))
     $("#crowds").append(div)
   }
-  var sorted = $("#crowds .crowdSum").sort(function(a,b) {
-    return parseInt(a.innerText)-parseInt(b.innerText);
-  });
-  sorted.appendTo('#crowds');
+}
+
+function animateCrowds() {
+  console.log("run")
+  var crowds = $('#crowds .crowdSum')
+  $(crowds).each(function (i) {
+    var me = $(this)
+    var dx = 0
+    var dy = 0
+    var mloc = me.data()
+    crowds.each(function (j) {
+      var yloc = $(this).data()
+      var dist = Math.sqrt((mloc.x-yloc.x)*(mloc.x-yloc.x) + (mloc.y-yloc.y)*(mloc.y-yloc.y))
+      if(dist<(mloc.r+yloc.r)*4 && dist!=0) {
+        var force = Math.min(30, Math.pow(yloc.r/dist,2)*20)
+        dx += force*((mloc.x-yloc.x)/dist)
+        dy += force*((mloc.y-yloc.y)/dist)
+      }
+    })
+    me.data('x', Math.min(Math.max(mloc.r,mloc.x+dx), 800-mloc.r))
+    me.data('y', Math.min(Math.max(mloc.r,mloc.y+dy), 500-mloc.r))
+    me.animate(coordForLoc(me), 1100, 'linear')
+  })
+}
+
+function coordForLoc(div) {
+  var data = div.data()
+  return {top:data.y-data.r, left:data.x-data.r}
 }
 
 </script>
