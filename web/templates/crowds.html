@@ -39,21 +39,30 @@ function getCrowds() {
 
 function loadCrowdSizes(data) {
   $("#crowds").empty()
-  for(var cid in data.cs) {
+  var crowds = [];
+  $.each(data.cs, function(cid, size) {
+    crowds.push({cid:cid,size:size});
+  });
+  crowds.sort(function(a,b) {return b.size-a.size});
+  var people_per_row = 40;
+  var people = 0;
+  $.each(crowds, function(index, crowd) {
+    people+=crowd.size
     var div = $('#crowdTempl').clone().removeAttr('id')
-    div.html(data.cs[cid])
-    radius = 1.5*Math.sqrt(data.cs[cid])
+    div.html(crowd.size)
+    radius = 1.5*Math.sqrt(crowd.size)
     div.width(radius*2)
     div.height(radius*2)
-    div.css('font-size', (1.7*Math.sqrt(data.cs[cid])) +'px')
+    div.css('font-size', (1.7*Math.sqrt(crowd.size)) +'px')
     div.data({
       x : Math.random()*800,
-      y : Math.max(0,400-data.cs[cid]),
-      r : radius
+      y : 20+people/people_per_row,
+      r : radius,
+      gy : 20+people/people_per_row,
     })
     div.offset(coordForLoc(div))
     $("#crowds").append(div)
-  }
+  });
 }
 
 function animateCrowds() {
@@ -73,8 +82,9 @@ function animateCrowds() {
         dy += force*((mloc.y-yloc.y)/dist)
       }
     })
+    var y = .9*(mloc.y+dy) + .1*mloc.gy
     me.data('x', Math.min(Math.max(mloc.r,mloc.x+dx), 800-mloc.r))
-    me.data('y', Math.min(Math.max(mloc.r,mloc.y+dy), 500-mloc.r))
+    me.data('y', Math.min(Math.max(mloc.r,y), 500-mloc.r))
     me.animate(coordForLoc(me), 1100, 'linear')
   })
 }
