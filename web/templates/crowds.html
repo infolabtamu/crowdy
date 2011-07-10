@@ -32,24 +32,25 @@ $(document).ready(function() {
 
 function getCrowds() {
   time+=3600;
-  jQuery.getJSON('/api/1/crowd/sizes/'+time, loadCrowdSizes);
+  jQuery.getJSON('/api/1/crowd/snapshot/'+time, loadCrowdSnapshot);
   d = new Date(time*1000);
   $('#timer').text(d.toString());
 }
 
-function loadCrowdSizes(data) {
+function loadCrowdSnapshot(data) {
+  //create set of new crowds
+  var cids = {}
+  $.each(data.cs, function(index, crowd) {
+    cids[crowd.cid] = 1
+  })
+  //remove non-existant crowds
   $("#crowds .crowdSum").filter(function() {
-    return !($(this).attr('id') in data.cs)
+    return !($(this).attr('id') in cids)
   }).remove()
-  var crowds = [];
-  $.each(data.cs, function(cid, size) {
-    crowds.push({cid:cid,size:size});
-  });
-  crowds.sort(function(a,b) {return b.size-a.size});
   var people_per_row = 40;
   var people = 0;
-  $.each(crowds, function(index, crowd) {
-    people+=crowd.size
+  $.each(data.cs, function(index, crowd) {
+    people+=crowd.u
     var div = $(document.getElementById(crowd.cid))
     if(!div.length) {
       div = $('#crowdTempl').clone()
@@ -59,11 +60,11 @@ function loadCrowdSizes(data) {
         y : 20+people/people_per_row,
       })
     }
-    div.html(crowd.size)
-    var radius = 1.5*Math.sqrt(crowd.size)
+    div.html(crowd.u)
+    var radius = 1.5*Math.sqrt(crowd.u)
     div.width(radius*2)
     div.height(radius*2)
-    div.css('font-size', (1.7*Math.sqrt(crowd.size)) +'px')
+    div.css('font-size', (1.7*Math.sqrt(crowd.u)) +'px')
     div.data('r', radius)
     div.data('gy', 20+people/people_per_row)
     div.css(coordForLoc(div))
@@ -88,7 +89,7 @@ function animateCrowds() {
         dy += force*((mloc.y-yloc.y)/dist)
       }
     })
-    var y = .9*(mloc.y+dy) + .1*mloc.gy
+    var y = .8*(mloc.y+dy) + .2*mloc.gy
     me.data('x', Math.min(Math.max(mloc.r,mloc.x+dx), 800-mloc.r))
     me.data('y', Math.min(Math.max(mloc.r,y), 500-mloc.r))
     me.animate(coordForLoc(me), 1100, 'linear')
