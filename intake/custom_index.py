@@ -5,11 +5,13 @@ import os
 from collections import defaultdict
 from datetime import datetime, timedelta
 from bisect import bisect_right
+from itertools import izip_longest
+from operator import itemgetter
 
 from bson.code import Code
 import maroon
 
-from api.models import Crowd, CrowdTime, CrowdTweets, CrowdSizes
+from api.models import Crowd, CrowdTime, CrowdTweets, CrowdSnapshot
 from etc.settings import settings
 
 
@@ -42,21 +44,37 @@ def _path_time(label, time):
     return os.path.join(label, *[str(n) for n in time.timetuple()[:4]])
 
 
-def crowd_sizes(year, month, startday, days=1):
+def crowd_snapshots(year, month, startday, days=1):
     time = start = datetime(int(year), int(month), int(startday))
     end = start+timedelta(days=int(days))
     while time <end:
         print "crowds for %r"%time
         crowd_time = CrowdTime.get_id(time)
-        crowds = Crowd.find(Crowd._id.is_in(crowd_time.value['crowds']))
-        sizes = dict(
-                    (crowd._id, len(crowd_members(crowd, time)))
-                    for crowd in crowds
-                )
-        cs = CrowdSizes(_id=time, crowd_sizes=sizes)
+        crowd_ids = crowd_time.value['crowds']
+        crowds_ = Crowd.find(
+                Crowd._id.is_in(crowd_ids),
+                fields=['users','clco'],
+                sort='_id')
+        tweets_ = CrowdTweets.find(
+                CrowdTweets._id.is_in(crowd_ids),
+                fields=['dts'],
+                sort='_id')
+        crowds = [
+                dict(
+                    cid = crowd._id,
+                    co = crowd.clust_coeff,
+                    u = len(crowd_members(crowd, time)),
+                    t = sum(1
+                        for dt in tweet.times
+                        if time<=dt<time+timedelta(hours=1))
+                    )
+                for crowd,tweet in izip_longest(crowds_,tweets_)
+            ]
+        crowds.sort(key=itemgetter('u'), reverse=True)
+        cs = CrowdSnapshot(_id=time, crowds=crowds)
         cs.save()
         time = time+timedelta(hours=1)
- 
+
 
 def crowd_tweets(year, month, startday, days=1):
     time = start = datetime(int(year), int(month), int(startday))
@@ -114,9 +132,9 @@ if __name__ == '__main__':
     cmd = sys.argv[1]
     if cmd=='hourly':
         mr_crowds(db)
-    elif cmd=='size':
-        crowd_sizes(*sys.argv[2:])
+    elif cmd=='snapshots':
+        crowd_snapshots(*sys.argv[2:])
     elif cmd=='index':
         crowd_tweets(*sys.argv[2:])
     else:
-        print "unknown command: %s"%cmdP
+        print "unknown command: %s"%cmd

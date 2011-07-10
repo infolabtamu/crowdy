@@ -1,6 +1,6 @@
 import cherrypy
 from cherrypy import tools
-from api.models import Crowd,User,Tweet,Edges, GraphSnapshot, CrowdTweets, CrowdSizes
+from api.models import Crowd,User,Tweet,Edges, CrowdSnapshot, CrowdTweets
 from utils import get_or_404, parse_bool, parse_date
 
 @cherrypy.expose
@@ -65,5 +65,5 @@ def sizes(date):
 @cherrypy.expose
 @tools.json_out()
 def snapshot(date):
-    graph = get_or_404(GraphSnapshot, parse_date(date))
+    graph = get_or_404(CrowdSnapshot, parse_date(date))
     return graph.to_d()
