@@ -56,9 +56,9 @@ class DemoCrowdGeneration:
             Evolution.buildCrowdEvolutionGraph(currentEpoch)
             currentEpoch = currentEpoch.next()
     @staticmethod
-    def test_postPorcessing():
+    def test_postProcessing():
         mongodb_connection = Connection('localhost', 27017)
-        crowds_db = mongodb_connection.tri_ats
+        crowds_db = mongodb_connection.set_ats_new
         crowds_collection = crowds_db.Crowd
         for crowd in crowds_collection.find():
             for k in ['start','end']:
@@ -74,8 +74,8 @@ class DemoCrowdGeneration:
     def demo():
 #        DemoCrowdGeneration.test_graphReader()
 #        DemoCrowdGeneration.test_mcl()
-        DemoCrowdGeneration.test_evolution()        
-#        DemoCrowdGeneration.test_postPorcessing()
+#        DemoCrowdGeneration.test_evolution()        
+        DemoCrowdGeneration.test_postProcessing()
     
 
 class CrowdsDBTests(unittest.TestCase):
