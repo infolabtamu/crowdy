@@ -51,14 +51,6 @@ def crowd_snapshots(year, month, startday, days=1):
         print "crowds for %r"%time
         crowd_time = CrowdTime.get_id(time)
         crowd_ids = crowd_time.value['crowds']
-        crowds_ = Crowd.find(
-                Crowd._id.is_in(crowd_ids),
-                fields=['users','clco'],
-                sort='_id')
-        tweets_ = CrowdTweets.find(
-                CrowdTweets._id.is_in(crowd_ids),
-                fields=['dts'],
-                sort='_id')
         crowds = [
                 dict(
                     cid = crowd._id,
@@ -68,12 +60,36 @@ def crowd_snapshots(year, month, startday, days=1):
                         for dt in tweet.times
                         if time<=dt<time+timedelta(hours=1))
                     )
-                for crowd,tweet in izip_longest(crowds_,tweets_)
+                for crowd,tweet in _crowd_and_tweets(crowd_ids)
             ]
-        crowds.sort(key=itemgetter('u'), reverse=True)
+        total_people = sum(c['u'] for c in crowds)
+        _add_centile(crowds, 'co', total_people)
+        _add_centile(crowds, 'u', total_people)
         cs = CrowdSnapshot(_id=time, crowds=crowds)
         cs.save()
         time = time+timedelta(hours=1)
+
+
+def _add_centile(crowds, key, total_people):
+    crowds.sort(key=itemgetter(key))
+    people = 0
+    for c in crowds:
+        c[key+"_pc"] = 100 * (people+c['u']//2) // total_people
+        people += c['u']
+
+
+def _crowd_and_tweets(crowd_ids):
+    crowds = Crowd.find(
+            Crowd._id.is_in(crowd_ids),
+            fields=['users','clco'],
+            sort='_id')
+    tweets = CrowdTweets.find(
+            CrowdTweets._id.is_in(crowd_ids),
+            fields=['dts'],
+            sort='_id')
+    for c,t in izip_longest(crowds, tweets):
+        assert c._id==t._id
+        yield (c,t)
 
 
 def crowd_tweets(year, month, startday, days=1):
