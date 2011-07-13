@@ -72,7 +72,9 @@ class DemoCrowdGeneration:
                 user['id'] = int(user['id'])
                 for h in user['history']:
                     for x in xrange(2):
-                        h[x] = dt.utcfromtimestamp(h[x]) if h[x] else end
+                        if h[x]:
+                            if type(h[x])==type(1.0):  h[x] = dt.utcfromtimestamp(h[x])
+                        else: h[x] =end
             print i, crowd['_id']
             i+=1
             crowds_collection.save(crowd)
