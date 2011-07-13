@@ -74,8 +74,8 @@ class DemoCrowdGeneration:
     def demo():
 #        DemoCrowdGeneration.test_graphReader()
 #        DemoCrowdGeneration.test_mcl()
-#        DemoCrowdGeneration.test_evolution()        
-        DemoCrowdGeneration.test_postProcessing()
+        DemoCrowdGeneration.test_evolution()        
+#        DemoCrowdGeneration.test_postProcessing()
     
 
 class CrowdsDBTests(unittest.TestCase):
