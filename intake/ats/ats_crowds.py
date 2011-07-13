@@ -13,7 +13,7 @@ from datetime import datetime
 #crowd_path = '/mnt/chevron/kykamath/data/twitter/ats'
 #data_dir = '/mnt/sid/hou_crowds'
 #data_dir = '/data/twitter/crowdy/ats1/'
-data_dir = '/home/kykamath/set_ats'
+data_dir = '/home/kykamath/set_ats_new'
 crawled_data_path = '%s/crawler/'%data_dir
 crowd_path = data_dir
 crowd_type = 'ats'
@@ -22,7 +22,7 @@ minimumNumberOfUsersInCrowd = 3
 
 # DB initialization
 mongodb_connection = Connection('localhost', 27017)
-crowds_db = mongodb_connection.set_ats
+crowds_db = mongodb_connection.set_ats_new
 edges = crowds_db.ats_graph_edges
 edges.ensure_index('_id')
 
@@ -52,7 +52,9 @@ class CrowdsDB:
             user_id = user['id']
             users[user_id] = user
             # Update if user has been removed.
-            if user_id not in newdata['users']: users[user_id]['history'][-1][1] = self.currentTime
+            if user_id not in newdata['users']: 
+                # Modifications to fix a single parent being selected twice.
+                if users[user_id]['history'][-1][0]!=self.currentTime: users[user_id]['history'][-1][1] = self.currentTime
         # Add new and rejoined users.
         for user in newdata['users']:
             if user not in users: 
@@ -65,7 +67,8 @@ class CrowdsDB:
                     pass
                 else:
                     # User rejoining the crowd. Add tuple for this new information.
-                    previously_observed_user['history'].append([self.currentTime, None])
+                    # Modifications to fix a single parent being selected twice.
+                    if users[user_id]['history'][-1][1]!=self.currentTime: previously_observed_user['history'].append([self.currentTime, None])
         # Update user changes in the crowd object.
         crowd['users'] = users.values()
         ############# Ending users changes. ####################################
