@@ -47,12 +47,12 @@ function loadCrowdSnapshot(data) {
   $("#crowds .crowdSum").filter(function() {
     return !($(this).attr('id') in cids)
   }).remove()
-  var people_per_row = 40;
-  var people = 0;
+  //fix the crowds
   $.each(data.cs, function(index, crowd) {
-    people+=crowd.u
     var div = $(document.getElementById(crowd.cid))
-    if(!div.length) {
+    if(div.length) {
+      div.stop(true)
+    } else {
       div = $('#crowdTempl').clone()
       div.attr('id', crowd.cid)
       div.data({
