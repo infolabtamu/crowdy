@@ -56,8 +56,8 @@ function loadCrowdSnapshot(data) {
       div = $('#crowdTempl').clone()
       div.attr('id', crowd.cid)
       div.data({
-        x : Math.random()*800,
-        y : 20+people/people_per_row,
+        x : 8*(100-crowd.co_pc),
+        y : 5*(100-crowd.u_pc),
       })
     }
     div.html(crowd.u)
@@ -66,7 +66,8 @@ function loadCrowdSnapshot(data) {
     div.height(radius*2)
     div.css('font-size', (1.7*Math.sqrt(crowd.u)) +'px')
     div.data('r', radius)
-    div.data('gy', 20+people/people_per_row)
+    div.data('gx', 8*(100-crowd.co_pc))
+    div.data('gy', 5*(100-crowd.u_pc))
     div.css(coordForLoc(div))
     $("#crowds").append(div)
   });
@@ -84,13 +85,14 @@ function animateCrowds() {
       var yloc = $(this).data()
       var dist = Math.sqrt((mloc.x-yloc.x)*(mloc.x-yloc.x) + (mloc.y-yloc.y)*(mloc.y-yloc.y))
       if(dist<(mloc.r+yloc.r)*4 && dist!=0) {
-        var force = Math.min(30, Math.pow(yloc.r/dist,2)*20)
+        var force = Math.min(100, Math.pow(yloc.r/dist,2)*20)
         dx += force*((mloc.x-yloc.x)/dist)
         dy += force*((mloc.y-yloc.y)/dist)
       }
     })
-    var y = .8*(mloc.y+dy) + .2*mloc.gy
-    me.data('x', Math.min(Math.max(mloc.r,mloc.x+dx), 800-mloc.r))
+    var x = .9*(mloc.x+dx) + .1*mloc.gx
+    var y = .9*(mloc.y+dy) + .1*mloc.gy
+    me.data('x', Math.min(Math.max(mloc.r,x), 800-mloc.r))
     me.data('y', Math.min(Math.max(mloc.r,y), 500-mloc.r))
     me.animate(coordForLoc(me), 1100, 'linear')
   })
