@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block head_extra %}
+<link rel="stylesheet" type="text/css" href="/static/css/boxy.css"/>
+<script src="/static/scripts/arbor.js"></script>
+<script src="/static/scripts/jquery.boxy.js" type="text/javascript"></script>
+<script src="/static/scripts/crowd_network.js"></script>
+
 <style>
 #crowds {
   position: relative;
@@ -22,13 +27,26 @@
 </style>
 <script>
 var time = 1304294400;
+var getCrowdsInterval = null;
+var animateCrowdsInterval = null;
 
 $(document).ready(function() {
-  //start the force directed layout
-  window.setInterval(getCrowds,4000);
-  window.setInterval(animateCrowds,1000);
-  getCrowds()
+  $('#pauseButton').click(pauseAnimation)
+  $('#playButton').click(startAnimation)
+  startAnimation()
 });
+
+function startAnimation() {
+  //start the force directed layout
+  getCrowdsInterval = window.setInterval(getCrowds,4000);
+  getCrowds()
+}
+
+function pauseAnimation() {
+  window.clearInterval(getCrowdsInterval)
+  window.clearInterval(animateCrowdsInterval)
+  $('#crowds .crowdSum').stop(true)
+}
 
 function getCrowds() {
   time+=3600;
@@ -59,8 +77,16 @@ function loadCrowdSnapshot(data) {
         x : 8*(100-crowd.co_pc),
         y : 5*(100-crowd.u_pc),
       })
+      div.click(function() {
+        box = new Boxy("<p>Loading...</p>",{title:"FIXME"});
+        pauseAnimation()
+        jQuery.getJSON('/crowd/'+crowd.cid, function(res) {
+          box.setContent(res.html)
+          loadCrowdPopup(crowd.cid,box.boxy,res)
+        })
+      })
     }
-    div.html(crowd.u)
+    div.html(crowd.u>10?crowd.u:"")
     var radius = 1.5*Math.sqrt(crowd.u)
     div.width(radius*2)
     div.height(radius*2)
@@ -71,10 +97,12 @@ function loadCrowdSnapshot(data) {
     div.css(coordForLoc(div))
     $("#crowds").append(div)
   });
+  window.clearInterval(animateCrowdsInterval)
+  animateCrowdsInterval = window.setInterval(animateCrowds,1000);
+  animateCrowds()
 }
 
 function animateCrowds() {
-  console.log("run")
   var crowds = $('#crowds .crowdSum')
   $(crowds).each(function (i) {
     var me = $(this)
@@ -114,5 +142,8 @@ function coordForLoc(div) {
 </div>
 
 <p id="timer"></p>
+
+<span id="playButton">play</span>
+<span id="pauseButton">pause</span>
 
 {% endblock %}
