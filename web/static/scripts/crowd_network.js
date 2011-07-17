@@ -144,10 +144,23 @@ function loadCrowdNetworkGraph(canvas, users, index) {
   sys.merge({nodes:nodes, edges:edges})
 }
 
+function loadTweets(div, tweets) {
+  var page = null
+  $.each(tweets, function(index, tweet) {
+    if (index%5==0) {
+      page = $("<div>")
+      div.append(page)
+    }
+    page.append('<p>'+tweet.tx+'</p>')
+
+  })
+  $(".scrollable").scrollable({mousewheel:true, vertical:true});
+}
 
 function loadCrowdPopup(cid, elem, crowd_info) {
     elem.find('.tabs').tabs("div.pane")
     loadCrowdNetworkGraph(elem.find('canvas'), crowd_info.users, crowd_info.index);
     $('#startTime').html(new Date(1000*crowd_info.crowd.start).toString())
     $('#endTime').html(new Date(1000*crowd_info.crowd.end).toString())
+    loadTweets($('#crowdTweets'), crowd_info.tweets)
 }

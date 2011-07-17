@@ -40,13 +40,15 @@ def crowds():
     return _render('crowds.html')
 
 
-def _chart_html(stamps):
+def _chart_html(stamps, crowd):
     counts = defaultdict(int)
     for s in stamps:
         counts[s/3600]+=1
-    start, end = min(counts.keys()),max(counts.keys())
-    hours = xrange(start,end+1)
+    start = crowd['start']/3600
+    end = crowd['end']/3600
+    hours = xrange(start,end)
     data = [counts[h] for h in hours]
+    print data
     start_dt = dt.utcfromtimestamp(start*3600)
 
     chart = google_chart_api.Sparkline(data)
@@ -55,8 +57,10 @@ def _chart_html(stamps):
     return chart.display.Img(20*math.sqrt(len(data)), 12)
 
 def _user_stamps(hist):
-    print hist[0][0], hist[-1][-1]
-    return xrange(hist[0][0], hist[-1][-1]-3600, 3600)
+    return chain.from_iterable(
+            xrange(seg[0]-3600, seg[1], 3600)
+            for seg in hist
+            )
 
 
 @tools.json_out()
@@ -73,8 +77,8 @@ def crowd(cid):
                 for u in crowd['users'])
     html = _render(
             'crowd.html',
-            tweet_spark = _chart_html(t_stamps),
-            user_spark = _chart_html(u_stamps),
+            tweet_spark = _chart_html(t_stamps, crowd),
+            user_spark = _chart_html(u_stamps, crowd),
             crowd = crowd,
             tweet_count = len(t_stamps),
             )

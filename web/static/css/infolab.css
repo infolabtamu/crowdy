@@ -579,3 +579,15 @@ way to fit your requirements.
 #crowdBox {
     background-color: #fff;
 }
+.scrollable {
+    position: relative;
+    overflow: hidden;
+    height: 150px;
+}
+.scrollable .items {
+    position: absolute;
+    height: 20000em;
+}
+.scrollable .items p {
+    height: 30px;
+}
