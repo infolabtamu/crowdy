@@ -148,4 +148,6 @@ function loadCrowdNetworkGraph(canvas, users, index) {
 function loadCrowdPopup(cid, elem, crowd_info) {
     elem.find('.tabs').tabs("div.pane")
     loadCrowdNetworkGraph(elem.find('canvas'), crowd_info.users, crowd_info.index);
+    $('#startTime').html(new Date(1000*crowd_info.crowd.start).toString())
+    $('#endTime').html(new Date(1000*crowd_info.crowd.end).toString())
 }

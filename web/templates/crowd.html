@@ -1,20 +1,16 @@
-<ul class="tabs">
-  <li><a href="#">Network</a></li>
-  <li><a href="#">Tweets</a></li>
-  <li><a href="#">Graph</a></li>
-  <img src ="/static/images/yellow_star.jpg" class="star" width="20" height="20">
-</ul>
-<div class="pane">
+<div id="crowdNetwork">
   <canvas></canvas>
 </div>
-<div class="pane">
-  <ul class="mylist">
-    List of Threads --	
-  </ul>
-  <div class = "next"></div>
-</div>
-<div class="pane">
-  <div class="time_chart">
-    {{ time_chart }}
+<div id="crowdStats">
+  <ul>
+    <li>Start: <span id="startTime"></span></li>
+    <li>End: <span id="endTime"></span></li>
+    <li>Users: {{crowd['size'] }} {{user_spark}}</li>
+    <li>Tweets: {{tweet_count}} {{tweet_spark}}</li>
+    <li>Central users: {{ crowd['title'] }}</li>
+    <li>Keywords: {{ ", ".join(crowd.kw[:2]) }}</li>
+    <li>Clustering Coeff: {{ "%.3f"%crowd['clco'] }}</li>
   </div>
+</div>
+<div class="crowdTweets">
 </div>

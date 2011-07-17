@@ -2,6 +2,8 @@
 import cherrypy
 from cherrypy import tools
 import api.crowd
+import math
+from itertools import chain
 import datetime
 from datetime import datetime as dt
 from collections import defaultdict
@@ -38,56 +40,42 @@ def crowds():
     return _render('crowds.html')
 
 
-CHART_WIDTH = 480
-CHART_HEIGHT = 240
-
-
-def _label_axis(axis,hours,delta,format):
-    positions = [h for h in hours if h%delta==0]
-    axis.min = hours[0]
-    axis.max = hours[-1]
-    axis.label_positions = positions
-    axis.labels = [
-            dt.utcfromtimestamp(p*3600).strftime(format)
-            for p in positions]
-
-
 def _chart_html(stamps):
     counts = defaultdict(int)
     for s in stamps:
         counts[s/3600]+=1
     start, end = min(counts.keys()),max(counts.keys())
-    hours = range(start-1,end+2)
+    hours = xrange(start,end+1)
     data = [counts[h] for h in hours]
     start_dt = dt.utcfromtimestamp(start*3600)
-    
-    chart = google_chart_api.LineChart(data)
-    if len(hours)>=48:
-        _label_axis(chart.bottom,hours,24,"%b %e")
-    else:
-        if len(hours)>=9:
-            _label_axis(chart.bottom,hours,6,"%H:00")
-        else:
-            _label_axis(chart.bottom,hours,1,"%H:00")
-        day_axis = chart.AddAxis(common.AxisPosition.BOTTOM, common.Axis())
-        _label_axis(day_axis,hours,24,"%b %e")
 
+    chart = google_chart_api.Sparkline(data)
     chart.left.min = 0
     chart.left.max = max(data)
-    chart.left.labels = [chart.left.max*i/4 for i in range(1,5)]
-    chart.left.label_positions = chart.left.labels
-    chart.display.extra_params['chtt']="Tweets per Hour"
-    
-    return chart.display.Img(CHART_WIDTH, CHART_HEIGHT)
+    return chart.display.Img(20*math.sqrt(len(data)), 12)
+
+def _user_stamps(hist):
+    print hist[0][0], hist[-1][-1]
+    return xrange(hist[0][0], hist[-1][-1]-3600, 3600)
 
 
 @tools.json_out()
 @cherrypy.expose
 def crowd(cid):
+    crowd = api.crowd.id(cid)
     users = api.crowd.users(cid)
     tweets = api.crowd.tweets(cid)
     index = api.crowd.tweet_index(cid)
     del index['tids']
-    stamps = [int(t) for t in index['dts']]
-    html = _render('crowd.html', time_chart=_chart_html(stamps))
-    return dict(users=users, tweets=tweets, html=html, index=index)
+    t_stamps = [int(t) for t in index['dts']]
+    u_stamps = chain.from_iterable(
+                _user_stamps(u['history'])
+                for u in crowd['users'])
+    html = _render(
+            'crowd.html',
+            tweet_spark = _chart_html(t_stamps),
+            user_spark = _chart_html(u_stamps),
+            crowd = crowd,
+            tweet_count = len(t_stamps),
+            )
+    return dict(crowd=crowd, users=users, tweets=tweets, html=html, index=index)

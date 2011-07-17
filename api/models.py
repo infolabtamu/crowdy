@@ -121,6 +121,15 @@ class Crowd(TwitterModel):
         crowd['users'] = [u['id'] for u in crowd['users']]
         return crowd
 
+    def to_d(self):
+        d = TwitterModel.to_d(self)
+        for u in d['users']:
+            u['history'] = [
+                [calendar.timegm(t.timetuple()) for t in chunck]
+                for chunck in u['history']
+            ]
+        return d
+
 
 class GraphSnapshot(TwitterModel):
     _id = DateTimeProperty('_id')
