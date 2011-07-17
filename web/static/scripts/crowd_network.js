@@ -144,61 +144,8 @@ function loadCrowdNetworkGraph(canvas, users, index) {
   sys.merge({nodes:nodes, edges:edges})
 }
 
-function filterTweets(tweets,start,end){
-	var subTweet = new Array();
-	var count = 0;
-	var i = 0;
-	for (i = start; i < end; i++){
-		subTweet[count] = tweets[i];
-		count = count + 1;
-	}
-	return subTweet
-}
-
-function showTweets(list,tweets,users,start,next){
-	if(tweets.length-start>5){
-                subTweets = filterTweets(tweets,start,start + 5);
-	}
-        else{
-		subTweets = filterTweets(tweets,start,tweets.length);
-		next.empty();
-	}
-
-	var nodes = {}
-        $.each(users, function(i,user) {
-                nodes[user._id] = user.sn;
-        });
-
-        var tweetInfo = '';
-	list.empty();
-	 
-        jQuery.each(subTweets, function(i,tweet) {
-        	tweetInfo = nodes[tweet.uid]+ ' : '
-		list.append("<li>"+tweetInfo+"<br>"+tweet.tx+"</li>");
-        });
-}
-
-
-function starclick()
-{
-	alert("clicked")
-}
 
 function loadCrowdPopup(cid, elem, crowd_info) {
     elem.find('.tabs').tabs("div.pane")
     loadCrowdNetworkGraph(elem.find('canvas'), crowd_info.users, crowd_info.index);
-	var list = elem.find('.mylist');
-	var next = elem.find('.next');
-
-	var start = 0;
-		
-	showTweets(list, crowd_info.tweets, crowd_info.users, start);
-	start += 5;
-	if(start < tweets.length){
-		next.append("<br><font color='red'><b><u>Next 5 tweets</u></b></font>");
-		next.click(function () { 
-			showTweets(list, crowd_info.tweets, crowd_info.users, start, next);
-			start += 5; 
-		});
-	}
 }

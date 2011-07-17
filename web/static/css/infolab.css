@@ -368,9 +368,6 @@ way to fit your requirements.
         cursor:pointer;
         background: url(/static/images/tabOnRight.png) right top no-repeat;
 }
-#nav li:hover a.top_link span, 
-#nav a.top_link:hover span
-{background:url(/static/images/six_1.png) no-repeat right top;}
 #nav li:hover a.top_link span.down,
 #nav a.top_link:hover span.down
 #nav li:hover {position:relative; z-index:200;}
@@ -397,7 +394,6 @@ way to fit your requirements.
         background: url(/static/images/tabOnRight.png) right top no-repeat;
 }
 #nav li.on a.top_link span, 
-#nav a.top_link span {background:url(/static/images/six_1.png) no-repeat right top;}
 #nav li.on a.top_link span.down
 #nav li.on {position:relative; z-index:200;}
 
