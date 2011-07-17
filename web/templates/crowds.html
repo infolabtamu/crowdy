@@ -78,11 +78,17 @@ function loadCrowdSnapshot(data) {
         y : 5*(100-crowd.u_pc),
       })
       div.click(function() {
-        box = new Boxy("<p>Loading...</p>",{title:"FIXME"});
         pauseAnimation()
         jQuery.getJSON('/crowd/'+crowd.cid, function(res) {
-          box.setContent(res.html)
-          loadCrowdPopup(crowd.cid,box.boxy,res)
+          $("#crowdBox").html(res.html)
+          $("#crowdBox").overlay({
+            load: true,
+            mask: {
+              color: '#000',
+              effect: 'apple'
+            }
+          });
+          loadCrowdPopup(crowd.cid,$("#crowdBox"),res)
         })
       })
     }
@@ -146,4 +152,5 @@ function coordForLoc(div) {
 <span id="playButton">play</span>
 <span id="pauseButton">pause</span>
 
+<div id="crowdBox"></div>
 {% endblock %}
