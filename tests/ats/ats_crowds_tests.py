@@ -56,26 +56,34 @@ class DemoCrowdGeneration:
             Evolution.buildCrowdEvolutionGraph(currentEpoch)
             currentEpoch = currentEpoch.next()
     @staticmethod
-    def test_postPorcessing():
+    def test_postProcessing():
         mongodb_connection = Connection('localhost', 27017)
-        crowds_db = mongodb_connection.tri_ats
+        crowds_db = mongodb_connection.set_ats_new
         crowds_collection = crowds_db.Crowd
+        i = 1
         for crowd in crowds_collection.find():
             for k in ['start','end']:
-                crowd[k] = dt.utcfromtimestamp(crowd[k]) if crowd[k] else dt(2011,6,1)
+                if crowd[k]:
+                    if type(crowd[k])==type(1.0): crowd[k] = dt.utcfromtimestamp(crowd[k]) 
+                    else: print 'nop', crowd['_id']
+                else: crowd[k] = dt(2011,6,1)
             end = crowd['end']
             for user in crowd['users']:
                 user['id'] = int(user['id'])
                 for h in user['history']:
                     for x in xrange(2):
-                        h[x] = dt.utcfromtimestamp(h[x]) if h[x] else end
+                        if h[x]:
+                            if type(h[x])==type(1.0):  h[x] = dt.utcfromtimestamp(h[x])
+                        else: h[x] =end
+            print i, crowd['_id']
+            i+=1
             crowds_collection.save(crowd)
     @staticmethod
     def demo():
 #        DemoCrowdGeneration.test_graphReader()
- #      DemoCrowdGeneration.test_mcl()
- #       DemoCrowdGeneration.test_evolution()        
-        DemoCrowdGeneration.test_postPorcessing()
+#        DemoCrowdGeneration.test_mcl()
+#        DemoCrowdGeneration.test_evolution()        
+        DemoCrowdGeneration.test_postProcessing()
     
 
 class CrowdsDBTests(unittest.TestCase):
