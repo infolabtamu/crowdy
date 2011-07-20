@@ -26,11 +26,10 @@ if __name__ == '__main__':
         maroon.Model.database = maroon.MongoDB(
             name=settings.mongo_database,
             host=settings.mongo_host)
-        cherrypy.config.update("etc/crowdy.conf")
         # Code added for fastcgi
         if "--fastcgi" in sys.argv:
-#            app = cherrypy.tree.mount(WebPWMan())
-            app = cherrypy.tree.mount(api,os.path.dirname(os.path.abspath(__file__))+"/api/1",config="etc/api.conf")
+            app = cherrypy.tree.mount(api)
+#            app = cherrypy.tree.mount(api,os.path.dirname(os.path.abspath(__file__))+"/api/1",config="etc/api.conf")
             # CherryPy autoreload must be disabled for the flup server to work
             
             cherrypy.config.update({'engine.autoreload_on':False})
@@ -45,6 +44,7 @@ if __name__ == '__main__':
             cherrypy.config.update({'engine.autoreload_on':False})
             WSGIServer(app).run()
         else:
+            cherrypy.config.update("etc/crowdy.conf")
             cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
             cherrypy.quickstart(web,"/",config="etc/web.conf")
     except:
