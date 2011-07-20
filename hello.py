@@ -25,6 +25,4 @@ if "--fastcgi" in sys.argv:
     cherrypy.config.update({'engine.autoreload_on':False})
     WSGIServer(app).run()
 else:
-    cherrypy.config.update("etc/crowdy.conf")
-#    cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
     cherrypy.quickstart(HelloWorld(), config="hello.conf")
