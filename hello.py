@@ -45,6 +45,7 @@ class HelloWorld:
         return "Hello world!"
     index.exposed = True
 
-cherrypy.tree.mount(HelloWorld())
-# CherryPy autoreload must be disabled for the flup server to work
-cherrypy.config.update({'engine.autoreload_on':False})
+#cherrypy.tree.mount(HelloWorld())
+## CherryPy autoreload must be disabled for the flup server to work
+#cherrypy.config.update({'engine.autoreload_on':False})
+cherrypy.quickstart(HelloWorld(), config="hello.conf")
