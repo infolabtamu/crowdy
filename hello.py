@@ -11,18 +11,22 @@ class HelloWorld:
     index.exposed = True
     
 if "--fastcgi" in sys.argv:
-    app = cherrypy.tree.mount(HelloWorld())
+#    app = cherrypy.tree.mount(HelloWorld())
+#    # CherryPy autoreload must be disabled for the flup server to work
+#    cherrypy.config.update('hello.conf')
+#    cherrypy.config.update({'engine.autoreload_on':False})
+#    cherrypy.config.update({
+#            "tools.sessions.on": True,
+#            "tools.sessions.timeout": 5,
+#            "log.screen": False,
+#            "log.access_file": "/tmp/cherry_access.log",
+#            "log.error_file": "/tmp/cherry_error.log",
+#    })
+#    from flup.server.fcgi import WSGIServer
+#    cherrypy.config.update({'engine.autoreload_on':False})
+#    WSGIServer(app).run()
+    cherrypy.tree.mount(HelloWorld())
     # CherryPy autoreload must be disabled for the flup server to work
     cherrypy.config.update({'engine.autoreload_on':False})
-    cherrypy.config.update({
-            "tools.sessions.on": True,
-            "tools.sessions.timeout": 5,
-            "log.screen": False,
-            "log.access_file": "/tmp/cherry_access.log",
-            "log.error_file": "/tmp/cherry_error.log",
-    })
-    from flup.server.fcgi import WSGIServer
-    cherrypy.config.update({'engine.autoreload_on':False})
-    WSGIServer(app).run()
 else:
     cherrypy.quickstart(HelloWorld(), config="hello.conf")
