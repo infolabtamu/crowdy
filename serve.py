@@ -28,10 +28,10 @@ if __name__ == '__main__':
             host=settings.mongo_host)
         # Code added for fastcgi
         if "--fastcgi" in sys.argv:
-            app = cherrypy.tree.mount(api)
-#            app = cherrypy.tree.mount(api,os.path.dirname(os.path.abspath(__file__))+"/api/1",config="etc/api.conf")
-            # CherryPy autoreload must be disabled for the flup server to work
+#            app = cherrypy.tree.mount(api)
+            cherrypy.tree.mount(api,os.path.dirname(os.path.abspath(__file__))+"/api/1",config=os.path.dirname(os.path.abspath(__file__))+"/etc/api.conf")
             
+            # CherryPy autoreload must be disabled for the flup server to work
             cherrypy.config.update({'engine.autoreload_on':False})
             cherrypy.config.update({
                     "tools.sessions.on": True,
@@ -42,7 +42,7 @@ if __name__ == '__main__':
             })
             from flup.server.fcgi import WSGIServer
             cherrypy.config.update({'engine.autoreload_on':False})
-            WSGIServer(app).run()
+            WSGIServer(web,script_name="/",config="etc/web.conf").run()
         else:
             cherrypy.config.update("etc/crowdy.conf")
             cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
