@@ -7,7 +7,7 @@ import cherrypy, sys, os
 
 class HelloWorld:
     def index(self):
-        return "Hello world!"
+        return "Hello world! ilab"
     index.exposed = True
     
 if "--fastcgi" in sys.argv:
