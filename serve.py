@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import traceback
-import pdb
+import pdb, os
 import sys
 
 import cherrypy
