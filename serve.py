@@ -42,7 +42,7 @@ if __name__ == '__main__':
             })
             from flup.server.fcgi import WSGIServer
             cherrypy.config.update({'engine.autoreload_on':False})
-            WSGIServer(web,script_name="/",config="etc/web.conf").run()
+            WSGIServer(web,script_name="/",config=os.path.dirname(os.path.abspath(__file__))+"/etc/web.conf").run()
         else:
             cherrypy.config.update("etc/crowdy.conf")
             cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
