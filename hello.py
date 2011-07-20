@@ -31,7 +31,7 @@ if "--fastcgi" in sys.argv:
     # CherryPy autoreload must be disabled for the flup server to work
     cherrypy.config.update({'engine.autoreload_on':False})
     from flup.server.fcgi import WSGIServer
-    WSGIServer(app).run()
+    WSGIServer(app, bindAddress=('0.0.0.0', 8000)).run()
 else:
     cherrypy.quickstart(HelloWorld(), config="hello.conf")
 
