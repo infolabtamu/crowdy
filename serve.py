@@ -30,6 +30,7 @@ if __name__ == '__main__':
     if "--fastcgi" in sys.argv:
 #            app = cherrypy.tree.mount(api)
         cherrypy.tree.mount(api,os.path.dirname(os.path.abspath(__file__))+"/api/1",config=os.path.dirname(os.path.abspath(__file__))+"/etc/api.conf")
+        cherrypy.tree.mount(web,os.path.dirname(os.path.abspath(__file__))+"/web",config=os.path.dirname(os.path.abspath(__file__))+"/etc/web.conf")
         
         # CherryPy autoreload must be disabled for the flup server to work
         cherrypy.config.update({'engine.autoreload_on':False})
