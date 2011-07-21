@@ -10,7 +10,7 @@ from itertools import groupby
 from operator import itemgetter
 
 class KeyWords:
-    mongodb_connection = Connection('sid', 27017)
+    mongodb_connection = Connection('sarge', 27017)
     tweets = mongodb_connection.hou.Tweet
     crowds = mongodb_connection.hou.Crowd
     crowdTweets = mongodb_connection.hou.CrowdTweets
