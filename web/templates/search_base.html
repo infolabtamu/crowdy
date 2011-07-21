@@ -14,7 +14,7 @@
 <script>
 
 $(document).ready(function() {
-    jQuery.getJSON('/api/1/search/crowd?limit=100&min_start=1304380800', loadData);
+    jQuery.getJSON('/api/1/search/crowd?limit=50&min_start=1304380800', loadData);
 });
 
 
@@ -27,7 +27,7 @@ function make_search_url() {
     var until_date = "";
     var min_num_tweets = "0";
     var min_num_users = "0";
-    var rpp = "100";
+    var rpp = "50";
 
     // get query. (If query is an empty string, return everything.
     var searchBox = document.getElementById('searchBox');
