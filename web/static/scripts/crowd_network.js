@@ -157,10 +157,22 @@ function loadTweets(div, tweets) {
   $(".scrollable").scrollable({mousewheel:true, vertical:true});
 }
 
-function loadCrowdPopup(cid, elem, crowd_info) {
-    elem.find('.tabs').tabs("div.pane")
-    loadCrowdNetworkGraph(elem.find('canvas'), crowd_info.users, crowd_info.index);
-    $('#startTime').html(new Date(1000*crowd_info.crowd.start).toString())
-    $('#endTime').html(new Date(1000*crowd_info.crowd.end).toString())
-    loadTweets($('#crowdTweets'), crowd_info.tweets)
+function loadCrowdPopup(ev) {
+    var elem = $("#crowdBox")
+    elem.html("Loading...")
+    jQuery.getJSON('/crowd/'+ev.data.cid, function(crowd_info) {
+        elem.html(crowd_info.html)
+        elem.overlay({
+            load: true,
+            mask: {
+              color: '#000',
+              effect: 'apple'
+            }
+        });
+        elem.find('.tabs').tabs("div.pane")
+        loadCrowdNetworkGraph(elem.find('canvas'), crowd_info.users, crowd_info.index);
+        $('#startTime').html(new Date(1000*crowd_info.crowd.start).toString())
+        $('#endTime').html(new Date(1000*crowd_info.crowd.end).toString())
+        loadTweets($('#crowdTweets'), crowd_info.tweets)
+    });
 }

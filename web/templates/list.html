@@ -16,7 +16,6 @@ function loadData(data) {
             '_id':crowd._id,
             'description': ""+crowd.size,
             'size': crowd.size,
-            'star' : crowd.star
         };
     });
     var tbo = $('#dyTableBody');
@@ -30,28 +29,13 @@ function loadData(data) {
         row.show()
         tbo.append(row);
 
-        //toggle the detailed view when the user clicks a row
-        row.click(
-            {cid:events[i]['_id'],star:events[i]['star']},
-            function(e) {
-                var detail = $(this).next();
-                detail.slideToggle();
-                var td = detail.children().first();
-                if(!td.contents.length==0) {
-                  jQuery.getJSON('/crowd/'+e.data.cid, function(res) {
-                      td.html(res.html);
-                      loadCrowdPopup(e.data.cid,td,res);
-                  });
-                }
-            }
-        );
-        tbo.append($('#expandTemplate').clone().removeAttr('id'));
+        row.click( {cid:events[i]['_id']}, loadCrowdPopup );
     }
 }
 
 function search() {
     //get rid of the old rows
-    $('#expandTemplate').nextAll().remove();
+    $('#listTemplate').nextAll().remove();
     var query_title=document.getElementById('query_title');
     query_title.innerHTML = "";
 
@@ -96,9 +80,6 @@ function search() {
                     <td class="listPeriod"></td>
                     <td class="listUsers"></td>
                     <td class="listSize"></td>
-                </tr>
-                <tr id="expandTemplate" style="display:none">
-                    <td colspan="4">Loading...</td>
                 </tr>
             </tbody>
         </table>
