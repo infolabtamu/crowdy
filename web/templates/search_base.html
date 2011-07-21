@@ -141,8 +141,14 @@ function showClco(newValue)
         <table id="advForm" cellspacing="0" align=center>
             <tr><td colspan="3" class="sep"></td></tr>
             <tr><th>Dates </th></tr>
-            <tr><th></th><td class="l t">Since this date</td><td class="r t"><input id="date_pick_1" name="date_pick_1" type="date"/></td><tr>
-            <tr><th></th><td class="l b">Until this date</td><td class="r b"><input id="date_pick_2" name="date_pick_2" type="date"/></td><tr>
+            <tr><th></th><td class="l t">Since this date</td><td class="r t">
+                <input id="date_pick_1" name="date_pick_1" type="date"
+                  min="2011-05-01" max="2011-05-31"/>
+            </td><tr>
+            <tr><th></th><td class="l b">Until this date</td><td class="r b">
+                <input id="date_pick_2" name="date_pick_2" type="date"
+                  min="2011-05-01" max="2011-05-31"/>
+            </td><tr>
             <tr><td colspan="3" class="sep"></td></tr>
             <tr><th>Size </th></tr>
             <tr><th></th><td class="l b">Min # of users in the crowd</td><td class="r b"><input type="range" min="1" max="100" value="5" name="num_users" id="num_users" onchange="showNumUsers(this.value)"/><span     id = "range_num_users"> 5</span></td><tr>
