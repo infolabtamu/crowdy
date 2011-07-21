@@ -28,25 +28,31 @@ if __name__ == '__main__':
         maroon.Model.database = maroon.MongoDB(
             name=settings.mongo_database,
             host=settings.mongo_host)
-        cherrypy.config.update("etc/crowdy.conf")
-        cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
-        cherrypy.tree.mount(web, "/", config="etc/web.conf")
 
-        engine = cherrypy.engine
-        if hasattr(engine, "signal_handler"):
-            engine.signal_handler.subscribe()
-        if hasattr(engine, "console_control_handler"):
-            engine.console_control_handler.subscribe()
-        cherrypy.config.update({'engine.autoreload_on': False})
-        cherrypy.server.unsubscribe()
-        addr = cherrypy.server.bind_addr
-        f = servers.FlupFCGIServer(application=cherrypy.tree,
-                                   bindAddress=addr)
-        s = servers.ServerAdapter(engine, httpserver=f, bind_addr=addr)
-        s.subscribe()
+        if settings.production:
+            cherrypy.config.update("etc/crowdy_prod.conf")
+            cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
+            cherrypy.tree.mount(web, "/", config="etc/web.conf")
 
-        engine.start()
-        engine.block()
+            # taken from the cherryd script
+            engine = cherrypy.engine
+            if hasattr(engine, "signal_handler"):
+                engine.signal_handler.subscribe()
+            if hasattr(engine, "console_control_handler"):
+                engine.console_control_handler.subscribe()
+            cherrypy.server.unsubscribe()
+            addr = cherrypy.server.bind_addr
+            f = servers.FlupFCGIServer(application=cherrypy.tree,
+                                       bindAddress=addr)
+            s = servers.ServerAdapter(engine, httpserver=f, bind_addr=addr)
+            s.subscribe()
+
+            engine.start()
+            engine.block()
+        else:
+            cherrypy.config.update("etc/crowdy.conf")
+            cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
+            cherrypy.quickstart(web,"/",config="etc/web.conf")
     except:
         traceback.print_exc()
 

@@ -14,6 +14,7 @@ settings = SettingsBunch(
     log_dir = 'logs',
     lucene_index_dir = '/tmp/twitter_search',
     pdb = pdb.set_trace,
+    production = False,
 )
 
 try:
