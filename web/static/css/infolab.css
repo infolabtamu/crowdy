@@ -591,3 +591,8 @@ way to fit your requirements.
 .scrollable .items p {
     height: 30px;
 }
+
+#actions .disabled {
+    visibility:hidden;
+}
+
