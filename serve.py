@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 import traceback
-import pdb, os
+import pdb
 import sys
 
 import cherrypy
 from cherrypy import tools
+from cherrypy.process import plugins, servers
 import maroon
 
 from etc.settings import settings
 import api
 import web
+
 
 if __name__ == '__main__':
     try:
@@ -22,32 +24,29 @@ if __name__ == '__main__':
     except ImportError:
         print "WARNING: ignoring lucene"
 
-#    try:
-    maroon.Model.database = maroon.MongoDB(
-        name=settings.mongo_database,
-        host=settings.mongo_host)
-    # Code added for fastcgi
-    if "--fastcgi" in sys.argv:
-#            app = cherrypy.tree.mount(api)
-        cherrypy.tree.mount(api,os.path.dirname(os.path.abspath(__file__))+"/api/1",config=os.path.dirname(os.path.abspath(__file__))+"/etc/api.conf")
-        cherrypy.tree.mount(web,os.path.dirname(os.path.abspath(__file__))+"/web",config=os.path.dirname(os.path.abspath(__file__))+"/etc/web.conf")
-        
-        # CherryPy autoreload must be disabled for the flup server to work
-        cherrypy.config.update({'engine.autoreload_on':False})
-        cherrypy.config.update({
-                "tools.sessions.on": True,
-                "tools.sessions.timeout": 5,
-                "log.screen": False,
-                "log.access_file": "/tmp/cherry_access.log",
-                "log.error_file": "/tmp/cherry_error.log",
-        })
-        from flup.server.fcgi import WSGIServer
-        cherrypy.config.update({'engine.autoreload_on':False})
-        WSGIServer(web).run()
-    else:
+    try:
+        maroon.Model.database = maroon.MongoDB(
+            name=settings.mongo_database,
+            host=settings.mongo_host)
         cherrypy.config.update("etc/crowdy.conf")
         cherrypy.tree.mount(api,"/api/1",config="etc/api.conf")
-        cherrypy.quickstart(web,"/",config="etc/web.conf")
-#    except:
-#        traceback.print_exc()
-#        pdb.post_mortem(sys.exc_info()[2])
+        cherrypy.tree.mount(web, "/", config="etc/web.conf")
+
+        engine = cherrypy.engine
+        if hasattr(engine, "signal_handler"):
+            engine.signal_handler.subscribe()
+        if hasattr(engine, "console_control_handler"):
+            engine.console_control_handler.subscribe()
+        cherrypy.config.update({'engine.autoreload_on': False})
+        cherrypy.server.unsubscribe()
+        addr = cherrypy.server.bind_addr
+        f = servers.FlupFCGIServer(application=cherrypy.tree,
+                                   bindAddress=addr)
+        s = servers.ServerAdapter(engine, httpserver=f, bind_addr=addr)
+        s.subscribe()
+
+        engine.start()
+        engine.block()
+    except:
+        traceback.print_exc()
+
