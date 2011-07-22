@@ -478,6 +478,10 @@ way to fit your requirements.
  */
 #crowdBox {
     background-color: #fff;
+    padding: 10px;
+    margin:50px;
+    width:800px;
+
 }
 .scrollable {
     position: relative;
@@ -527,5 +531,17 @@ way to fit your requirements.
 /* the input field */
 #timeSlider {
     display: none;
+}
+
+/* the crowd view */
+#crowdNetwork {
+    float: left;
+}
+#crowdStats {
+    float: left;
+}
+#crowdTweets {
+    float: left;
+    width: 100%;
 }
 
