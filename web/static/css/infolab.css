@@ -22,7 +22,7 @@ pre { border: 0px; }
 
 
 body {
-        background:#fff /*url(/static/images/pageBG.png)*/ repeat-x scroll center top;
+        background:#fff;
         color:#333333;
         font-family:"Segoe UI",Helvetica,Arial,Verdana,sans-serif;
         font-size:13px;
@@ -72,13 +72,7 @@ input,textarea,select,optgroup,option,button{
         line-height:1.4em;
 }
 div#headerContainer {
-    background:transparent url(/static/images/UItitle.png) no-repeat scroll right top; /*largeCrowd.png*/
-/*max-width: 900px;
-min-width: 800px;*/
 height: 115px;
-}
-div#headerMain {
-    background:transparent url(/static/images/UItitle.png) no-repeat scroll left top; /*smallCrowd.png*/
 }
 div#headerMain h1 a {
 display:block;
@@ -89,7 +83,6 @@ text-decoration: none;
 width:300px;
 }
 div#headerright {
-        background:transparent url(/static/images/largeCrowd.png) no-repeat scroll right bottom;
         border:medium none;
         display:block;
         float:right;
