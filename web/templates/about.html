@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>About CrowdTracker</h2>
+CrowdTracker detects crowds based on conversations in the online microblogging
+website Twitter.
+All of the tweets in this demo come from 160,000 users who either live in the
+greater Houston area or have strong ties to the area.
+For the purposes of this demo, we are using a snapshot of data from May 2011.
+
+<h2>Crowds View</h2>
+The crowds view shows a visualization of the crowds as they change over time.
+The crowds are sorted on the X and Y axis by clustering coefficient and size
+respectively.
+Crowds that are highlighted in red are extremely active.
+
+<h2>Search View</h2>
+This allows you to run a full-text search of the crowds we discovered, and
+investigate crowds that you think are interesting.
+
+{% endblock %}
