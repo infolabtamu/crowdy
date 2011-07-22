@@ -320,6 +320,9 @@ way to fit your requirements.
     background-color: #aaa;
 }
 
+#searchBox {
+    width:580px;
+}
 
 /*
  Added by Zhiyuan Cheng begins
@@ -478,7 +481,7 @@ way to fit your requirements.
 }
 
 #adv_search {
-     text-align: middle;
+     text-align: left;
      vertical-align: middle;
     
      margin-left: 150px;
