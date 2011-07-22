@@ -33,6 +33,7 @@ var animateCrowdsInterval = null;
 $(document).ready(function() {
   $('#pauseButton').click(pauseAnimation)
   $('#playButton').click(startAnimation)
+  $(':range').rangeinput();
   startAnimation()
 });
 
@@ -142,5 +143,6 @@ function coordForLoc(div) {
 
 <span id="playButton">play</span>
 <span id="pauseButton">pause</span>
+<input type="range" id="timeSlider" min="0" max="744" value="24" />
 
 {% endblock %}
