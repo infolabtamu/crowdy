@@ -14,7 +14,7 @@ function loadData(data) {
             'users': crowd.users,
             'title': crowd.title,
             '_id':crowd._id,
-            'description': ""+crowd.size,
+            'keys':crowd.kw.join(", ").substring(0,60),
             'size': crowd.size,
         };
     });
@@ -22,10 +22,12 @@ function loadData(data) {
     for(var i=0;i<events.length;i++){
         var row = $('#listTemplate').clone().removeAttr('id');
         var date1 = $.strftime('%Y/%m/%d %H:%M', events[i]['start']);
-        var date2 = $.strftime('%Y/%m/%d %H:%M', events[i]['end']);
-        row.find('.listPeriod').text(date1+' To '+date2);
+        var hours = (events[i]['end']-events[i]['start'])/3600000;
+        row.find('.listStart').text(date1);
+        row.find('.listHours').text(hours);
+        row.find('.listKeys').text(events[i]['keys']);
         row.find('.listUsers').text(events[i]['title']);
-        row.find('.listSize').text(events[i]['description']);
+        row.find('.listSize').text(events[i]['size']);
         row.show()
         tbo.append(row);
 
@@ -75,9 +77,11 @@ function search() {
             <div id="query_content">
             </div>
             <tbody id="dyTableBody">
-                <tr><th>Period</th><th>Users</th><th>Size</th></tr>
+              <tr><th>Start</th><th>Hours</th><th>Keywords</th><th>Users</th><th>Size</th></tr>
                 <tr id="listTemplate" style="display:none">
-                    <td class="listPeriod"></td>
+                    <td class="listStart"></td>
+                    <td class="listHours"></td>
+                    <td class="listKeys"></td>
                     <td class="listUsers"></td>
                     <td class="listSize"></td>
                 </tr>

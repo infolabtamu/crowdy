@@ -23,7 +23,7 @@ pre { border: 0px; }
 
 body {
         background:#fff;
-        color:#333333;
+        color:#444;
         font-family:"Segoe UI",Helvetica,Arial,Verdana,sans-serif;
         font-size:13px;
         line-height:125%;
@@ -145,10 +145,6 @@ input{
 
 .mytable table
 {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 12px;
-	margin: 45px;
-	text-align: left;
 	border-collapse: collapse;
 }
 .mytable th
@@ -156,24 +152,10 @@ input{
 	font-size: 13px;
 	font-weight: normal;
 	padding: 8px;
-	background: #b9c9fe;
-	border-top: 4px solid #aabcfe;
-	border-bottom: 1px solid #fff;
-	color: #039;
 }
 .mytable td
 {
 	padding: 8px;
-	background: #e8edff; 
-    border-bottom: 1px solid #fff;
-	color: #669;
-	border-top: 1px solid transparent;
-}
-.mytable tr:hover td
-{
-	/*border: 1px solid black;*/
-	background: #d0dafd;
-	color: #339;
 }
 
 textarea{
@@ -455,14 +437,6 @@ way to fit your requirements.
     float: left;
     line-height: 40px;
     height: 40px;
-}
-
-#mytable {
-     text-align: left;
-     vertical-align: middle;
-
-     margin-left: 100px;
-     margin-right:100px;
 }
 
 #query_title {
