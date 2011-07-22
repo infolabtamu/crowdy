@@ -33,7 +33,12 @@ var animateCrowdsInterval = null;
 $(document).ready(function() {
   $('#pauseButton').click(pauseAnimation)
   $('#playButton').click(startAnimation)
-  $(':range').rangeinput();
+  $(':range').rangeinput()
+  $('#timeSlider').change(function(ev,val) {
+    pauseAnimation()
+    time = val*3600+1304208000
+    startAnimation()
+  })
   startAnimation()
 });
 
@@ -51,6 +56,7 @@ function pauseAnimation() {
 
 function getCrowds() {
   time+=3600;
+  $("#timeSlider").data("rangeinput").step()
   jQuery.getJSON('/api/1/crowd/snapshot/'+time, loadCrowdSnapshot);
   d = new Date(time*1000);
   $('#timer').text(d.toString());
