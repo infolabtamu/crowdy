@@ -23,6 +23,7 @@
   background-color: #ccc;
   -moz-border-radius: 100px;
   border-radius: 100px;
+  box-shadow: 0 0 7px #ccc;
 }
 </style>
 <script>
@@ -66,7 +67,8 @@ function loadCrowdSnapshot(data) {
   //create set of new crowds
   var cids = {}
   $.each(data.cs, function(index, crowd) {
-    cids[crowd.cid] = 1
+    if(crowd.u)
+      cids[crowd.cid] = 1
   })
   //remove non-existant crowds
   $("#crowds .crowdSum").filter(function() {
@@ -74,6 +76,8 @@ function loadCrowdSnapshot(data) {
   }).remove()
   //fix the crowds
   $.each(data.cs, function(index, crowd) {
+    if(!crowd.u)
+      return;
     var div = $(document.getElementById(crowd.cid))
     if(div.length) {
       div.stop(true)
@@ -90,8 +94,12 @@ function loadCrowdSnapshot(data) {
           loadCrowdPopup(e)
       })
     }
-    div.html(crowd.u>10?crowd.u:"")
-    var radius = 1.5*Math.sqrt(crowd.u)
+    var activity = crowd.t/Math.sqrt(crowd.u)
+    if (activity >1 )
+      var color = 'rgb('+(204+activity*10)+',204,204)'
+      div.css('background-color',color)
+      div.css('box-shadow','0 0 7px '+color)
+    var radius = 2*Math.sqrt(crowd.u)
     div.width(radius*2)
     div.height(radius*2)
     div.css('font-size', (1.7*Math.sqrt(crowd.u)) +'px')
