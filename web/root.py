@@ -22,22 +22,17 @@ def _render(path, **kwargs):
 
 @cherrypy.expose
 def index():
-    return _render('index.html')
+    return _render('crowds.html')
 
 
 @cherrypy.expose
-def list():
+def search():
     return _render('list.html')
 
 
 @cherrypy.expose
-def snapshot():
-    return _render('snapshot.html')
-
-
-@cherrypy.expose
-def crowds():
-    return _render('crowds.html')
+def about():
+    return _render('about.html')
 
 
 def _chart_html(stamps, crowd):
