@@ -22,7 +22,7 @@ Renderer = function(canvas){
       ctx.strokeStyle = "#d3d3d3"
       particleSystem.eachEdge(function(edge, pt1, pt2){
           ctx.beginPath()
-          ctx.lineWidth = Math.min(10,edge.data.weight);
+          ctx.lineWidth = Math.min(5, .5*edge.data.weight)
           ctx.moveTo(pt1.x, pt1.y)
           ctx.lineTo(pt2.x, pt2.y)
           ctx.stroke()
@@ -36,7 +36,7 @@ Renderer = function(canvas){
         var lls = String(label)
         ctx.fillStyle = '#' + lls.substring(lls.length-3,lls.length)
         ctx.beginPath()
-        ctx.arc(pt.x,pt.y,3,0,2*Math.PI)
+        ctx.arc(pt.x,pt.y,2,0,2*Math.PI)
         ctx.fill()
       })
       if(labeled) {
@@ -158,8 +158,9 @@ function loadTweets(div, tweets) {
 }
 
 function loadCrowdPopup(ev) {
-    var elem = $("#crowdBox")
-    elem.html("Loading...")
+    $("#crowdBox").remove()
+    var elem = $('<div id="crowdBox">Loading...</div>')
+    elem.insertBefore("#footer")
     jQuery.getJSON('/crowd/'+ev.data.cid, function(crowd_info) {
         elem.html(crowd_info.html)
         elem.overlay({
