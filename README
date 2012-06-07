@@ -14,3 +14,13 @@ web/        the frontend
 
 There are some toy programs in the intake directory.  This is their usage:
     ./jsoncrawl.py ../../tests/infolabers.json|./tee.py tmp|./digits.py 1
+
+To use this project, you will need to install several python modules:
+    pip install -r reqs.pip
+
+You will also need to install pylucene. There are mediocre instructions on the PyLucene website. Here's what I used for the Makefile in a Python 2.7 virtualenv
+    PREFIX_PYTHON=$(HOME)/virtualenv/crowdy
+    ANT=ant
+    PYTHON=$(PREFIX_PYTHON)/bin/python
+    JCC=$(PYTHON) -m jcc --shared --arch x86_64
+    NUM_FILES=4

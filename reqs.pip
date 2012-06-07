@@ -1,6 +1,6 @@
 jinja2
 cherrypy
 flup
-nlp
+pyenchant
 pymongo
-lucene
+JCC
