@@ -46,4 +46,5 @@ docs/crowdy_gui.pdf
 
 # development settings
 settings_dev.py
+settings_local.py
 etc/dev.conf
